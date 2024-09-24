@@ -6,7 +6,7 @@ namespace WWMS.BAL.Authentications
 {
     public class PermissionAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        private string[] _roles;
+        private readonly string[] _roles;
         public PermissionAuthorizeAttribute(params string[] roles)
         {
             this._roles = roles;
@@ -38,7 +38,7 @@ namespace WWMS.BAL.Authentications
                 return;
             }
 
-            var roleClaim = context.HttpContext.User.Claims.FirstOrDefault(x => x.Type.ToLower() == "role");
+            var roleClaim = context.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("role", StringComparison.CurrentCultureIgnoreCase));
 
             if (roleClaim == null) return;
 
