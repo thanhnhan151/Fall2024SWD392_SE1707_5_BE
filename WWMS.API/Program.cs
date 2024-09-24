@@ -1,7 +1,6 @@
 using WWMS.DAL;
 using WWMS.BAL;
 using Microsoft.EntityFrameworkCore;
-using WWMS.DAL.Persistences;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,14 +17,6 @@ builder.Services.ConfigureDALServices();
 builder.Services.ConfigureBALServices();
 #endregion
 
-#region Database
-builder.Services.AddDbContext<WineWarehouseDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DeployConnection"));
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-});
-#endregion
 
 #region Json Web Token
 builder.Services.AddSwaggerGen(options =>
