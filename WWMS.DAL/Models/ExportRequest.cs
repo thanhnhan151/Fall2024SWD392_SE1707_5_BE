@@ -45,9 +45,9 @@ public partial class ExportRequest
 
     public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = new List<AdditionalImportRequest>();
 
-    public virtual ExportReport? ExportReport { get; set; }
-
     public virtual ICollection<ExportWineWarehouse> ExportWineWarehouses { get; set; } = new List<ExportWineWarehouse>();
+
+    public virtual Report? Report { get; set; }
 
     public virtual User User { get; set; } = null!;
 

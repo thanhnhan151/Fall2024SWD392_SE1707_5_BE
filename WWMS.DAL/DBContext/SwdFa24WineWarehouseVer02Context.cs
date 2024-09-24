@@ -21,19 +21,15 @@ public partial class SwdFa24WineWarehouseVer02Context : DbContext
 
     public virtual DbSet<CheckRequestWarehouse> CheckRequestWarehouses { get; set; }
 
-    public virtual DbSet<ExportReport> ExportReports { get; set; }
-
     public virtual DbSet<ExportRequest> ExportRequests { get; set; }
 
     public virtual DbSet<ExportWineWarehouse> ExportWineWarehouses { get; set; }
 
-    public virtual DbSet<ImportReport> ImportReports { get; set; }
-
     public virtual DbSet<ImportRequest> ImportRequests { get; set; }
 
-    public virtual DbSet<InventoryCheckReport> InventoryCheckReports { get; set; }
-
     public virtual DbSet<InventoryCheckRequest> InventoryCheckRequests { get; set; }
+
+    public virtual DbSet<Report> Reports { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -230,68 +226,6 @@ public partial class SwdFa24WineWarehouseVer02Context : DbContext
                 .HasConstraintName("warehouse_foreign");
         });
 
-        modelBuilder.Entity<ExportReport>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("export_report_id_primary");
-
-            entity.ToTable("Export_Report");
-
-            entity.HasIndex(e => e.ExportRequestId, "UQ__Export_R__42A76907A385B38C").IsUnique();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.CustomerFeedback)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("customer_feedback");
-            entity.Property(e => e.DiscrepanciesFound).HasColumnName("discrepancies_found");
-            entity.Property(e => e.ExportDate).HasColumnName("export_date");
-            entity.Property(e => e.ExportRequestId).HasColumnName("export_request_id");
-            entity.Property(e => e.FileAttachment)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("file_attachment");
-            entity.Property(e => e.FinalApprovalDate).HasColumnName("final_approval_date");
-            entity.Property(e => e.ItemsExported).HasColumnName("items_exported");
-            entity.Property(e => e.PreparedAt).HasColumnName("prepared_at");
-            entity.Property(e => e.ReportDescription)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("report_description");
-            entity.Property(e => e.ReportPreparedBy)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("report_prepared_by");
-            entity.Property(e => e.ReportStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("report_status");
-            entity.Property(e => e.ReviewComments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("review_comments");
-            entity.Property(e => e.ShippingIssues)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("shipping_issues");
-            entity.Property(e => e.SignOffBy)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("sign_off_by");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-
-            entity.HasOne(d => d.ExportRequest).WithOne(p => p.ExportReport)
-                .HasForeignKey<ExportReport>(d => d.ExportRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("export_request_foreign");
-
-            entity.HasOne(d => d.User).WithMany(p => p.ExportReports)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign_3");
-        });
-
         modelBuilder.Entity<ExportRequest>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("export_request_id_primary");
@@ -368,7 +302,7 @@ public partial class SwdFa24WineWarehouseVer02Context : DbContext
 
         modelBuilder.Entity<ExportWineWarehouse>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Export_W__3213E83F70CD1E99");
+            entity.HasKey(e => e.Id).HasName("PK__Export_W__3213E83FDCC5E67C");
 
             entity.ToTable("Export_Wine_Warehouse");
 
@@ -387,68 +321,6 @@ public partial class SwdFa24WineWarehouseVer02Context : DbContext
                 .HasForeignKey(d => d.WineWarehouseId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("wine_warehouse_foreign");
-        });
-
-        modelBuilder.Entity<ImportReport>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("import_report_id_primary");
-
-            entity.ToTable("Import_Report");
-
-            entity.HasIndex(e => e.ImportRequestId, "UQ__Import_R__C75CF497CC8CB393").IsUnique();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.DamageReport)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("damage_report");
-            entity.Property(e => e.DiscrepanciesFound).HasColumnName("discrepancies_found");
-            entity.Property(e => e.FileAttachment)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("file_attachment");
-            entity.Property(e => e.FinalApprovalDate).HasColumnName("final_approval_date");
-            entity.Property(e => e.ImportDate).HasColumnName("import_date");
-            entity.Property(e => e.ImportRequestId).HasColumnName("import_request_id");
-            entity.Property(e => e.ItemsImported).HasColumnName("items_imported");
-            entity.Property(e => e.PreparedAt).HasColumnName("prepared_at");
-            entity.Property(e => e.ReportDescription)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("report_description");
-            entity.Property(e => e.ReportPreparedBy)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("report_prepared_by");
-            entity.Property(e => e.ReportStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("report_status");
-            entity.Property(e => e.ReviewComments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("review_comments");
-            entity.Property(e => e.SignOffBy)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("sign_off_by");
-            entity.Property(e => e.SupplierFeedback)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("supplier_feedback");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-
-            entity.HasOne(d => d.ImportRequest).WithOne(p => p.ImportReport)
-                .HasForeignKey<ImportReport>(d => d.ImportRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("import_request_foreign");
-
-            entity.HasOne(d => d.User).WithMany(p => p.ImportReports)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign_6");
         });
 
         modelBuilder.Entity<ImportRequest>(entity =>
@@ -528,69 +400,6 @@ public partial class SwdFa24WineWarehouseVer02Context : DbContext
                 .HasConstraintName("wine_foreign");
         });
 
-        modelBuilder.Entity<InventoryCheckReport>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("inventory_check_report_id_primary");
-
-            entity.ToTable("Inventory_Check_Report");
-
-            entity.HasIndex(e => e.InventoryCheckRequestId, "UQ__Inventor__8099F7E528418361").IsUnique();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.ApprovalDate).HasColumnName("approval_date");
-            entity.Property(e => e.CheckEndTime).HasColumnName("check_end_time");
-            entity.Property(e => e.CheckStartTime).HasColumnName("check_start_time");
-            entity.Property(e => e.CheckerName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("checker_name");
-            entity.Property(e => e.CheckerNotes)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("checker_notes");
-            entity.Property(e => e.CorrectionPlan)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("correction_plan");
-            entity.Property(e => e.DiscrepanciesFound).HasColumnName("discrepancies_found");
-            entity.Property(e => e.FileAttachment)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("file_attachment");
-            entity.Property(e => e.InventoryCheckRequestId).HasColumnName("inventory_check_request_id");
-            entity.Property(e => e.ItemsChecked).HasColumnName("items_checked");
-            entity.Property(e => e.ReportApprovedBy)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("report_approved_by");
-            entity.Property(e => e.ReportDescription)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("report_description");
-            entity.Property(e => e.ReportStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("report_status");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.VerificationDate).HasColumnName("verification_date");
-            entity.Property(e => e.VerifiedBy)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("verified_by");
-
-            entity.HasOne(d => d.InventoryCheckRequest).WithOne(p => p.InventoryCheckReport)
-                .HasForeignKey<InventoryCheckReport>(d => d.InventoryCheckRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("inventory_check_request_foreign");
-
-            entity.HasOne(d => d.User).WithMany(p => p.InventoryCheckReports)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign_7");
-        });
-
         modelBuilder.Entity<InventoryCheckRequest>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("inventory_check_request_id_primary");
@@ -652,6 +461,88 @@ public partial class SwdFa24WineWarehouseVer02Context : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("user_foreign_8");
+        });
+
+        modelBuilder.Entity<Report>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("report_id_primary");
+
+            entity.ToTable("Report");
+
+            entity.HasIndex(e => e.ExportRequestId, "UQ__Report__42A76907FBF5270C").IsUnique();
+
+            entity.HasIndex(e => e.AdditionalImportRequestId, "UQ__Report__554DA09A96662158").IsUnique();
+
+            entity.HasIndex(e => e.InventoryCheckRequestId, "UQ__Report__8099F7E53B1391DC").IsUnique();
+
+            entity.HasIndex(e => e.ImportRequestId, "UQ__Report__C75CF497B655D9AD").IsUnique();
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.AdditionalImportRequestId).HasColumnName("additional_import_request_id");
+            entity.Property(e => e.DamageReport)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("damage_report");
+            entity.Property(e => e.DiscrepanciesFound).HasColumnName("discrepancies_found");
+            entity.Property(e => e.ExportRequestId).HasColumnName("export_request_id");
+            entity.Property(e => e.FileAttachment)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("file_attachment");
+            entity.Property(e => e.FinalApprovalDate).HasColumnName("final_approval_date");
+            entity.Property(e => e.ImportDate).HasColumnName("import_date");
+            entity.Property(e => e.ImportRequestId).HasColumnName("import_request_id");
+            entity.Property(e => e.InventoryCheckRequestId).HasColumnName("inventory_check_request_id");
+            entity.Property(e => e.ItemsImported).HasColumnName("items_imported");
+            entity.Property(e => e.PreparedAt).HasColumnName("prepared_at");
+            entity.Property(e => e.ReportDescription)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("report_description");
+            entity.Property(e => e.ReportPreparedBy)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("report_prepared_by");
+            entity.Property(e => e.ReportStatus)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("report_status");
+            entity.Property(e => e.ReviewComments)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("review_comments");
+            entity.Property(e => e.SignOffBy)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("sign_off_by");
+            entity.Property(e => e.SupplierFeedback)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("supplier_feedback");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.AdditionalImportRequest).WithOne(p => p.Report)
+                .HasForeignKey<Report>(d => d.AdditionalImportRequestId)
+                .HasConstraintName("additional_import_request_foreign");
+
+            entity.HasOne(d => d.ExportRequest).WithOne(p => p.Report)
+                .HasForeignKey<Report>(d => d.ExportRequestId)
+                .HasConstraintName("export_request_foreign");
+
+            entity.HasOne(d => d.ImportRequest).WithOne(p => p.Report)
+                .HasForeignKey<Report>(d => d.ImportRequestId)
+                .HasConstraintName("import_request_foreign");
+
+            entity.HasOne(d => d.InventoryCheckRequest).WithOne(p => p.Report)
+                .HasForeignKey<Report>(d => d.InventoryCheckRequestId)
+                .HasConstraintName("inventory_check_request_foreign");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Reports)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("user_foreign_6");
         });
 
         modelBuilder.Entity<User>(entity =>

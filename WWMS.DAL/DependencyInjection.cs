@@ -10,7 +10,7 @@ namespace WWMS.DAL
         {
             //TODO: register any services used DI
 
-            // services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

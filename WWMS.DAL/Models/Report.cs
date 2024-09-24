@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WWMS.DAL.Models;
 
-public partial class ImportReport
+public partial class Report
 {
     public long Id { get; set; }
 
@@ -33,11 +33,23 @@ public partial class ImportReport
 
     public string? DamageReport { get; set; }
 
-    public long ImportRequestId { get; set; }
+    public long? ImportRequestId { get; set; }
 
     public long UserId { get; set; }
 
-    public virtual ImportRequest ImportRequest { get; set; } = null!;
+    public long? ExportRequestId { get; set; }
+
+    public long? InventoryCheckRequestId { get; set; }
+
+    public long? AdditionalImportRequestId { get; set; }
+
+    public virtual AdditionalImportRequest? AdditionalImportRequest { get; set; }
+
+    public virtual ExportRequest? ExportRequest { get; set; }
+
+    public virtual ImportRequest? ImportRequest { get; set; }
+
+    public virtual InventoryCheckRequest? InventoryCheckRequest { get; set; }
 
     public virtual User User { get; set; } = null!;
 }

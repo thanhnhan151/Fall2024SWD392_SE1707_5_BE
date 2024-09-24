@@ -45,7 +45,7 @@ public partial class InventoryCheckRequest
 
     public virtual ICollection<CheckRequestWarehouse> CheckRequestWarehouses { get; set; } = new List<CheckRequestWarehouse>();
 
-    public virtual InventoryCheckReport? InventoryCheckReport { get; set; }
+    public virtual Report? Report { get; set; }
 
     public virtual User User { get; set; } = null!;
 }

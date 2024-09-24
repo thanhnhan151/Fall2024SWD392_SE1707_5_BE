@@ -41,5 +41,7 @@ public partial class AdditionalImportRequest
 
     public virtual InventoryCheckRequest InventoryCheckRequest { get; set; } = null!;
 
+    public virtual Report? Report { get; set; }
+
     public virtual User User { get; set; } = null!;
 }

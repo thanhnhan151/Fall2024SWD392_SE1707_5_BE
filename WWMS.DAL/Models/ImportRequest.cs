@@ -45,7 +45,7 @@ public partial class ImportRequest
 
     public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = new List<AdditionalImportRequest>();
 
-    public virtual ImportReport? ImportReport { get; set; }
+    public virtual Report? Report { get; set; }
 
     public virtual User User { get; set; } = null!;
 

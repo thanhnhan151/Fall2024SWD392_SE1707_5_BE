@@ -43,15 +43,11 @@ public partial class User
 
     public virtual ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
 
-    public virtual ICollection<ExportReport> ExportReports { get; set; } = new List<ExportReport>();
-
     public virtual ICollection<ExportRequest> ExportRequests { get; set; } = new List<ExportRequest>();
-
-    public virtual ICollection<ImportReport> ImportReports { get; set; } = new List<ImportReport>();
 
     public virtual ICollection<ImportRequest> ImportRequests { get; set; } = new List<ImportRequest>();
 
-    public virtual ICollection<InventoryCheckReport> InventoryCheckReports { get; set; } = new List<InventoryCheckReport>();
-
     public virtual ICollection<InventoryCheckRequest> InventoryCheckRequests { get; set; } = new List<InventoryCheckRequest>();
+
+    public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
 }
