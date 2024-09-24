@@ -11,8 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 #region Dependency Injection
-builder.Services.ConfigureDALServices();
-
 builder.Services.ConfigureBALServices();
 #endregion
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using WWMS.BAL.Mappings;
+using WWMS.DAL;
 
 namespace WWMS.BAL
 {
@@ -7,6 +8,8 @@ namespace WWMS.BAL
     {
         public static IServiceCollection ConfigureBALServices(this IServiceCollection services)
         {
+            services.ConfigureDALServices();
+
             services.AddAutoMapper(typeof(MappingProfiles));
             //TODO: register any services used DI
 
