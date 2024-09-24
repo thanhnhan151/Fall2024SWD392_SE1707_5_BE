@@ -8,7 +8,9 @@ namespace WWMS.DAL
         public static IServiceCollection ConfigureDALServices(
             this IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //TODO: register any services used DI
+
+            // services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

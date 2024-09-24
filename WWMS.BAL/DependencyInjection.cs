@@ -8,6 +8,7 @@ namespace WWMS.BAL
         public static IServiceCollection ConfigureBALServices(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(MappingProfiles));
+            //TODO: register any services used DI
 
             return services;
         }
