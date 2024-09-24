@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WWMS.DAL.Models;
+﻿namespace WWMS.DAL.Entities;
 
 public partial class Wine
 {
@@ -41,11 +38,11 @@ public partial class Wine
 
     public long WineCategoryId { get; set; }
 
-    public virtual ICollection<ExportRequest> ExportRequests { get; set; } = new List<ExportRequest>();
+    public virtual ICollection<ExportRequest> ExportRequests { get; set; } = [];
 
-    public virtual ICollection<ImportRequest> ImportRequests { get; set; } = new List<ImportRequest>();
+    public virtual ICollection<ImportRequest> ImportRequests { get; set; } = [];
 
     public virtual WineCategory WineCategory { get; set; } = null!;
 
-    public virtual ICollection<WineWarehouse> WineWarehouses { get; set; } = new List<WineWarehouse>();
+    public virtual ICollection<WineWarehouse> WineWarehouses { get; set; } = [];
 }

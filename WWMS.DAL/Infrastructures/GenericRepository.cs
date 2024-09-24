@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WWMS.DAL.Models;
+using WWMS.DAL.Persistences;
 
 namespace WWMS.DAL.Infrastructures
 {
     internal class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        protected SwdFa24WineWarehouseVer02Context _context;
+        protected WineWarehouseDbContext _context;
         protected DbSet<TEntity> _dbSet;
         protected readonly ILogger _logger;
 
         public GenericRepository(
-            SwdFa24WineWarehouseVer02Context context,
+            WineWarehouseDbContext context,
             ILogger logger)
         {
             _context = context;

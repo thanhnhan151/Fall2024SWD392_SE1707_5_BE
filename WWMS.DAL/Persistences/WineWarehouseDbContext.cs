@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WWMS.DAL.Entities;
 
-namespace WWMS.DAL.Models;
+namespace WWMS.DAL.Persistences;
 
-public partial class SwdFa24WineWarehouseVer02Context : DbContext
+public partial class WineWarehouseDbContext : DbContext
 {
-    public SwdFa24WineWarehouseVer02Context()
+    public WineWarehouseDbContext()
     {
     }
 
-    public SwdFa24WineWarehouseVer02Context(DbContextOptions<SwdFa24WineWarehouseVer02Context> options)
+    public WineWarehouseDbContext(DbContextOptions<WineWarehouseDbContext> options)
         : base(options)
     {
     }

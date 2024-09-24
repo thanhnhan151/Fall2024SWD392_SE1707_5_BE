@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WWMS.DAL.Models;
+﻿namespace WWMS.DAL.Entities;
 
 public partial class WineCategory
 {
@@ -39,5 +36,5 @@ public partial class WineCategory
 
     public string? Vineyard { get; set; }
 
-    public virtual ICollection<Wine> Wines { get; set; } = new List<Wine>();
+    public virtual ICollection<Wine> Wines { get; set; } = [];
 }

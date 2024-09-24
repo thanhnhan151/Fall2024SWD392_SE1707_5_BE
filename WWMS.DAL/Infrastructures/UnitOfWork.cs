@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using WWMS.DAL.Models;
+using WWMS.DAL.Persistences;
 
 namespace WWMS.DAL.Infrastructures
 {
     internal class UnitOfWork : IUnitOfWork
     {
-        private readonly SwdFa24WineWarehouseVer02Context _context;
+        private readonly WineWarehouseDbContext _context;
 
-        public UnitOfWork(SwdFa24WineWarehouseVer02Context context, ILoggerFactory loggerFactory)
+        public UnitOfWork(WineWarehouseDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
         }

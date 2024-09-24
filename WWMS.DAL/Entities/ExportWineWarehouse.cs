@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WWMS.DAL.Models;
+﻿namespace WWMS.DAL.Entities;
 
 public partial class ExportWineWarehouse
 {

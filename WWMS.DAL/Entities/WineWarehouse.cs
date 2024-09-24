@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WWMS.DAL.Models;
+﻿namespace WWMS.DAL.Entities;
 
 public partial class WineWarehouse
 {
@@ -43,7 +40,7 @@ public partial class WineWarehouse
 
     public long WineId { get; set; }
 
-    public virtual ICollection<ExportWineWarehouse> ExportWineWarehouses { get; set; } = new List<ExportWineWarehouse>();
+    public virtual ICollection<ExportWineWarehouse> ExportWineWarehouses { get; set; } = [];
 
     public virtual ImportRequest ImportRequest { get; set; } = null!;
 

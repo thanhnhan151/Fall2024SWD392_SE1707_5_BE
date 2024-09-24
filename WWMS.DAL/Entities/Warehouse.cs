@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WWMS.DAL.Models;
+﻿namespace WWMS.DAL.Entities;
 
 public partial class Warehouse
 {
@@ -39,7 +36,7 @@ public partial class Warehouse
 
     public string? InspectionFrequency { get; set; }
 
-    public virtual ICollection<CheckRequestWarehouse> CheckRequestWarehouses { get; set; } = new List<CheckRequestWarehouse>();
+    public virtual ICollection<CheckRequestWarehouse> CheckRequestWarehouses { get; set; } = [];
 
-    public virtual ICollection<WineWarehouse> WineWarehouses { get; set; } = new List<WineWarehouse>();
+    public virtual ICollection<WineWarehouse> WineWarehouses { get; set; } = [];
 }

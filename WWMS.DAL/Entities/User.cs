@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WWMS.DAL.Models;
+﻿namespace WWMS.DAL.Entities;
 
 public partial class User
 {
@@ -39,15 +36,15 @@ public partial class User
 
     public string? TimeZone { get; set; }
 
-    public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = new List<AdditionalImportRequest>();
+    public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = [];
 
-    public virtual ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
+    public virtual ICollection<AuditLog> AuditLogs { get; set; } = [];
 
-    public virtual ICollection<ExportRequest> ExportRequests { get; set; } = new List<ExportRequest>();
+    public virtual ICollection<ExportRequest> ExportRequests { get; set; } = [];
 
-    public virtual ICollection<ImportRequest> ImportRequests { get; set; } = new List<ImportRequest>();
+    public virtual ICollection<ImportRequest> ImportRequests { get; set; } = [];
 
-    public virtual ICollection<InventoryCheckRequest> InventoryCheckRequests { get; set; } = new List<InventoryCheckRequest>();
+    public virtual ICollection<InventoryCheckRequest> InventoryCheckRequests { get; set; } = [];
 
-    public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+    public virtual ICollection<Report> Reports { get; set; } = [];
 }

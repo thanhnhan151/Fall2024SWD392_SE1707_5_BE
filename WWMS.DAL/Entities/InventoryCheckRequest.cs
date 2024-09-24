@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WWMS.DAL.Models;
+﻿namespace WWMS.DAL.Entities;
 
 public partial class InventoryCheckRequest
 {
@@ -41,9 +38,9 @@ public partial class InventoryCheckRequest
 
     public long UserId { get; set; }
 
-    public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = new List<AdditionalImportRequest>();
+    public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = [];
 
-    public virtual ICollection<CheckRequestWarehouse> CheckRequestWarehouses { get; set; } = new List<CheckRequestWarehouse>();
+    public virtual ICollection<CheckRequestWarehouse> CheckRequestWarehouses { get; set; } = [];
 
     public virtual Report? Report { get; set; }
 

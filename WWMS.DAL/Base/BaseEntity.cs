@@ -1,5 +1,3 @@
-using System;
-
 namespace WWMS.DAL.Base
 {
     public class BaseEntity
