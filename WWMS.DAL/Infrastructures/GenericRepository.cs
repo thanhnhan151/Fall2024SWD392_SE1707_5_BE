@@ -22,7 +22,7 @@ namespace WWMS.DAL.Infrastructures
 
         public virtual void UpdateEntity(TEntity entity) => _dbSet.Update(entity);
 
-        public virtual async Task<TEntity?> GetEntityByIdAsync(int id)
+        public virtual async Task<TEntity?> GetEntityByIdAsync(long id)
         {
             var result = await _dbSet.FindAsync(id);
             if (result != null)

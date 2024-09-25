@@ -11,6 +11,8 @@ namespace WWMS.BAL
     {
         public static IServiceCollection ConfigureBALServices(this IServiceCollection services)
         {
+
+
             services.AddDbContext<WineWarehouseDbContext>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -19,6 +21,7 @@ namespace WWMS.BAL
             //TODO: register any services used DI
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IImportRequestService,ImportRequestService>();
 
             return services;
         }
