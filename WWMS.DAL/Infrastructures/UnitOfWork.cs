@@ -1,15 +1,25 @@
 ﻿using Microsoft.Extensions.Logging;
+using WWMS.DAL.Interfaces;
 using WWMS.DAL.Persistences;
+using WWMS.DAL.Repositories;
 
 namespace WWMS.DAL.Infrastructures
 {
-    internal class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly WineWarehouseDbContext _context;
+
+        private readonly ILogger _logger;
+
+        public IUserRepository Users { get; private set; }
 
         public UnitOfWork(WineWarehouseDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
+
+            _logger = loggerFactory.CreateLogger("logs");
+
+            Users = new UserRepository(_context, _logger);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

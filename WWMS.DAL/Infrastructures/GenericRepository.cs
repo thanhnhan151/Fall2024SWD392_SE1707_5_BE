@@ -4,7 +4,7 @@ using WWMS.DAL.Persistences;
 
 namespace WWMS.DAL.Infrastructures
 {
-    internal class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
         protected WineWarehouseDbContext _context;
         protected DbSet<TEntity> _dbSet;

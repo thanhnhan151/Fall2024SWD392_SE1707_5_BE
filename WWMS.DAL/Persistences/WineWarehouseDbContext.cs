@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using WWMS.DAL.Entities;
 
 namespace WWMS.DAL.Persistences;
@@ -41,7 +42,13 @@ public partial class WineWarehouseDbContext : DbContext
     public virtual DbSet<WineWarehouse> WineWarehouses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=(local);Uid=sa;Pwd=1;Database=WineWarehouseSystem;Trusted_Connection=true;TrustServerCertificate=true;");
+    {
+        var builder = new ConfigurationBuilder()
+                                  .SetBasePath(Directory.GetCurrentDirectory())
+                                  .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        IConfigurationRoot configuration = builder.Build();
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));        
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

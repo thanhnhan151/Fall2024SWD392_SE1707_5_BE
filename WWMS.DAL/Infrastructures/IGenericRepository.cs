@@ -1,6 +1,6 @@
 ﻿namespace WWMS.DAL.Infrastructures
 {
-    internal interface IGenericRepository<TEntity> where TEntity : class
+    public interface IGenericRepository<TEntity> where TEntity : class
     {
         Task<TEntity?> GetEntityByIdAsync(int id);
 
