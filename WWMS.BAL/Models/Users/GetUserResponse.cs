@@ -12,11 +12,11 @@
 
         public string? LastName { get; set; }
 
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         public string? PhoneNumber { get; set; }
 
-        public string? Role { get; set; }
+        public string Role { get; set; } = string.Empty;
 
         public string? Status { get; set; }
 
@@ -30,7 +30,7 @@
 
         public DateTime? LastPasswordChange { get; set; }
 
-        public string? AccountStatus { get; set; }
+        public string AccountStatus { get; set; } = string.Empty;
 
         public string? PreferredLanguage { get; set; }
 

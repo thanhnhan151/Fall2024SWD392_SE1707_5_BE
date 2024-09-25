@@ -23,6 +23,8 @@ namespace WWMS.BAL.Services
         {
             var user = _mapper.Map<User>(createUserRequest);
 
+            user.PasswordHash = BC.EnhancedHashPassword(createUserRequest.Password, 13);
+
             await _unitOfWork.Users.AddEntityAsync(user);
 
             await _unitOfWork.CompleteAsync();
@@ -38,6 +40,8 @@ namespace WWMS.BAL.Services
         public async Task<GetUserResponse?> GetUserByIdAsync(long id) => _mapper.Map<GetUserResponse?>(await _unitOfWork.Users.GetEntityByIdAsync(id));
 
         public async Task<List<GetUserResponse>> GetUserListAsync() => _mapper.Map<List<GetUserResponse>>(await _unitOfWork.Users.GetAllEntitiesAsync());
+
+        public async Task<GetUserResponse?> LoginAsync(string username, string password) => _mapper.Map<GetUserResponse?>(await _unitOfWork.Users.LoginAsync(username, password));
 
         public async Task UpdateUserAsync(UpdateUserRequest updateUserRequest)
         {

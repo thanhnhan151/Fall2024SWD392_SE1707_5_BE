@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Users;
 
@@ -20,7 +21,7 @@ namespace WWMS.API.Controllers
             _userService = userService;
         }
 
-        #region Add User
+        #region Create User
         /// <summary>
         /// Add an user in the system
         /// </summary>
@@ -30,7 +31,7 @@ namespace WWMS.API.Controllers
         ///     {
         ///       "id": "3",
         ///       "username": "test3",
-        ///       "passwordHash": "test3",
+        ///       "password": "test3",
         ///       "firstName": "test3",
         ///       "lastName": "test3",
         ///       "email": "test3",
@@ -42,7 +43,7 @@ namespace WWMS.API.Controllers
         ///       "profileImageUrl": "test3",
         ///       "bio": "test3",
         ///       "lastPasswordChange": "2024-09-25T09:00:27.824Z",
-        ///       "accountStatus": "test3",
+        ///       "accountStatus": "Active",
         ///       "preferredLanguage": "test3",
         ///       "timeZone": "test3"
         ///     }
@@ -85,6 +86,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -150,14 +152,17 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "userId" : 2,
-        ///       "userName": "newtestaccount",
-        ///       "fullName": "Nguyen Van C",
-        ///       "phoneNumber": "0999123456",
-        ///       "email": "testemail@gmail.com",
-        ///       "password" : "test",
-        ///       "address" : "test",
-        ///       "roleId" : 2
+        ///       "id": "3",
+        ///       "username": "hello",
+        ///       "passwordHash": "gggg",
+        ///       "firstName": "test3",
+        ///       "lastName": "test3",
+        ///       "email": "test3",
+        ///       "phoneNumber": "test3",
+        ///       "role": "test3",
+        ///       "status": "test3",
+        ///       "profileImageUrl": "test3",
+        ///       "bio": "test3"
         ///     }
         ///         
         /// </remarks> 
@@ -175,8 +180,7 @@ namespace WWMS.API.Controllers
             {
                 var user = await _userService.GetUserByIdAsync(updateUserRequest.Id);
 
-                if (user == null)
-                    return BadRequest();
+                if (user == null) return BadRequest();
 
                 await _userService.UpdateUserAsync(updateUserRequest);
 

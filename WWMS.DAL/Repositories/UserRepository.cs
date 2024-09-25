@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 using WWMS.DAL.Interfaces;
@@ -28,6 +29,27 @@ namespace WWMS.DAL.Repositories
             else
             {
                 checkExistUser.AccountStatus = "Active";
+            }
+
+            _dbSet.Update(checkExistUser);
+        }
+
+        public async Task<User?> LoginAsync(string username, string password)
+        {
+            try
+            {
+                var user = await _dbSet.Where(u => u.Username == username).FirstOrDefaultAsync();
+
+                if (user == null) return null;
+
+                if (BC.EnhancedVerify(password, user.PasswordHash)) return user;
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} LoginAsync method error", typeof(UserRepository));
+                return new User();
             }
         }
     }
