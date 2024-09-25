@@ -38,7 +38,7 @@ namespace WWMS.BAL.Authentications
                 return;
             }
 
-            var roleClaim = context.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("role", StringComparison.CurrentCultureIgnoreCase));
+            var roleClaim = context.HttpContext.User.Claims.FirstOrDefault(x => x.Type.ToLower() == "role");
 
             if (roleClaim == null) return;
 

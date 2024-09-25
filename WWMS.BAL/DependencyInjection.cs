@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Mappings;
 using WWMS.BAL.Services;
@@ -11,7 +12,10 @@ namespace WWMS.BAL
     {
         public static IServiceCollection ConfigureBALServices(this IServiceCollection services)
         {
-            services.AddDbContext<WineWarehouseDbContext>();
+            services.AddDbContext<WineWarehouseDbContext>(options =>
+            {
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
