@@ -2,6 +2,10 @@
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
+
+
+        // fix int => long because primary key of all table are long
+
         Task<TEntity?> GetEntityByIdAsync(long id);
 
         Task AddEntityAsync(TEntity entity);
