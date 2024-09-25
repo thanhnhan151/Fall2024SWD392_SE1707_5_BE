@@ -14,5 +14,21 @@ namespace WWMS.DAL.Repositories
             ) : base(context, logger)
         {
         }
+
+        public async Task DisableAsync(long id)
+        {
+            var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"User with {id} does not exist");
+
+            if (checkExistUser.AccountStatus == null) throw new Exception($"User {id}'s account status is null");
+
+            if (checkExistUser.AccountStatus.Equals("Active"))
+            {
+                checkExistUser.AccountStatus = "Inactive";
+            }
+            else
+            {
+                checkExistUser.AccountStatus = "Active";
+            }
+        }
     }
 }

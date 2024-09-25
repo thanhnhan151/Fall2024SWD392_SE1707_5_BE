@@ -5,5 +5,6 @@ namespace WWMS.DAL.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>
     {
+        Task DisableAsync(long id);
     }
 }

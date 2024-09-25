@@ -18,23 +18,21 @@ namespace WWMS.DAL.Infrastructures
             _logger = logger;
             _dbSet = _context.Set<TEntity>();
         }
-        public virtual TEntity AddEntity(TEntity entity) => _dbSet.Add(entity).Entity;
+        public virtual async Task AddEntityAsync(TEntity entity) => await _dbSet.AddAsync(entity);
 
         public virtual void UpdateEntity(TEntity entity) => _dbSet.Update(entity);
 
-        public virtual async Task<TEntity?> GetEntityByIdAsync(int id)
+        public virtual async Task<TEntity?> GetEntityByIdAsync(long id)
         {
             var result = await _dbSet.FindAsync(id);
-            if (result != null)
-            {
-                return result;
-            }
+
+            if (result != null) return result;
 
             return null;
         }
 
         public virtual async Task<ICollection<TEntity>> GetAllEntitiesAsync() => await _dbSet.ToListAsync();
 
-        public Task AddEntities(ICollection<TEntity> entities) => _dbSet.AddRangeAsync(entities);
+        public virtual async Task AddEntitiesAsync(ICollection<TEntity> entities) => await _dbSet.AddRangeAsync(entities);
     }
 }

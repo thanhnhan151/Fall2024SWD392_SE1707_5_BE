@@ -10,6 +10,10 @@ namespace WWMS.BAL.Mappings
         {
             #region User
             CreateMap<User, GetUserResponse>();
+
+            CreateMap<CreateUserRequest, User>();
+
+            CreateMap<UpdateUserRequest, User>();
             #endregion
         }
     }
