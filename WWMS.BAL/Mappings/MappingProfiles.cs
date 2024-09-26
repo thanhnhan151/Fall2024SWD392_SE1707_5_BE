@@ -22,12 +22,13 @@ namespace WWMS.BAL.Mappings
             #region Wine
             CreateMap<Wine, GetWineResponse>()
                 .ForMember(w => w.CategoryName, w => w.MapFrom(w => w.WineCategory.CategoryName));
-
             CreateMap<CreateUpdateWineRequest, Wine>();
-=======
+            #endregion
             #region Import
             CreateMap<ImportRequest, GetImportRequestRespone>();
             CreateMap<CreateImportRequest, ImportRequest>();
+            CreateMap<UpdateImportRequest, ImportRequest>();
+
 
             #endregion
         }

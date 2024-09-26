@@ -33,33 +33,44 @@ namespace WWMS.BAL.Services
 
         public async Task<GetImportRequestRespone> GetImportRequestByIdAsync(long Import_id) => _mapper.Map<GetImportRequestRespone>(await _unitOfWork.Imports.GetEntityByIdAsync(Import_id));
 
-        public async Task CreateImportRequestAnync([FromBody]CreateImportRequest Import)
+        public async Task CreateImportRequestAnync([FromBody] CreateImportRequest Import)
         {
+                var wine = await _unitOfWork.Wines.GetEntityByIdAsync(Import.WineId);
+
+                if (wine == null)
+                {
+                    throw new Exception("Rượu không tồn tại."); 
+                 }
             var import = _mapper.Map<ImportRequest>(Import);
-            import.Id = Import.Id;
-            import.RequestCode = Import.RequestCode; // auto
-            import.ImportDate = _base.CreatedDate;   
-            import.Status = "In Progress";  ///  3 status // In Progress , Completed ,Cancelled
-            import.TotalQuantity = import.TotalQuantity; // auto   ///TotalValue = TotalQuantity x  Wine (price)
-            import.TotalValue = import.TotalValue;
-            import.TransportDetails = import.TransportDetails; // thong tin van chuyen 
-            import.Comments = import.Comments;  // ko can check null
-            import.CustomsClearance = import.CustomsClearance;
-            import.DeliveryStatus = import.DeliveryStatus;
-            import.ExpectedArrival = import.ExpectedArrival;
-            import.InsuranceProvider = import.InsuranceProvider;
-            import.ShippingMethod = import.ShippingMethod;
-            import.TaxDetails = import.TaxDetails;
-            import.WineId = import.WineId;
-            import.UserId = import.UserId;
-
-
-            await _unitOfWork.Imports.AddEntityAsync(import);
-
-            await _unitOfWork.CompleteAsync();
+                import.RequestCode = GenerateRequestCode();
+                import.ImportDate = _base.CreatedDate;
+                import.Status = "In Progress";
+                import.DeliveryStatus = "In Progress";
+                import.TotalValue = wine.Price * import.TotalQuantity;
+                await _unitOfWork.Imports.AddEntityAsync(import);
+                await _unitOfWork.CompleteAsync();
 
         }
+        private string GenerateRequestCode()
+        {
+            // generate dependent : IMP-yyMM (chỉ lấy năm và tháng)
+            string datePart = DateTime.Now.ToString("yyMM"); //  (2 chữ số cho năm, 2 chữ số cho tháng)
+            return $"IMP-{datePart}"; // Ví dụ: IMP-2309
+        }
 
+        public async Task UpdateImportRequestAsync(UpdateImportRequest Import)
+        {
+             _unitOfWork.Imports.UpdateEntity(_mapper.Map<ImportRequest>(Import));
+
+            await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task DisableImportRequestAsync(long id)
+        {
+            await _unitOfWork.Imports.DisableAsync(id);
+
+            await _unitOfWork.CompleteAsync();
+        }
 
 
     }
