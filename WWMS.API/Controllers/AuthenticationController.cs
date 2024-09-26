@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Text;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Users;
-using WWMS.DAL.Entities;
 
 namespace WWMS.API.Controllers
 {
