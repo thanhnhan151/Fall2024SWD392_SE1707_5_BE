@@ -21,7 +21,7 @@ namespace WWMS.API.Controllers
             _userService = userService;
         }
 
-        #region Create User
+        #region Create An User
         /// <summary>
         /// Add an user in the system
         /// </summary>
@@ -108,7 +108,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Get User By Id
+        #region Get An User By Id
         /// <summary>
         /// Get an user in the system
         /// </summary>
@@ -139,12 +139,12 @@ namespace WWMS.API.Controllers
 
             return NotFound(new
             {
-                ErrorMessage = "User does not exist"
+                ErrorMessage = $"User with id: {id} does not exist"
             });
         }
         #endregion
 
-        #region Update User
+        #region Update An User
         /// <summary>
         /// Update an user in the system
         /// </summary>
@@ -166,7 +166,7 @@ namespace WWMS.API.Controllers
         ///     }
         ///         
         /// </remarks> 
-        /// <returns>No content</returns>
+        /// <response code="200">User that was updated</response>
         /// <response code="204">No content</response>
         /// <response code="400">User does not exist</response>
         /// <response code="401">Unauthorized</response>
@@ -180,7 +180,10 @@ namespace WWMS.API.Controllers
             {
                 var user = await _userService.GetUserByIdAsync(updateUserRequest.Id);
 
-                if (user == null) return BadRequest();
+                if (user == null) return NotFound(new
+                {
+                    ErrorMessage = $"User with id: {updateUserRequest.Id} does not exist"
+                }); ;
 
                 await _userService.UpdateUserAsync(updateUserRequest);
 
@@ -196,7 +199,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Disable User
+        #region Disable An User
         /// <summary>
         /// Disable user in the system
         /// </summary>
@@ -220,7 +223,10 @@ namespace WWMS.API.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return NotFound(new
+                {
+                    ErrorMessage = ex.Message
+                });
             }
         }
         #endregion

@@ -16,7 +16,7 @@ namespace WWMS.DAL.Repositories
         {
         }
 
-        public async Task DisableAsync(long id)
+        public override async Task DisableAsync(long id)
         {
             var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"User with {id} does not exist");
 
