@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WWMS.BAL.Models.ImportRequest;
 using WWMS.BAL.Models.Users;
 using WWMS.DAL.Entities;
 
@@ -14,6 +15,10 @@ namespace WWMS.BAL.Mappings
             CreateMap<CreateUserRequest, User>();
 
             CreateMap<UpdateUserRequest, User>();
+            #endregion
+            #region Import
+            CreateMap<ImportRequest, GetImportRequestRespone>();
+            CreateMap<CreateImportRequest, ImportRequest>();
             #endregion
         }
     }

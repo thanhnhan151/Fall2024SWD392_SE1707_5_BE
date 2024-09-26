@@ -6,6 +6,8 @@ namespace WWMS.DAL.Infrastructures
     {
         IUserRepository Users { get; }
 
+        IImportRequestRepository Imports { get; }
+
         Task CompleteAsync();
     }
 }
