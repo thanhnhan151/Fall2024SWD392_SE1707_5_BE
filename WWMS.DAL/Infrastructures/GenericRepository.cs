@@ -34,5 +34,10 @@ namespace WWMS.DAL.Infrastructures
         public virtual async Task<ICollection<TEntity>> GetAllEntitiesAsync() => await _dbSet.ToListAsync();
 
         public virtual async Task AddEntitiesAsync(ICollection<TEntity> entities) => await _dbSet.AddRangeAsync(entities);
+
+        public virtual Task DisableAsync(long id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -11,5 +11,7 @@
         Task<ICollection<TEntity>> GetAllEntitiesAsync();
 
         Task AddEntitiesAsync(ICollection<TEntity> entities);
+
+        Task DisableAsync(long id);
     }   
 }
