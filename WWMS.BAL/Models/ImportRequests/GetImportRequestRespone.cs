@@ -1,21 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WWMS.DAL.Entities;
+﻿using WWMS.DAL.Entities;
 
-namespace WWMS.BAL.Models.ImportRequest
+namespace WWMS.BAL.Models.ImportRequests
 {
-    public class CreateImportRequest
+    public class GetImportRequestRespone
     {
         public long Id { get; set; }
+
+        public string RequestCode { get; set; } = null!;
 
         public string? RequesterName { get; set; }
 
         public string? Supplier { get; set; }
 
+        public DateTime? ImportDate { get; set; }
+
+        public string? Status { get; set; }
+
         public int? TotalQuantity { get; set; }
+
+        public decimal? TotalValue { get; set; }
 
         public string? WarehouseLocation { get; set; }
 
@@ -24,6 +27,8 @@ namespace WWMS.BAL.Models.ImportRequest
         public string? Comments { get; set; }
 
         public string? CustomsClearance { get; set; }
+
+        public string? DeliveryStatus { get; set; }
 
         public DateTime? ExpectedArrival { get; set; }
 
@@ -36,5 +41,13 @@ namespace WWMS.BAL.Models.ImportRequest
         public long WineId { get; set; }
 
         public long UserId { get; set; }
+
+        public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = [];
+
+        public virtual Report? Report { get; set; }
+
+        public virtual User User { get; set; } = null!;
+
+        public virtual Wine Wine { get; set; } = null!;
     }
 }

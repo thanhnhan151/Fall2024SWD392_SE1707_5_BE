@@ -1,26 +1,23 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
-using WWMS.BAL.Models.ImportRequest;
-using WWMS.BAL.Models.Users;
-using WWMS.BAL.Models.Wines;
-using WWMS.BAL.Services;
+using WWMS.BAL.Models.ImportRequests;
 
 namespace WWMS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/import-requests")]
     [ApiController]
-    public class ImportRequestController : ControllerBase
+    public class ImportRequestsController : ControllerBase
     {
-        private readonly ILogger<ImportRequestController> _logger;
+        private readonly ILogger<ImportRequestsController> _logger;
         private readonly IImportRequestService _importService;
 
-        public ImportRequestController(ILogger<ImportRequestController> logger, IImportRequestService importService)
+        public ImportRequestsController(ILogger<ImportRequestsController> logger, IImportRequestService importService)
         {
             _logger = logger;
             _importService = importService;
         }
-        #region Gell All Import Request 
+        #region Gell All Import Requests
         /// <summary>
         /// Get all Import Request  in the system
         /// </summary>
@@ -53,7 +50,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Get An ImportRequest By Id
+        #region Get An Import Request By Id
         /// <summary>
         /// Get an ImportRequest in the system
         /// </summary>
@@ -86,33 +83,33 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Create An ImportRequest
+        #region Create An Import Request
         /// <summary>
         /// Add an user in the system
         /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
-        //{
-        //  "id": 1, 
-        //  "requestCode": "REQ-001",
-        //  "requesterName": "John Doe",
-        //  "supplier": "Supplier A",
-        //  "importDate": "2024-09-25T00:00:00",
-        //  "status": "Pending",
-        //  "totalQuantity": 100,
-        //  "totalValue": 1500,
-        //  "warehouseLocation": "Warehouse 1",
-        //  "transportDetails": "Transport by truck",
-        //  "comments": "No comments",
-        //  "customsClearance": "Cleared",
-        //  "deliveryStatus": "In transit",
-        //  "expectedArrival": "2024-10-01T00:00:00",
-        //  "insuranceProvider": "Insurance Co",
-        //  "shippingMethod": "Air freight",
-        //  "taxDetails": "Tax ID: 123456",
-        //  "wineId": 1,
-        //  "userId": 1,
+        ///     {
+        ///       "id": 1, 
+        ///       "requestCode": "REQ-001",
+        ///       "requesterName": "John Doe",
+        ///       "supplier": "Supplier A",
+        ///       "importDate": "2024-09-25T00:00:00",
+        ///       "status": "Pending",
+        ///       "totalQuantity": 100,
+        ///       "totalValue": 1500,
+        ///       "warehouseLocation": "Warehouse 1",
+        ///       "transportDetails": "Transport by truck",
+        ///       "comments": "No comments",
+        ///       "customsClearance": "Cleared",
+        ///       "deliveryStatus": "In transit",
+        ///       "expectedArrival": "2024-10-01T00:00:00",
+        ///       "insuranceProvider": "Insurance Co",
+        ///       "shippingMethod": "Air freight",
+        ///       "taxDetails": "Tax ID: 123456",
+        ///       "wineId": 1,
+        ///       "userId": 1,
         ///     }
         ///         
         /// </remarks> 
@@ -143,38 +140,38 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Update An ImportRequest
+        #region Update An Import Request
         /// <summary>
         /// Add an user in the system
         /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
-        //{
-        //  "id": 1, 
-        //  "requestCode": "REQ-001",
-        //  "requesterName": "John Doe",
-        //  "supplier": "Supplier A",
-        //  "importDate": "2024-09-25T00:00:00",
-        //  "status": "Pending",
-        //  "totalQuantity": 100,
-        //  "totalValue": 1500,
-        //  "warehouseLocation": "Warehouse 1",
-        //  "transportDetails": "Transport by truck",
-        //  "comments": "No comments",
-        //  "customsClearance": "Cleared",
-        //  "deliveryStatus": "In transit",
-        //  "expectedArrival": "2024-10-01T00:00:00",
-        //  "insuranceProvider": "Insurance Co",
-        //  "shippingMethod": "Air freight",
-        //  "taxDetails": "Tax ID: 123456",
-        //  "wineId": 1,
-        //  "userId": 1,
+        ///     {
+        ///       "id": 1, 
+        ///       "requestCode": "REQ-001",
+        ///       "requesterName": "John Doe",
+        ///       "supplier": "Supplier A",
+        ///       "importDate": "2024-09-25T00:00:00",
+        ///       "status": "Pending",
+        ///       "totalQuantity": 100,
+        ///       "totalValue": 1500,
+        ///       "warehouseLocation": "Warehouse 1",
+        ///       "transportDetails": "Transport by truck",
+        ///       "comments": "No comments",
+        ///       "customsClearance": "Cleared",
+        ///       "deliveryStatus": "In transit",
+        ///       "expectedArrival": "2024-10-01T00:00:00",
+        ///       "insuranceProvider": "Insurance Co",
+        ///       "shippingMethod": "Air freight",
+        ///       "taxDetails": "Tax ID: 123456",
+        ///       "wineId": 1,
+        ///       "userId": 1,
         ///     }
         ///         
         /// </remarks> 
-        /// <returns>ImPort  that was created</returns>
-        /// <response code="200">ImPort that was created</response>
+        /// <returns>Import request  that was created</returns>
+        /// <response code="200">Import request that was created</response>
         /// <response code="400">Failed validation, Wine was null</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
@@ -206,9 +203,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-
-
-        #region Disable An ImportRequest
+        #region Disable An Import Request
         /// <summary>
         /// Disable user in the system
         /// </summary>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WWMS.BAL.Models.ImportRequest;
-using WWMS.BAL.Models.Users;
+﻿using WWMS.BAL.Models.ImportRequests;
 
 namespace WWMS.BAL.Interfaces
 {

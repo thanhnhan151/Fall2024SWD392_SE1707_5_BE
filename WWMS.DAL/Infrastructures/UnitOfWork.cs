@@ -13,11 +13,9 @@ namespace WWMS.DAL.Infrastructures
 
         public IUserRepository Users { get; private set; }
 
-
         public IWineRepository Wines { get; private set; }
 
         public IImportRequestRepository Imports { get; private set; }
-
 
         public UnitOfWork(WineWarehouseDbContext context, ILoggerFactory loggerFactory)
         {
@@ -31,7 +29,6 @@ namespace WWMS.DAL.Infrastructures
             Wines = new WineRepository(_context, _logger);
 
             Imports = new ImportRequestRepository(context, _logger);
-
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

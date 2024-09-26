@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WWMS.DAL.Entities;
-
-namespace WWMS.BAL.Models.ImportRequest
+﻿namespace WWMS.BAL.Models.ImportRequests
 {
-    public class GetImportRequestRespone
+    public class UpdateImportRequest
     {
         public long Id { get; set; }
 
@@ -47,12 +40,5 @@ namespace WWMS.BAL.Models.ImportRequest
 
         public long UserId { get; set; }
 
-        public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = [];
-
-        public virtual Report? Report { get; set; }
-
-        public virtual User User { get; set; } = null!;
-
-        public virtual Wine Wine { get; set; } = null!;
     }
 }

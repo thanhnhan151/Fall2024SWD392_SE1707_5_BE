@@ -18,19 +18,16 @@ namespace WWMS.BAL
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
+            services.AddScoped<BaseEntity>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(MappingProfiles));
-
 
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IWineService, WineService>();
 
-
-            //TODO: register any services used DI
-            services.AddScoped<BaseEntity>();
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IImportRequestService, ImportRequestService>();
 
             return services;

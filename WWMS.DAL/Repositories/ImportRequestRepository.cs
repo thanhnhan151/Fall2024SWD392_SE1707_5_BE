@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 using WWMS.DAL.Interfaces;
@@ -17,8 +12,9 @@ namespace WWMS.DAL.Repositories
         {
 
         }
+
         // In Progress , Completed ,Cancelled
-        public async Task DisableAsync(long id)
+        public override async Task DisableAsync(long id)
         {
             var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"Import Stick with {id} does not exist");
 
