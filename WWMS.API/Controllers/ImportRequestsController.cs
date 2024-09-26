@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.ImportRequests;
 
 namespace WWMS.API.Controllers
 {
-    [Route("api/import-requests")]
+    [ApiVersion(1)]
+    [Route("api/v{version:apiVersion}/import-requests")]
     [ApiController]
     public class ImportRequestsController : ControllerBase
     {

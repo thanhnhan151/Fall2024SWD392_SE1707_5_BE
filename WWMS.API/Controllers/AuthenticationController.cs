@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,7 +10,8 @@ using WWMS.BAL.Models.Users;
 
 namespace WWMS.API.Controllers
 {
-    [Route("api/auth")]
+    [ApiVersion(1)]
+    [Route("api/v{version:apiVersion}/auth")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {

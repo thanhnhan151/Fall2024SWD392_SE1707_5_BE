@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
@@ -6,8 +7,9 @@ using WWMS.BAL.Models.Users;
 
 namespace WWMS.API.Controllers
 {
-    [Route("api/users")]
-    [ApiController]
+    [ApiVersion(1)]
+    [Route("api/v{version:apiVersion}/users")]
+    [ApiController]   
     public class UsersController : ControllerBase
     {
         private readonly ILogger<UsersController> _logger;
@@ -86,7 +88,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Staff")]
+        //[PermissionAuthorize("Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {

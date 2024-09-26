@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
@@ -6,7 +7,8 @@ using WWMS.BAL.Models.Wines;
 
 namespace WWMS.API.Controllers
 {
-    [Route("api/wines")]
+    [ApiVersion(1)]
+    [Route("api/v{version:apiVersion}/wines")]
     [ApiController]
     public class WinesController : ControllerBase
     {
@@ -86,7 +88,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Staff")]
+        //[PermissionAuthorize("Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
