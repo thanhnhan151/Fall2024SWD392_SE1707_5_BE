@@ -20,9 +20,10 @@ namespace WWMS.BAL
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(MappingProfiles));
-            //TODO: register any services used DI
 
             services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IWineService, WineService>();
 
             return services;
         }

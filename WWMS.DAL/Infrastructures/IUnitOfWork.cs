@@ -6,6 +6,8 @@ namespace WWMS.DAL.Infrastructures
     {
         IUserRepository Users { get; }
 
+        IWineRepository Wines { get; }
+
         Task CompleteAsync();
     }
 }
