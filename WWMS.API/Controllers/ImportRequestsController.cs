@@ -205,7 +205,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Disable An Import Request
+        #region Cancel An Import Request status
         /// <summary>
         /// Disable user in the system
         /// </summary>
@@ -218,12 +218,44 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DisableAsync(long id)
+        [HttpPut("cancel-status/{id}")]
+        public async Task<IActionResult> CanncelStatusAsync(long id)
         {
             try
             {
                 await _importService.DisableImportRequestAsync(id);
+
+                return Ok("Update Successfully!");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region Cancel An Import Request status
+        /// <summary>
+        /// Disable Import Request status in the system
+        /// </summary>
+        /// <param name="id">Id of the Import Request status you want to change</param>
+        /// <response code="200">Ok</response>
+        /// <response code="201">Created At</response>
+        /// <response code="204">No Content</response>
+        /// <response code="400">If the Import Request status is null</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        [HttpPut("cancel-delivery-status/{id}")]
+        public async Task<IActionResult> CanncelDeliveryStatusAsync(long id)
+        {
+            try
+            {
+                await _importService.DisableImportDeliveryRequestAsync(id);
 
                 return Ok("Update Successfully!");
             }
