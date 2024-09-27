@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using WWMS.BAL.Models.ImportRequests;
 using WWMS.BAL.Models.Users;
+using WWMS.BAL.Models.Warehouses;
 using WWMS.BAL.Models.Wines;
 using WWMS.DAL.Entities;
 
@@ -21,6 +22,7 @@ namespace WWMS.BAL.Mappings
             #region Wine
             CreateMap<Wine, GetWineResponse>()
                 .ForMember(w => w.CategoryName, w => w.MapFrom(w => w.WineCategory.CategoryName));
+
             CreateMap<CreateUpdateWineRequest, Wine>();
             #endregion
 
@@ -30,6 +32,12 @@ namespace WWMS.BAL.Mappings
             CreateMap<CreateImportRequest, ImportRequest>();
 
             CreateMap<UpdateImportRequest, ImportRequest>();
+            #endregion
+
+            #region Warehouse
+            CreateMap<Warehouse, GetWarehouseResponse>();
+
+            CreateMap<CreateUpdateWarehouseRequest, Warehouse>();
             #endregion
         }
     }

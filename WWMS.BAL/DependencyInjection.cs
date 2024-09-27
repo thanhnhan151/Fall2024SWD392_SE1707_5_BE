@@ -28,7 +28,11 @@ namespace WWMS.BAL
 
             services.AddScoped<IWineService, WineService>();
 
+            services.AddScoped<IWarehouseService, WarehouseService>();
+
             services.AddScoped<IImportRequestService, ImportRequestService>();
+
+            services.AddScoped<IWineCategoryService, WineCategoryService>();
 
             return services;
         }

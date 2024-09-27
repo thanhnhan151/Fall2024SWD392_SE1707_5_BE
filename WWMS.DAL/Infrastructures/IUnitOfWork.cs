@@ -10,6 +10,10 @@ namespace WWMS.DAL.Infrastructures
 
         IImportRequestRepository Imports { get; }
 
+        IWarehouseRepository Warehouses { get; }
+
+        IWineCategoryRepository WineCategories { get; }
+
         Task CompleteAsync();
     }
 }
