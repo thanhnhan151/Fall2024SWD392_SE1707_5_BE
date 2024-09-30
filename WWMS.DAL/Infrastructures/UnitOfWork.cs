@@ -21,6 +21,8 @@ namespace WWMS.DAL.Infrastructures
 
         public IWineCategoryRepository WineCategories { get; private set; }
 
+        public IAdditionalImportRequestRepository AdditionalImports { get; private set; }
+
         public UnitOfWork(WineWarehouseDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
@@ -36,6 +38,8 @@ namespace WWMS.DAL.Infrastructures
             Warehouses = new WarehouseRepository(context, _logger);
 
             WineCategories = new WineCategoryRepository(context, _logger);
+
+            AdditionalImports = new AdditionalImportRequestRepository(context, _logger);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

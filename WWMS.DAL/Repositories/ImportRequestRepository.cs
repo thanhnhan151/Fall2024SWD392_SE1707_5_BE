@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 using WWMS.DAL.Interfaces;
@@ -13,8 +14,30 @@ namespace WWMS.DAL.Repositories
 
         }
 
+        public override async Task<ICollection<ImportRequest>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.User).Include(d=> d.Wine).ToListAsync();
+
+
+        //       public override async Task<ICollection<ImportRequest>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.User).ToListAsync();
         // In Progress , Completed ,Cancelled
-        public override async Task DisableAsync(long id)
+        public  async Task UpdateStateAsync(long id)
+        {
+            var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"Import Stick with {id} does not exist");
+
+            if (checkExistUser.Status == null) throw new Exception($"Import Stick {id}'s status is null");
+
+            if (checkExistUser.Status.Equals("In Progress"))
+            {
+                checkExistUser.Status = "Cancelled";
+            }
+            else
+            {
+                checkExistUser.Status = "In Progress";
+            }
+
+            _dbSet.Update(checkExistUser);
+        }
+
+        public async Task UpdateDeliveryStateAsync(long id)
         {
             var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"Import Stick with {id} does not exist");
 
@@ -31,5 +54,7 @@ namespace WWMS.DAL.Repositories
 
             _dbSet.Update(checkExistUser);
         }
+
+
     }
 }

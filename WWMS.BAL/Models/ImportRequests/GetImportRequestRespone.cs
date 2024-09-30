@@ -38,16 +38,11 @@ namespace WWMS.BAL.Models.ImportRequests
 
         public string? TaxDetails { get; set; }
 
-        public long WineId { get; set; }
+        public string WineName { get; set; } = null!;
 
-        public long UserId { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = [];
 
-        public virtual Report? Report { get; set; }
-
-        public virtual User User { get; set; } = null!;
-
-        public virtual Wine Wine { get; set; } = null!;
     }
 }

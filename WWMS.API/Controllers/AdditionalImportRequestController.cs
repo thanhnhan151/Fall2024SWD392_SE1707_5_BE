@@ -2,30 +2,31 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
+using WWMS.BAL.Models.AdditionalImportRequests;
 using WWMS.BAL.Models.ImportRequests;
 
 namespace WWMS.API.Controllers
 {
     [ApiVersion(1)]
-    [Route("api/v{version:apiVersion}/import-requests")]
+    [Route("api/v{version:apiVersion}/additions-requests")]
     [ApiController]
-    public class ImportRequestsController : ControllerBase
+    public class AdditionalImportRequestController : ControllerBase
     {
-        private readonly ILogger<ImportRequestsController> _logger;
-        private readonly IImportRequestService _importService;
-
-        public ImportRequestsController(ILogger<ImportRequestsController> logger, IImportRequestService importService)
+        private readonly ILogger<AdditionalImportRequestController> _logger;
+        private readonly IAdditionalImportRequestService _additionalImport;
+        public AdditionalImportRequestController(ILogger<AdditionalImportRequestController> logger, IAdditionalImportRequestService importService)
         {
             _logger = logger;
-            _importService = importService;
+            _additionalImport = importService;
         }
-        #region Gell All Import Requests
+
+        #region Gell All Addition Import Requests
         /// <summary>
-        /// Get all Import Request  in the system
+        /// Get all Addition Import Requests  in the system
         /// </summary>
-        /// <returns>A list of all Import Request </returns>
-        /// <response code="200">Return all Import Request  in the system</response>
-        /// <response code="400">If no Import Request  are in the system</response>
+        /// <returns>A list of all Addition Import Requests </returns>
+        /// <response code="200">Return all Addition Import Requests  in the system</response>
+        /// <response code="400">If no Addition Import Requests  are in the system</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
@@ -36,7 +37,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var result = await _importService.GetImportRequestAsync();
+                var result = await _additionalImport.GetAdditionalImportRequestAsync();
 
                 if (result is not null)
                 {
@@ -52,14 +53,16 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Get An Import Request By Id
+
+
+        #region Gell All Addition Import Requests
         /// <summary>
-        /// Get an ImportRequest in the system
+        /// Get an Addition Import in the system
         /// </summary>
-        /// <param name="id">Id of the ImportRequest you want to get</param>
+        /// <param name="id">Id of the Addition Import you want to get</param>
         /// <returns>An user</returns>
-        /// <response code="200">Return an ImportRequest in the system</response>
-        /// <response code="400">If the ImportRequest is null</response>
+        /// <response code="200">Return an Addition Import in the system</response>
+        /// <response code="400">If the Addition Import is null</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
@@ -69,7 +72,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var result = await _importService.GetImportRequestByIdAsync(id);
+                var result = await _additionalImport.GetAdditionalImportRequestIdAsync(id);
 
                 if (result is not null)
                 {
@@ -85,50 +88,43 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Create An Import Request
+        #region Create An Addition Import Requests
         /// <summary>
-        /// Add an user in the system
+        /// Add an Addition Import Requests in the system
         /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
-        ///     {
-        ///       "id": 1, 
-        ///       "requestCode": "REQ-001",
-        ///       "requesterName": "John Doe",
-        ///       "supplier": "Supplier A",
-        ///       "importDate": "2024-09-25T00:00:00",
-        ///       "status": "Pending",
-        ///       "totalQuantity": 100,
-        ///       "totalValue": 1500,
-        ///       "warehouseLocation": "Warehouse 1",
-        ///       "transportDetails": "Transport by truck",
-        ///       "comments": "No comments",
-        ///       "customsClearance": "Cleared",
-        ///       "deliveryStatus": "In transit",
-        ///       "expectedArrival": "2024-10-01T00:00:00",
-        ///       "insuranceProvider": "Insurance Co",
-        ///       "shippingMethod": "Air freight",
-        ///       "taxDetails": "Tax ID: 123456",
-        ///       "wineId": 1,
-        ///       "userId": 1,
-        ///     }
+        //{
+        //  "id": 0,
+        //  "requesterName": "string",
+        //  "supplier": "string",
+        //  "additionalQuantity": 0,
+        //  "totalValue": 0,
+        //  "warehouseLocation": "string",
+        //  "transportDetails": "string",
+        //  "comments": "string",
+        //  "exportRequestId": 0,
+        //  "inventoryCheckRequestId": 0,
+        //  "userId": 0,
+        //  "importRequestId": 0
+        //}
         ///         
         /// </remarks> 
-        /// <returns>ImPort  that was created</returns>
-        /// <response code="200">ImPort that was created</response>
+        /// <returns>Addition Import Requests  that was created</returns>
+        /// <response code="200">Addition Import Requests that was created</response>
         /// <response code="400">Failed validation , Wine was null</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] CreateImportRequest createImport)
+    [HttpPost]
+        public async Task<IActionResult> AddAsync([FromBody] CreateAdditionalImportRequest createImport)
         {
             try
             {
-                await _importService.CreateImportRequestAnync(createImport);
-                var Im = await _importService.GetImportRequestByIdAsync(createImport.Id);
+                await _additionalImport.CreateAdditionalImportRequestAnync(createImport);
+                var Im = await _additionalImport.GetAdditionalImportRequestIdAsync(createImport.Id);
                 return Ok(Im);
             }
             catch (Exception ex)
@@ -142,7 +138,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Update An Import Request
+        #region Update An Addition Import Request
         /// <summary>
         /// Add an user in the system
         /// </summary>
@@ -172,7 +168,7 @@ namespace WWMS.API.Controllers
         ///     }
         ///         
         /// </remarks> 
-        /// <returns>Import request  that was created</returns>
+        /// <returns>Addition Import  that was created</returns>
         /// <response code="200">Import request that was created</response>
         /// <response code="400">Failed validation, Wine was null</response>
         /// <response code="401">Unauthorized</response>
@@ -180,18 +176,18 @@ namespace WWMS.API.Controllers
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateImportRequest updateRequest)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateAdditionalImportRequest updateRequest)
         {
             try
             {
-                var user = await _importService.GetImportRequestByIdAsync(updateRequest.Id);
+                var user = await _additionalImport.GetAdditionalImportRequestIdAsync(updateRequest.Id);
 
                 if (user == null) return NotFound(new
                 {
                     ErrorMessage = $"id: {updateRequest.Id} does not exist"
                 });
 
-                await _importService.UpdateImportRequestAsync(updateRequest);
+                await _additionalImport.UpdateAdditionalImportRequestAsync(updateRequest);
 
                 return Ok(updateRequest);
             }
@@ -205,9 +201,9 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Cancel An Import Request status
+        #region Cancel An Addition Import Request status
         /// <summary>
-        /// Disable user in the system
+        /// Disable Addition Import Request in the system
         /// </summary>
         /// <param name="id">Id of the user you want to change</param>
         /// <response code="200">Ok</response>
@@ -223,39 +219,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                await _importService.DisableImportRequestAsync(id);
-
-                return Ok("Update Successfully!");
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new
-                {
-                    ErrorMessage = ex.Message
-                });
-            }
-        }
-        #endregion
-
-        #region Cancel An Import Request Delivery Status
-        /// <summary>
-        /// Disable Import Request Delivery status in the system
-        /// </summary>
-        /// <param name="id">Id of the Import Request status you want to change</param>
-        /// <response code="200">Ok</response>
-        /// <response code="201">Created At</response>
-        /// <response code="204">No Content</response>
-        /// <response code="400">If the user is null</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="404">Not Found</response>
-        /// <response code="500">Internal Server</response>
-        [HttpPut("cancel-delivery-status/{id}")]
-        public async Task<IActionResult> CanncelDeliveryStatusAsync(long id)
-        {
-            try
-            {
-                await _importService.DisableImportDeliveryRequestAsync(id);
+                await _additionalImport.DisableAdditionalImportRequestAsync(id);
 
                 return Ok("Update Successfully!");
             }
@@ -269,4 +233,8 @@ namespace WWMS.API.Controllers
         }
         #endregion
     }
+
+
+
+
 }

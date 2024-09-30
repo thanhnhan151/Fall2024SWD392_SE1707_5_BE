@@ -34,6 +34,8 @@ namespace WWMS.BAL
 
             services.AddScoped<IWineCategoryService, WineCategoryService>();
 
+            services.AddScoped<IAdditionalImportRequestService, AdditionalImportRequestService>();
+
             return services;
         }
     }

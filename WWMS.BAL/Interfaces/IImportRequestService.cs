@@ -13,5 +13,7 @@ namespace WWMS.BAL.Interfaces
         Task UpdateImportRequestAsync(UpdateImportRequest Import);
 
         Task DisableImportRequestAsync(long id);
+
+        Task DisableImportDeliveryRequestAsync(long id);
     }
 }

@@ -25,6 +25,8 @@ namespace WWMS.BAL.Services
 
         public async Task<GetImportRequestRespone> GetImportRequestByIdAsync(long Import_id) => _mapper.Map<GetImportRequestRespone>(await _unitOfWork.Imports.GetEntityByIdAsync(Import_id));
 
+
+
         public async Task CreateImportRequestAnync([FromBody] CreateImportRequest Import)
         {
             var wine = await _unitOfWork.Wines.GetEntityByIdAsync(Import.WineId) ?? throw new Exception("Rượu không tồn tại.");
@@ -42,11 +44,16 @@ namespace WWMS.BAL.Services
         private static string GenerateRequestCode()
         {
             // generate dependent : IMP-yyMM (chỉ lấy năm và tháng)
-            string datePart = DateTime.Now.ToString("yyMM"); //  (2 chữ số cho năm, 2 chữ số cho tháng)
-            return $"IMP-{datePart}"; // Ví dụ: IMP-2309
+            string datePart = DateTime.Now.ToString("yyMM"); // (2 chữ số cho năm, 2 chữ số cho tháng)
+
+            // Tạo 4 chữ số ngẫu nhiên
+            Random random = new Random();
+            int randomDigits = random.Next(1000, 9999); // Sinh số ngẫu nhiên trong khoảng từ 1000 đến 9999
+
+            return $"IMP-{datePart}{randomDigits}"; // Ví dụ: IMP-23091234
         }
 
-        public async Task UpdateImportRequestAsync(UpdateImportRequest Import)
+        public async Task UpdateImportRequestAsync([FromBody] UpdateImportRequest Import)
         {
             _unitOfWork.Imports.UpdateEntity(_mapper.Map<ImportRequest>(Import));
 
@@ -55,7 +62,14 @@ namespace WWMS.BAL.Services
 
         public async Task DisableImportRequestAsync(long id)
         {
-            await _unitOfWork.Imports.DisableAsync(id);
+            await _unitOfWork.Imports.UpdateStateAsync(id);
+
+            await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task DisableImportDeliveryRequestAsync(long id)
+        {
+            await _unitOfWork.Imports.UpdateDeliveryStateAsync(id);
 
             await _unitOfWork.CompleteAsync();
         }
