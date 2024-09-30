@@ -17,7 +17,7 @@ namespace WWMS.DAL.Repositories
         public AdditionalImportRequestRepository(WineWarehouseDbContext context, ILogger logger) : base(context, logger)
         {
         }
-        public override async Task<ICollection<AdditionalImportRequest>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.ImportRequest).ThenInclude(d => d.User).ToListAsync();
+        public override async Task<ICollection<AdditionalImportRequest>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.ImportRequest).Include(d => d.User).ToListAsync();
         public async Task UpdateStateAsync(long id)
         {
             var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"Import Stick with {id} does not exist");
