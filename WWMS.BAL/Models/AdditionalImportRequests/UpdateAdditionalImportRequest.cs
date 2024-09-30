@@ -7,7 +7,7 @@ using WWMS.DAL.Entities;
 
 namespace WWMS.BAL.Models.AdditionalImportRequests
 {
-    public class GetAdditionalImportRequest
+    public class UpdateAdditionalImportRequest
     {
         public long Id { get; set; }
 
@@ -35,9 +35,9 @@ namespace WWMS.BAL.Models.AdditionalImportRequests
 
         public long InventoryCheckRequestId { get; set; }
 
-        public string? Usernames { get; set; } = string.Empty;
+        public long UserId { get; set; }
 
-        public string? RequesterNames { get; set; } = string.Empty;
+        public long ImportRequestId { get; set; }
 
     }
 }

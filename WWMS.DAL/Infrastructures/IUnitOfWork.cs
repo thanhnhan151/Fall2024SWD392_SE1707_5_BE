@@ -14,6 +14,8 @@ namespace WWMS.DAL.Infrastructures
 
         IWineCategoryRepository WineCategories { get; }
 
+        IAdditionalImportRequestRepository AdditionalImports { get; }
+
         Task CompleteAsync();
     }
 }

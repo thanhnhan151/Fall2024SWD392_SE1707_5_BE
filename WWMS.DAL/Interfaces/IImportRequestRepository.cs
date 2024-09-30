@@ -7,5 +7,6 @@ namespace WWMS.DAL.Interfaces
     {
         Task UpdateStateAsync(long id);
         Task UpdateDeliveryStateAsync(long id);
+
     }
 }

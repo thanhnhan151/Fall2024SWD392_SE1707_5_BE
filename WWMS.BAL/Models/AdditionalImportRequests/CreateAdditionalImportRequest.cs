@@ -3,23 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WWMS.DAL.Entities;
 
 namespace WWMS.BAL.Models.AdditionalImportRequests
 {
-    public class GetAdditionalImportRequest
+    public class CreateAdditionalImportRequest
     {
         public long Id { get; set; }
-
-        public string RequestCode { get; set; } = null!;
 
         public string? RequesterName { get; set; }
 
         public string? Supplier { get; set; }
-
-        public DateTime? ImportDate { get; set; }
-
-        public string? Status { get; set; }
 
         public int? AdditionalQuantity { get; set; }
 
@@ -35,9 +28,8 @@ namespace WWMS.BAL.Models.AdditionalImportRequests
 
         public long InventoryCheckRequestId { get; set; }
 
-        public string? Usernames { get; set; } = string.Empty;
+        public long UserId { get; set; }
 
-        public string? RequesterNames { get; set; } = string.Empty;
-
+        public long ImportRequestId { get; set; }
     }
 }
