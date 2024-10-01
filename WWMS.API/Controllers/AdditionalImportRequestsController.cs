@@ -3,18 +3,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.AdditionalImportRequests;
-using WWMS.BAL.Models.ImportRequests;
 
 namespace WWMS.API.Controllers
 {
     [ApiVersion(1)]
-    [Route("api/v{version:apiVersion}/additions-requests")]
+    [Route("api/v{version:apiVersion}/additional-requests")]
     [ApiController]
-    public class AdditionalImportRequestController : ControllerBase
+    public class AdditionalImportRequestsController : ControllerBase
     {
-        private readonly ILogger<AdditionalImportRequestController> _logger;
+        private readonly ILogger<AdditionalImportRequestsController> _logger;
         private readonly IAdditionalImportRequestService _additionalImport;
-        public AdditionalImportRequestController(ILogger<AdditionalImportRequestController> logger, IAdditionalImportRequestService importService)
+        public AdditionalImportRequestsController(ILogger<AdditionalImportRequestsController> logger, IAdditionalImportRequestService importService)
         {
             _logger = logger;
             _additionalImport = importService;
@@ -52,8 +51,6 @@ namespace WWMS.API.Controllers
             return NotFound();
         }
         #endregion
-
-
 
         #region Gell All Addition Import Requests
         /// <summary>
@@ -233,8 +230,4 @@ namespace WWMS.API.Controllers
         }
         #endregion
     }
-
-
-
-
 }

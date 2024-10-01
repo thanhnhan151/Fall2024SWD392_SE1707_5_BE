@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 using WWMS.DAL.Interfaces;
@@ -18,6 +13,7 @@ namespace WWMS.DAL.Repositories
         {
         }
         public override async Task<ICollection<AdditionalImportRequest>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.ImportRequest).Include(d => d.User).ToListAsync();
+
         public async Task UpdateStateAsync(long id)
         {
             var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"Import Stick with {id} does not exist");
