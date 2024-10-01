@@ -92,20 +92,20 @@ namespace WWMS.API.Controllers
         /// <remarks>
         /// Sample request:
         /// 
-        //{
-        //  "id": 0,
-        //  "requesterName": "string",
-        //  "supplier": "string",
-        //  "additionalQuantity": 0,
-        //  "totalValue": 0,
-        //  "warehouseLocation": "string",
-        //  "transportDetails": "string",
-        //  "comments": "string",
-        //  "exportRequestId": 0,
-        //  "inventoryCheckRequestId": 0,
-        //  "userId": 0,
-        //  "importRequestId": 0
-        //}
+        ///     {
+        ///       "id": 0,
+        ///       "requesterName": "string",
+        ///       "supplier": "string",
+        ///       "additionalQuantity": 0,
+        ///       "totalValue": 0,
+        ///       "warehouseLocation": "string",
+        ///       "transportDetails": "string",
+        ///       "comments": "string",
+        ///       "exportRequestId": 0,
+        ///       "inventoryCheckRequestId": 0,
+        ///       "userId": 0,
+        ///       "importRequestId": 0
+        ///     }
         ///         
         /// </remarks> 
         /// <returns>Addition Import Requests  that was created</returns>
@@ -115,7 +115,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-    [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateAdditionalImportRequest createImport)
         {
             try
