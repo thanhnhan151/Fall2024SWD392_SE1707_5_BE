@@ -7,7 +7,7 @@ using WWMS.BAL.Models.AdditionalImportRequests;
 namespace WWMS.API.Controllers
 {
     [ApiVersion(1)]
-    [Route("api/v{version:apiVersion}/additional-requests")]
+    [Route("api/v{version:apiVersion}/additional-import-requests")]
     [ApiController]
     public class AdditionalImportRequestsController : ControllerBase
     {
