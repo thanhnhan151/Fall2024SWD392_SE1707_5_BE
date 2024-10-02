@@ -25,7 +25,6 @@ namespace WWMS.DAL.Repositories
             return null;
         }
 
-        //       public override async Task<ICollection<ImportRequest>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.User).ToListAsync();
         // In Progress , Completed ,Cancelled
         public async Task UpdateStateAsync(long id)
         {
@@ -80,7 +79,5 @@ namespace WWMS.DAL.Repositories
 
             _dbSet.Update(checkExistUser);
         }
-
-
     }
 }

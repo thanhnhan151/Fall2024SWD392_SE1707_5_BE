@@ -8,7 +8,5 @@ namespace WWMS.DAL.Interfaces
         Task UpdateStateAsync(long id);
         Task<ImportRequest> UpdateStatusSuccessAsync(long id);
         Task UpdateDeliveryStateAsync(long id);
-        Task<ImportRequest?> GetEntityByIdAsync(long id);
-
     }
 }
