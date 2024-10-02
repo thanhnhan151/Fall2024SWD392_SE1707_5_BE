@@ -13,6 +13,7 @@ namespace WWMS.DAL.Repositories
         {
         }
         public override async Task<ICollection<AdditionalImportRequest>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.ImportRequest).Include(d => d.User).ToListAsync();
+
         public override async Task<AdditionalImportRequest?> GetEntityByIdAsync(long id)
         {
             var result = await _dbSet.Include(c => c.ImportRequest).Include(d => d.User).FirstOrDefaultAsync(c => c.Id == id);
@@ -21,7 +22,9 @@ namespace WWMS.DAL.Repositories
 
             return null;
         }
+
         public async Task<ICollection<AdditionalImportRequest>> GetAdditionalByImportRequestCodeAsync(int req) => await _dbSet.Include(c => c.ImportRequestId == req).ToListAsync();
+
         public async Task UpdateStateAsync(long id)
         {
             var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"Import Stick with {id} does not exist");
@@ -39,7 +42,6 @@ namespace WWMS.DAL.Repositories
 
             _dbSet.Update(checkExistUser);
         }
-
 
         public async Task<AdditionalImportRequest> UpdateStatusSuccessAsync(long id)
         {
@@ -59,6 +61,5 @@ namespace WWMS.DAL.Repositories
             _dbSet.Update(checkExistAddImport);
             return checkExistAddImport;
         }
-
     }
 }

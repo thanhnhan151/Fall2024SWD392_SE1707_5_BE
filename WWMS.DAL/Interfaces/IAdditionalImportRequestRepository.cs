@@ -9,9 +9,6 @@ namespace WWMS.DAL.Interfaces
 
         Task<ICollection<AdditionalImportRequest>> GetAdditionalByImportRequestCodeAsync(int req);
 
-
-        Task<AdditionalImportRequest?> GetEntityByIdAsync(long id);
-
         Task<AdditionalImportRequest> UpdateStatusSuccessAsync(long id);
     }
 }
