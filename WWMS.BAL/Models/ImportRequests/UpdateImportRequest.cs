@@ -1,4 +1,6 @@
-﻿namespace WWMS.BAL.Models.ImportRequests
+﻿using WWMS.DAL.Entities;
+
+namespace WWMS.BAL.Models.ImportRequests
 {
     public class UpdateImportRequest
     {
@@ -39,6 +41,8 @@
         public long WineId { get; set; }
 
         public long UserId { get; set; }
+
+
 
     }
 }

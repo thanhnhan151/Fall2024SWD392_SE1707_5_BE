@@ -36,6 +36,8 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
+
+
         private static string GenerateRequestCode()
         {
             string datePart = DateTime.Now.ToString("yyMM"); 
@@ -59,10 +61,25 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
+        public async Task UpdateStatusAdditionalImportRequestAsync(long id)
+        {
+            var exitAdd = await _unitOfWork.AdditionalImports.UpdateStatusSuccessAsync(id);
+            if (exitAdd.Status == "Complete") 
+            {
+                var exitimport = await _unitOfWork.Imports.UpdateStatusSuccessAsync(exitAdd.ImportRequestId);
+                var exitWines = await _unitOfWork.Wines.GetEntityByIdAsync(exitimport.WineId) ?? throw new Exception($"Wine with {exitimport.WineId} id does not exist");
+                if (exitimport.Status == "Complete")
+                {
+                    exitWines.AvailableStock = exitWines.AvailableStock + exitimport.TotalQuantity;
+                    _unitOfWork.Wines.UpdateEntity(exitWines);
+                    await _unitOfWork.CompleteAsync();
+                }
+                else
+                {
+                    throw new Exception("Import request already complete or not available");
+                }
+            }
 
-
-
-
-
+        }
     }
 }

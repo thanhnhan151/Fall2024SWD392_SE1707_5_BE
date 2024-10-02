@@ -237,6 +237,37 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
+        #region Complete An Import Request status (save data if status is complete)
+        /// <summary>
+        /// Complete An Import Request in the system
+        /// </summary>
+        /// <param name="id">Id of the user you want to change</param>
+        /// <response code="200">Ok</response>
+        /// <response code="201">Created At</response>
+        /// <response code="204">No Content</response>
+        /// <response code="400">If the Import Request is null</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        [HttpPut("complete-status/{id}")]
+        public async Task<IActionResult> CompleteStatusAsync(long id)
+        {
+            try
+            {
+                await _importService.UpdateStatusImportRequestAsync(id);
+
+                return Ok("Update Successfully!");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
         #region Cancel An Import Request Delivery Status
         /// <summary>
         /// Disable Import Request Delivery status in the system

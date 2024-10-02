@@ -92,20 +92,20 @@ namespace WWMS.API.Controllers
         /// <remarks>
         /// Sample request:
         /// 
-        ///     {
-        ///       "id": 0,
-        ///       "requesterName": "string",
-        ///       "supplier": "string",
-        ///       "additionalQuantity": 0,
-        ///       "totalValue": 0,
-        ///       "warehouseLocation": "string",
-        ///       "transportDetails": "string",
-        ///       "comments": "string",
-        ///       "exportRequestId": 0,
-        ///       "inventoryCheckRequestId": 0,
-        ///       "userId": 0,
-        ///       "importRequestId": 0
-        ///     }
+        //{
+        //  "id": 5,
+        //  "requesterName": "John Doe",
+        //  "supplier": "Supplier A",
+        //  "additionalQuantity": 100,
+        //  "totalValue": 5000,
+        //  "warehouseLocation": "Warehouse 1",
+        //  "transportDetails": "Truck XYZ, License Plate ABC123",
+        //  "comments": "Urgent request, needs to be delivered by end of the week.",
+        //  "exportRequestId": 1,
+        //  "inventoryCheckRequestId": 1,
+        //  "userId": 1,
+        //  "importRequestId": 1
+        //}
         ///         
         /// </remarks> 
         /// <returns>Addition Import Requests  that was created</returns>
@@ -142,27 +142,23 @@ namespace WWMS.API.Controllers
         /// <remarks>
         /// Sample request:
         /// 
-        ///     {
-        ///       "id": 1, 
-        ///       "requestCode": "REQ-001",
-        ///       "requesterName": "John Doe",
-        ///       "supplier": "Supplier A",
-        ///       "importDate": "2024-09-25T00:00:00",
-        ///       "status": "Pending",
-        ///       "totalQuantity": 100,
-        ///       "totalValue": 1500,
-        ///       "warehouseLocation": "Warehouse 1",
-        ///       "transportDetails": "Transport by truck",
-        ///       "comments": "No comments",
-        ///       "customsClearance": "Cleared",
-        ///       "deliveryStatus": "In transit",
-        ///       "expectedArrival": "2024-10-01T00:00:00",
-        ///       "insuranceProvider": "Insurance Co",
-        ///       "shippingMethod": "Air freight",
-        ///       "taxDetails": "Tax ID: 123456",
-        ///       "wineId": 1,
-        ///       "userId": 1,
-        ///     }
+        //{
+        //  "id": 1, 
+        //  "requestCode": "REQ-2024-001",
+        //  "requesterName": "Nguyen Van A",  
+        //  "supplier": "ABC Supplies Co.", 
+        //  "importDate": "2024-10-02T04:52:27.000Z",  
+        //  "status": "In Process", 
+        //  "additionalQuantity": 50,  
+        //  "totalValue": 15000,  
+        //  "warehouseLocation": "Warehouse A",  
+        //  "transportDetails": "Truck XYZ, License Plate 1234", 
+        //  "comments": "Needs urgent approval",  
+        //  "exportRequestId": 1, 
+        //  "inventoryCheckRequestId": 1,  
+        //  "userId": 1, 
+        //  "importRequestId": 1  
+        //}
         ///         
         /// </remarks> 
         /// <returns>Addition Import  that was created</returns>
@@ -197,6 +193,39 @@ namespace WWMS.API.Controllers
             }
         }
         #endregion
+
+        #region Complete An Additional Import Request status (save data if status is complete)
+        /// <summary>
+        /// Complete An  Additional Import Request in the system
+        /// </summary>
+        /// <param name="id">Id of the  Additional Import Request you want to change</param>
+        /// <response code="200">Ok</response>
+        /// <response code="201">Created At</response>
+        /// <response code="204">No Content</response>
+        /// <response code="400">If the Additional Import Request is null</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        [HttpPut("complete-status/{id}")]
+        public async Task<IActionResult> CompleteStatusAsync(long id)
+        {
+            try
+            {
+                await _additionalImport.UpdateStatusAdditionalImportRequestAsync(id);
+
+                return Ok("Update Successfully!");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
+
 
         #region Cancel An Addition Import Request status
         /// <summary>

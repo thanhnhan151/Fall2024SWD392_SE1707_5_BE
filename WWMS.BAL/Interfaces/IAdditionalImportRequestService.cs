@@ -1,4 +1,5 @@
 ﻿using WWMS.BAL.Models.AdditionalImportRequests;
+using WWMS.BAL.Models.ImportRequests;
 
 namespace WWMS.BAL.Interfaces
 {
@@ -12,8 +13,10 @@ namespace WWMS.BAL.Interfaces
 
         Task UpdateAdditionalImportRequestAsync(UpdateAdditionalImportRequest Import);
 
+        Task UpdateStatusAdditionalImportRequestAsync(long id);
+
         Task DisableAdditionalImportRequestAsync(long id);
 
-        //       Task DisableImportDeliveryRequestAsync(long id);
+
     }
 }
