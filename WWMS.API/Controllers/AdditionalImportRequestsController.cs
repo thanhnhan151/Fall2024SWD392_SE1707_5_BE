@@ -143,18 +143,21 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         //{
-        //  "id": 5,
-        //  "requesterName": "John Doe",
-        //  "supplier": "Supplier A",
-        //  "additionalQuantity": 100,
-        //  "totalValue": 5000,
-        //  "warehouseLocation": "Warehouse 1",
-        //  "transportDetails": "Truck XYZ, License Plate ABC123",
-        //  "comments": "Urgent request, needs to be delivered by end of the week.",
-        //  "exportRequestId": 1,
-        //  "inventoryCheckRequestId": 1,
-        //  "userId": 1,
-        //  "importRequestId": 1
+        //  "id": 1, 
+        //  "requestCode": "REQ-2024-001",
+        //  "requesterName": "Nguyen Van A",  
+        //  "supplier": "ABC Supplies Co.", 
+        //  "importDate": "2024-10-02T04:52:27.000Z",  
+        //  "status": "In Process", 
+        //  "additionalQuantity": 50,  
+        //  "totalValue": 15000,  
+        //  "warehouseLocation": "Warehouse A",  
+        //  "transportDetails": "Truck XYZ, License Plate 1234", 
+        //  "comments": "Needs urgent approval",  
+        //  "exportRequestId": 1, 
+        //  "inventoryCheckRequestId": 1,  
+        //  "userId": 1, 
+        //  "importRequestId": 1  
         //}
         ///         
         /// </remarks> 
