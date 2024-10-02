@@ -29,7 +29,7 @@ namespace WWMS.BAL.Services
 
         public async Task CreateImportRequestAnync([FromBody] CreateImportRequest Import)
         {
-            var wine = await _unitOfWork.Wines.GetEntityByIdAsync(Import.WineId) ?? throw new Exception("Rượu không tồn tại.");
+            var wine = await _unitOfWork.Wines.GetEntityByIdAsync(Import.WineId) ?? throw new Exception($"Wine with {Import.WineId} id does not exist");
 
             var import = _mapper.Map<ImportRequest>(Import);
             import.RequestCode = GenerateRequestCode();
@@ -37,6 +37,7 @@ namespace WWMS.BAL.Services
             import.Status = "In Progress";
             import.DeliveryStatus = "In Progress";
             import.TotalValue = wine.Price * import.TotalQuantity;
+
             await _unitOfWork.Imports.AddEntityAsync(import);
             await _unitOfWork.CompleteAsync();
         }
@@ -60,6 +61,24 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
+        // chance status to success if status is process 
+        // channce quantity if status == complete
+        public async Task UpdateStatusImportRequestAsync(long id)
+        {
+            var exitimport  =  await _unitOfWork.Imports.UpdateStatusSuccessAsync(id);
+            var exitWines = await _unitOfWork.Wines.GetEntityByIdAsync(exitimport.WineId)?? throw new Exception($"Wine with {exitimport.WineId} id does not exist");
+            if (exitimport.Status == "Complete")
+            {
+              exitWines.AvailableStock = exitWines.AvailableStock + exitimport.TotalQuantity ;
+              _unitOfWork.Wines.UpdateEntity(exitWines);
+              await _unitOfWork.CompleteAsync();
+            }
+            else
+            {
+                throw new Exception("Import request already complete or not available");
+            }
+        }
+
         public async Task DisableImportRequestAsync(long id)
         {
             await _unitOfWork.Imports.UpdateStateAsync(id);
@@ -73,5 +92,7 @@ namespace WWMS.BAL.Services
 
             await _unitOfWork.CompleteAsync();
         }
+
+
     }
 }
