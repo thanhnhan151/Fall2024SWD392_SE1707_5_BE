@@ -47,8 +47,7 @@ public partial class WineWarehouseDbContext : DbContext
                                   .SetBasePath(Directory.GetCurrentDirectory())
                                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         IConfigurationRoot configuration = builder.Build();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"));
-        // optionsBuilder.UseSqlServer();       
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"));    
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
