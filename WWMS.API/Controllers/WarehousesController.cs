@@ -30,7 +30,6 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "id": "3",
         ///       "Warehousename": "test3",
         ///       "password": "test3",
         ///       "firstName": "test3",
