@@ -1,7 +1,10 @@
-﻿namespace WWMS.DAL.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WWMS.DAL.Entities;
 
 public partial class AdditionalImportRequest
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
 
     public string RequestCode { get; set; } = null!;

@@ -47,7 +47,7 @@ public partial class WineWarehouseDbContext : DbContext
                                   .SetBasePath(Directory.GetCurrentDirectory())
                                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         IConfigurationRoot configuration = builder.Build();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"));        
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"));       
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -59,7 +59,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Additional_Import_Request");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.AdditionalQuantity).HasColumnName("additional_quantity");
             entity.Property(e => e.Comments)
@@ -127,7 +126,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Audit_Log");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.ActionDescription)
                 .HasMaxLength(255)
@@ -190,7 +188,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Check_Request_Warehouse");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.CheckerAssigned)
                 .HasMaxLength(255)
@@ -238,7 +235,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Export_Request");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Comments)
                 .HasMaxLength(255)
@@ -312,7 +308,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Export_Wine_Warehouse");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.ExportRequestId).HasColumnName("export_request_id");
             entity.Property(e => e.WineWarehouseId).HasColumnName("wine_warehouse_id");
@@ -335,7 +330,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Import_Request");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Comments)
                 .HasMaxLength(255)
@@ -412,7 +406,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Inventory_Check_Request");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.AssignedTeam)
                 .HasMaxLength(255)
@@ -483,7 +476,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.HasIndex(e => e.ImportRequestId, "UQ__Report__C75CF497B655D9AD").IsUnique();
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.AdditionalImportRequestId).HasColumnName("additional_import_request_id");
             entity.Property(e => e.DamageReport)
@@ -557,16 +549,11 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("User");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.AccountStatus)
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("account_status");
-            entity.Property(e => e.Bio)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("bio");
             entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
@@ -576,12 +563,10 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("first_name");
-            entity.Property(e => e.LastLogin).HasColumnName("last_login");
             entity.Property(e => e.LastName)
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("last_name");
-            entity.Property(e => e.LastPasswordChange).HasColumnName("last_password_change");
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(255)
                 .IsUnicode(false)
@@ -590,10 +575,6 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("phone_number");
-            entity.Property(e => e.PreferredLanguage)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("preferred_language");
             entity.Property(e => e.ProfileImageUrl)
                 .HasMaxLength(255)
                 .IsUnicode(false)
@@ -602,14 +583,6 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("role");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("status");
-            entity.Property(e => e.TimeZone)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("time_zone");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
                 .IsUnicode(false)
@@ -623,7 +596,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Warehouse");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Capacity).HasColumnName("capacity");
             entity.Property(e => e.ClimateControl).HasColumnName("climate_control");
@@ -682,7 +654,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Wine");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.AcidityLevel)
                 .HasColumnType("decimal(4, 2)")
@@ -750,7 +721,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Wine_Category");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.AcidityLevel)
                 .HasMaxLength(50)
@@ -825,7 +795,6 @@ public partial class WineWarehouseDbContext : DbContext
             entity.ToTable("Wine_Warehouse");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.ArrivalDate).HasColumnName("arrival_date");
             entity.Property(e => e.DepartureDate).HasColumnName("departure_date");

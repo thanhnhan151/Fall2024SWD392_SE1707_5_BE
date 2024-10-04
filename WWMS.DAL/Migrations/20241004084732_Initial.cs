@@ -15,7 +15,8 @@ namespace WWMS.DAL.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     username = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     password_hash = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     first_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
@@ -23,15 +24,9 @@ namespace WWMS.DAL.Migrations
                     email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     phone_number = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     role = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
-                    status = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    last_login = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     profile_image_url = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    bio = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    last_password_change = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    account_status = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
-                    preferred_language = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    time_zone = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true)
+                    account_status = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,7 +37,8 @@ namespace WWMS.DAL.Migrations
                 name: "Warehouse",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     warehouse_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     location_address = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     capacity = table.Column<int>(type: "int", nullable: true),
@@ -69,7 +65,8 @@ namespace WWMS.DAL.Migrations
                 name: "Wine_Category",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     category_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     description = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     region = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
@@ -96,7 +93,8 @@ namespace WWMS.DAL.Migrations
                 name: "Audit_Log",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     action_type = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
                     action_description = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     performed_at = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -127,7 +125,8 @@ namespace WWMS.DAL.Migrations
                 name: "Inventory_Check_Request",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     request_code = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     requester_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     requested_at = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -160,7 +159,8 @@ namespace WWMS.DAL.Migrations
                 name: "Wine",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     wine_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     vintage = table.Column<int>(type: "int", nullable: false),
                     alcohol_content = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
@@ -193,7 +193,8 @@ namespace WWMS.DAL.Migrations
                 name: "Check_Request_Warehouse",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     request_code = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     warehouse_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     requested_at = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -226,7 +227,8 @@ namespace WWMS.DAL.Migrations
                 name: "Export_Request",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     request_code = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     requester_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     export_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -265,7 +267,8 @@ namespace WWMS.DAL.Migrations
                 name: "Import_Request",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     request_code = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     requester_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     supplier = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
@@ -304,7 +307,8 @@ namespace WWMS.DAL.Migrations
                 name: "Additional_Import_Request",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     request_code = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     requester_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     supplier = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
@@ -349,7 +353,8 @@ namespace WWMS.DAL.Migrations
                 name: "Wine_Warehouse",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     wine_code = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     wine_name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     warehouse_location = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
@@ -393,7 +398,8 @@ namespace WWMS.DAL.Migrations
                 name: "Report",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     report_description = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     import_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     items_imported = table.Column<int>(type: "int", nullable: true),
@@ -447,7 +453,8 @@ namespace WWMS.DAL.Migrations
                 name: "Export_Wine_Warehouse",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     export_request_id = table.Column<long>(type: "bigint", nullable: false),
                     wine_warehouse_id = table.Column<long>(type: "bigint", nullable: false)
                 },

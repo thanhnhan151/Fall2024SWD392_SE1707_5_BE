@@ -2,8 +2,6 @@
 {
     public class CreateAdditionalImportRequest
     {
-        public long Id { get; set; }
-
         public string? RequesterName { get; set; }
 
         public string? Supplier { get; set; }

@@ -93,7 +93,6 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "id": 1, 
         ///       "requestCode": "REQ-001",
         ///       "requesterName": "John Doe",
         ///       "supplier": "Supplier A",
@@ -128,8 +127,7 @@ namespace WWMS.API.Controllers
             try
             {
                 await _importService.CreateImportRequestAnync(createImport);
-                var Im = await _importService.GetImportRequestByIdAsync(createImport.Id);
-                return Ok(Im);
+                return Ok(createImport);
             }
             catch (Exception ex)
             {

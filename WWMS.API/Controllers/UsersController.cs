@@ -31,23 +31,14 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "id": "3",
-        ///       "username": "test3",
-        ///       "password": "test3",
-        ///       "firstName": "test3",
-        ///       "lastName": "test3",
-        ///       "email": "test3",
-        ///       "phoneNumber": "test3",
-        ///       "role": "test3",
-        ///       "status": "test3",
-        ///       "lastLogin": "2024-09-25T09:00:27.824Z",
-        ///       "createdAt": "2024-09-25T09:00:27.824Z",
-        ///       "profileImageUrl": "test3",
-        ///       "bio": "test3",
-        ///       "lastPasswordChange": "2024-09-25T09:00:27.824Z",
-        ///       "accountStatus": "Active",
-        ///       "preferredLanguage": "test3",
-        ///       "timeZone": "test3"
+        ///       "username": "staff",
+        ///       "password": "staff",
+        ///       "firstName": "Tran Van",
+        ///       "lastName": "A",
+        ///       "email": "test@gmail.com",
+        ///       "phoneNumber": "0123456789",
+        ///       "role": "Staff",
+        ///       "profileImageUrl": "TestImg"
         ///     }
         ///         
         /// </remarks> 
@@ -162,9 +153,7 @@ namespace WWMS.API.Controllers
         ///       "email": "test3",
         ///       "phoneNumber": "test3",
         ///       "role": "test3",
-        ///       "status": "test3",
-        ///       "profileImageUrl": "test3",
-        ///       "bio": "test3"
+        ///       "profileImageUrl": "test3"
         ///     }
         ///         
         /// </remarks> 

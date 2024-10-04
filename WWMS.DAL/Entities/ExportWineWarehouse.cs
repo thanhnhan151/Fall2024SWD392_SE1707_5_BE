@@ -1,7 +1,10 @@
-﻿namespace WWMS.DAL.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WWMS.DAL.Entities;
 
 public partial class ExportWineWarehouse
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
 
     public long ExportRequestId { get; set; }

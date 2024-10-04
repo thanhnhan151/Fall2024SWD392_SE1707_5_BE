@@ -12,7 +12,7 @@ using WWMS.DAL.Persistences;
 namespace WWMS.DAL.Migrations
 {
     [DbContext(typeof(WineWarehouseDbContext))]
-    [Migration("20240924094729_Initial")]
+    [Migration("20241004084732_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -28,8 +28,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.AdditionalImportRequest", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int?>("AdditionalQuantity")
                         .HasColumnType("int")
@@ -119,8 +122,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.AuditLog", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ActionDescription")
                         .HasMaxLength(255)
@@ -213,8 +219,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.CheckRequestWarehouse", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CheckerAssigned")
                         .HasMaxLength(255)
@@ -288,8 +297,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.ExportRequest", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Comments")
                         .HasMaxLength(255)
@@ -399,8 +411,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.ExportWineWarehouse", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ExportRequestId")
                         .HasColumnType("bigint")
@@ -423,8 +438,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.ImportRequest", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Comments")
                         .HasMaxLength(255)
@@ -536,8 +554,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.InventoryCheckRequest", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("AssignedTeam")
                         .HasMaxLength(255)
@@ -639,8 +660,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.Report", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long?>("AdditionalImportRequestId")
                         .HasColumnType("bigint")
@@ -757,20 +781,17 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.User", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("AccountStatus")
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("account_status");
-
-                    b.Property<string>("Bio")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("bio");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -788,19 +809,11 @@ namespace WWMS.DAL.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("first_name");
 
-                    b.Property<DateTime?>("LastLogin")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("last_login");
-
                     b.Property<string>("LastName")
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("last_name");
-
-                    b.Property<DateTime?>("LastPasswordChange")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("last_password_change");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -815,12 +828,6 @@ namespace WWMS.DAL.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("phone_number");
 
-                    b.Property<string>("PreferredLanguage")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("preferred_language");
-
                     b.Property<string>("ProfileImageUrl")
                         .HasMaxLength(255)
                         .IsUnicode(false)
@@ -832,18 +839,6 @@ namespace WWMS.DAL.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("role");
-
-                    b.Property<string>("Status")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("status");
-
-                    b.Property<string>("TimeZone")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("time_zone");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -861,8 +856,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.Warehouse", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int?>("Capacity")
                         .HasColumnType("int")
@@ -958,8 +956,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.Wine", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<decimal?>("AcidityLevel")
                         .HasColumnType("decimal(4, 2)")
@@ -1059,8 +1060,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.WineCategory", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("AcidityLevel")
                         .HasMaxLength(50)
@@ -1168,8 +1172,11 @@ namespace WWMS.DAL.Migrations
             modelBuilder.Entity("WWMS.DAL.Entities.WineWarehouse", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("ArrivalDate")
                         .HasColumnType("datetime2")

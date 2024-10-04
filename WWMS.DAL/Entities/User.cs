@@ -1,7 +1,10 @@
-﻿namespace WWMS.DAL.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WWMS.DAL.Entities;
 
 public partial class User
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
 
     public string Username { get; set; } = null!;
@@ -18,23 +21,11 @@ public partial class User
 
     public string? Role { get; set; }
 
-    public string? Status { get; set; }
-
-    public DateTime? LastLogin { get; set; }
-
-    public DateTime? CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
     public string? ProfileImageUrl { get; set; }
 
-    public string? Bio { get; set; }
-
-    public DateTime? LastPasswordChange { get; set; }
-
-    public string? AccountStatus { get; set; }
-
-    public string? PreferredLanguage { get; set; }
-
-    public string? TimeZone { get; set; }
+    public string? AccountStatus { get; set; } = "Active";
 
     public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = [];
 
