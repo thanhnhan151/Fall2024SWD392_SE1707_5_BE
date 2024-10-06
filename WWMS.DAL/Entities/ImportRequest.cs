@@ -42,6 +42,7 @@ public partial class ImportRequest
     public long WineId { get; set; }
 
     public long UserId { get; set; }
+    public string? ReporterName { get; set; } //username of staff as reporter
 
     public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = [];
 

@@ -34,6 +34,7 @@ public partial class AdditionalImportRequest
     public long UserId { get; set; }
 
     public long ImportRequestId { get; set; }
+    public string? ReporterName { get; set; } //username of staff as reporter
 
     public virtual ExportRequest ExportRequest { get; set; } = null!;
 
