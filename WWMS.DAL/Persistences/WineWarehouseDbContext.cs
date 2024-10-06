@@ -97,6 +97,10 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("warehouse_location");
+            entity.Property(e => e.ReporterName)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("reporter_name");
 
             entity.HasOne(d => d.ExportRequest).WithMany(p => p.AdditionalImportRequests)
                 .HasForeignKey(d => d.ExportRequestId)
@@ -289,6 +293,10 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasColumnName("total_value");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.WineId).HasColumnName("wine_id");
+            entity.Property(e => e.ReporterName)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("reporter_name");
 
             entity.HasOne(d => d.User).WithMany(p => p.ExportRequests)
                 .HasForeignKey(d => d.UserId)
@@ -387,6 +395,10 @@ public partial class WineWarehouseDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("warehouse_location");
             entity.Property(e => e.WineId).HasColumnName("wine_id");
+            entity.Property(e => e.ReporterName)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("reporter_name");
 
             entity.HasOne(d => d.User).WithMany(p => p.ImportRequests)
                 .HasForeignKey(d => d.UserId)
@@ -407,10 +419,7 @@ public partial class WineWarehouseDbContext : DbContext
 
             entity.Property(e => e.Id)
                 .HasColumnName("id");
-            entity.Property(e => e.AssignedTeam)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("assigned_team");
+
             entity.Property(e => e.Attachments)
                 .HasMaxLength(255)
                 .IsUnicode(false)
@@ -454,6 +463,10 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasColumnName("requester_name");
             entity.Property(e => e.TotalItems).HasColumnName("total_items");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.ReporterName)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("reporter_name");
 
             entity.HasOne(d => d.User).WithMany(p => p.InventoryCheckRequests)
                 .HasForeignKey(d => d.UserId)

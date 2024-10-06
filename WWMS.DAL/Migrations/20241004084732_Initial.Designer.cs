@@ -560,11 +560,7 @@ namespace WWMS.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("AssignedTeam")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("assigned_team");
+
 
                     b.Property<string>("Attachments")
                         .HasMaxLength(255)

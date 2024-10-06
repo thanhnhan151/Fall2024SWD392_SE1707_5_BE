@@ -29,8 +29,6 @@ public partial class InventoryCheckRequest
 
     public string? RequestPriority { get; set; }
 
-    public string? AssignedTeam { get; set; }
-
     public string? CheckPurpose { get; set; }
 
     public DateTime? Deadline { get; set; }
@@ -40,6 +38,7 @@ public partial class InventoryCheckRequest
     public string? AuditReference { get; set; }
 
     public long UserId { get; set; }
+    public string? ReporterName { get; set; } //username of staff as reporter
 
     public virtual ICollection<AdditionalImportRequest> AdditionalImportRequests { get; set; } = [];
 

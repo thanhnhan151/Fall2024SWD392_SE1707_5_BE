@@ -57,6 +57,12 @@ namespace WWMS.DAL.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("inventory_check_request_id");
 
+                    b.Property<string>("ReporterName")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("reporter_name");
+
                     b.Property<string>("RequestCode")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -348,6 +354,12 @@ namespace WWMS.DAL.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("packaging_instructions");
 
+                    b.Property<string>("ReporterName")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("reporter_name");
+
                     b.Property<string>("RequestCode")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -473,6 +485,12 @@ namespace WWMS.DAL.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("insurance_provider");
 
+                    b.Property<string>("ReporterName")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("reporter_name");
+
                     b.Property<string>("RequestCode")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -557,12 +575,6 @@ namespace WWMS.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("AssignedTeam")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("assigned_team");
-
                     b.Property<string>("Attachments")
                         .HasMaxLength(255)
                         .IsUnicode(false)
@@ -608,6 +620,12 @@ namespace WWMS.DAL.Migrations
                     b.Property<int?>("ItemsChecked")
                         .HasColumnType("int")
                         .HasColumnName("items_checked");
+
+                    b.Property<string>("ReporterName")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("reporter_name");
 
                     b.Property<string>("RequestCode")
                         .IsRequired()
