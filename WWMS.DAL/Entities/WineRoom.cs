@@ -16,12 +16,12 @@ namespace WWMS.DAL.Entities
         public long RoomId { get; set; }
         public long WineId { get; set; }
 
-        public ICollection<IORequestDetail> IORequestDetails { get; set; }
-        public ICollection<CheckRequestDetail> CheckRequestDetails { get; set; }
+        public ICollection<IORequestDetail> IORequestDetails { get; set; } = [];
+        public ICollection<CheckRequestDetail> CheckRequestDetails { get; set; } = [];
 
-        public Room Room { get; set; }
+        public Room Room { get; set; } = null!;
 
-        public Wine Wine { get; set; }
+        public Wine Wine { get; set; } = null!;
 
     }
 }

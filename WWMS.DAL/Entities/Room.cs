@@ -11,5 +11,5 @@ public partial class Room : CommonEntity
     public int? Capacity { get; set; } //MAX SIZE
     public int? CurrentOccupancy { get; set; }
     public string? ManagerName { get; set; }
-     public ICollection<WineRoom> WineRooms { get; set; }
+    public ICollection<WineRoom> WineRooms { get; set; } = [];
 }

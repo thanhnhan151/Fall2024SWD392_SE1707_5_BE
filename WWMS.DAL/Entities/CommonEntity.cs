@@ -1,19 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace WWMS.DAL.Entities
 {
     public class CommonEntity
     {
-        public DateTime? createdTime { get; set; }
-        public DateTime? updatedTime { get; set; }
-        public DateTime? deletedTime { get; set; }
-        public string createdBy { get; set; }
-        public string updatedBy { get; set; }
-        public string deletedBy { get; set; }
-        public string Status { get; set; }
+        public DateTime? CreatedTime { get; set; }
 
+        public DateTime? UpdatedTime { get; set; }
+
+        public DateTime? DeletedTime { get; set; }
+
+        public string CreatedBy { get; set; } = string.Empty;
+
+        public string UpdatedBy { get; set; } = string.Empty;
+
+        public string DeletedBy { get; set; } = string.Empty;
+
+        public string Status { get; set; } = string.Empty;
     }
 }

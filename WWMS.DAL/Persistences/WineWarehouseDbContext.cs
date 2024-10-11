@@ -46,10 +46,6 @@ public partial class WineWarehouseDbContext : DbContext
             });
     }
 
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // USER
@@ -88,24 +84,24 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasMaxLength(256); // Adjust length as necessary
 
             // Common fields from CommonEntity
-            entity.Property(u => u.createdTime)
+            entity.Property(u => u.CreatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(u => u.updatedTime)
+            entity.Property(u => u.UpdatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(u => u.deletedTime)
+            entity.Property(u => u.DeletedTime)
                 .IsRequired(false); // Optional: make nullable if it's not always set
 
-            entity.Property(u => u.createdBy)
+            entity.Property(u => u.CreatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(u => u.updatedBy)
+            entity.Property(u => u.UpdatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(u => u.deletedBy)
+            entity.Property(u => u.DeletedBy)
                 .HasMaxLength(50); // Adjust length as necessary
 
 
@@ -142,24 +138,24 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasMaxLength(50); // Adjust length as necessary
 
             // Common fields from CommonEntity
-            entity.Property(wc => wc.createdTime)
+            entity.Property(wc => wc.CreatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(wc => wc.updatedTime)
+            entity.Property(wc => wc.UpdatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(wc => wc.deletedTime)
+            entity.Property(wc => wc.DeletedTime)
                 .IsRequired(false); // Optional: make nullable if it's not always set
 
-            entity.Property(wc => wc.createdBy)
+            entity.Property(wc => wc.CreatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(wc => wc.updatedBy)
+            entity.Property(wc => wc.UpdatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(wc => wc.deletedBy)
+            entity.Property(wc => wc.DeletedBy)
                 .HasMaxLength(50); // Adjust length as necessary
 
             // Relationships
@@ -207,24 +203,24 @@ public partial class WineWarehouseDbContext : DbContext
                 .IsRequired(); // Ensure this property is required
 
             // Common fields from CommonEntity
-            entity.Property(w => w.createdTime)
+            entity.Property(w => w.CreatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(w => w.updatedTime)
+            entity.Property(w => w.UpdatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(w => w.deletedTime)
+            entity.Property(w => w.DeletedTime)
                 .IsRequired(false); // Optional: make nullable if it's not always set
 
-            entity.Property(w => w.createdBy)
+            entity.Property(w => w.CreatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(w => w.updatedBy)
+            entity.Property(w => w.UpdatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(w => w.deletedBy)
+            entity.Property(w => w.DeletedBy)
                 .HasMaxLength(50); // Adjust length as necessary
 
             // Foreign key configuration
@@ -259,24 +255,24 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasMaxLength(100); // Adjust length as necessary
 
             // Common fields from CommonEntity
-            entity.Property(r => r.createdTime)
+            entity.Property(r => r.CreatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(r => r.updatedTime)
+            entity.Property(r => r.UpdatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(r => r.deletedTime)
+            entity.Property(r => r.DeletedTime)
                 .IsRequired(false); // Optional: make nullable if it's not always set
 
-            entity.Property(r => r.createdBy)
+            entity.Property(r => r.CreatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(r => r.updatedBy)
+            entity.Property(r => r.UpdatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(r => r.deletedBy)
+            entity.Property(r => r.DeletedBy)
                 .HasMaxLength(50); // Adjust length as necessary
 
             // Relationships configuration
@@ -302,24 +298,24 @@ public partial class WineWarehouseDbContext : DbContext
                 .IsRequired();
 
             // Common fields from CommonEntity
-            entity.Property(wr => wr.createdTime)
+            entity.Property(wr => wr.CreatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(wr => wr.updatedTime)
+            entity.Property(wr => wr.UpdatedTime)
                 .IsRequired(); // Optional: set as required if needed
 
-            entity.Property(wr => wr.deletedTime)
+            entity.Property(wr => wr.DeletedTime)
                 .IsRequired(false); // Optional: make nullable if it's not always set
 
-            entity.Property(wr => wr.createdBy)
+            entity.Property(wr => wr.CreatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(wr => wr.updatedBy)
+            entity.Property(wr => wr.UpdatedBy)
                 .IsRequired()
                 .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(wr => wr.deletedBy)
+            entity.Property(wr => wr.DeletedBy)
                 .HasMaxLength(50); // Adjust length as necessary
 
             // Foreign key configuration for Room
@@ -345,22 +341,22 @@ public partial class WineWarehouseDbContext : DbContext
             entity.HasKey(cr => cr.Id);
 
             // CommonEntity properties
-            entity.Property(cr => cr.createdTime)
+            entity.Property(cr => cr.CreatedTime)
                 .IsRequired();
 
-            entity.Property(cr => cr.updatedTime)
+            entity.Property(cr => cr.UpdatedTime)
                 .IsRequired();
 
-            entity.Property(cr => cr.deletedTime)
+            entity.Property(cr => cr.DeletedTime)
                 .IsRequired(false); // Nullable if soft delete is not implemented
 
-            entity.Property(cr => cr.createdBy)
+            entity.Property(cr => cr.CreatedBy)
                 .IsRequired();
 
-            entity.Property(cr => cr.updatedBy)
+            entity.Property(cr => cr.UpdatedBy)
                 .IsRequired(false); // Nullable if not updated yet
 
-            entity.Property(cr => cr.deletedBy)
+            entity.Property(cr => cr.DeletedBy)
                 .IsRequired(false); // Nullable if not deleted yet
 
             entity.Property(cr => cr.Status)
@@ -406,22 +402,22 @@ public partial class WineWarehouseDbContext : DbContext
             entity.HasKey(crd => crd.Id);
 
             // CommonEntity properties
-            entity.Property(crd => crd.createdTime)
+            entity.Property(crd => crd.CreatedTime)
                 .IsRequired();
 
-            entity.Property(crd => crd.updatedTime)
+            entity.Property(crd => crd.UpdatedTime)
                 .IsRequired();
 
-            entity.Property(crd => crd.deletedTime)
+            entity.Property(crd => crd.DeletedTime)
                 .IsRequired(false); // Nullable if soft delete is not implemented
 
-            entity.Property(crd => crd.createdBy)
+            entity.Property(crd => crd.CreatedBy)
                 .IsRequired();
 
-            entity.Property(crd => crd.updatedBy)
+            entity.Property(crd => crd.UpdatedBy)
                 .IsRequired(false); // Nullable if not updated yet
 
-            entity.Property(crd => crd.deletedBy)
+            entity.Property(crd => crd.DeletedBy)
                 .IsRequired(false); // Nullable if not deleted yet
 
             entity.Property(crd => crd.Status)
@@ -473,22 +469,22 @@ public partial class WineWarehouseDbContext : DbContext
             entity.HasKey(ir => ir.Id);
 
             // CommonEntity properties
-            entity.Property(ir => ir.createdTime)
+            entity.Property(ir => ir.CreatedTime)
                 .IsRequired();
 
-            entity.Property(ir => ir.updatedTime)
+            entity.Property(ir => ir.UpdatedTime)
                 .IsRequired();
 
-            entity.Property(ir => ir.deletedTime)
+            entity.Property(ir => ir.DeletedTime)
                 .IsRequired(false); // Nullable if soft delete is not implemented
 
-            entity.Property(ir => ir.createdBy)
+            entity.Property(ir => ir.CreatedBy)
                 .IsRequired();
 
-            entity.Property(ir => ir.updatedBy)
+            entity.Property(ir => ir.UpdatedBy)
                 .IsRequired(false); // Nullable if not updated yet
 
-            entity.Property(ir => ir.deletedBy)
+            entity.Property(ir => ir.DeletedBy)
                 .IsRequired(false); // Nullable if not deleted yet
 
             entity.Property(ir => ir.Status)
@@ -537,22 +533,22 @@ public partial class WineWarehouseDbContext : DbContext
             entity.HasKey(ird => ird.Id);
 
             // CommonEntity properties
-            entity.Property(ird => ird.createdTime)
+            entity.Property(ird => ird.CreatedTime)
                 .IsRequired();
 
-            entity.Property(ird => ird.updatedTime)
+            entity.Property(ird => ird.UpdatedTime)
                 .IsRequired();
 
-            entity.Property(ird => ird.deletedTime)
+            entity.Property(ird => ird.DeletedTime)
                 .IsRequired(false); // Nullable if soft delete is not implemented
 
-            entity.Property(ird => ird.createdBy)
+            entity.Property(ird => ird.CreatedBy)
                 .IsRequired();
 
-            entity.Property(ird => ird.updatedBy)
+            entity.Property(ird => ird.UpdatedBy)
                 .IsRequired(false); // Nullable if not updated yet
 
-            entity.Property(ird => ird.deletedBy)
+            entity.Property(ird => ird.DeletedBy)
                 .IsRequired(false); // Nullable if not deleted yet
 
             entity.Property(ird => ird.Status)

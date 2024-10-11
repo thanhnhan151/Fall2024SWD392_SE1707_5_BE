@@ -17,6 +17,6 @@ public partial class User : CommonEntity
 
 
     // Relationships
-    public ICollection<IORequest> IORequests { get; set; }
-    public ICollection<CheckRequest> CheckRequests { get; set; }
+    public ICollection<IORequest> IORequests { get; set; } = [];
+    public ICollection<CheckRequest> CheckRequests { get; set; } = [];
 }

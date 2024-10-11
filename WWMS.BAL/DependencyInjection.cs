@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Mappings;
 using WWMS.BAL.Services;
-using WWMS.DAL.Base;
 using WWMS.DAL.Infrastructures;
 using WWMS.DAL.Persistences;
 
@@ -18,8 +17,6 @@ namespace WWMS.BAL
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
-            services.AddScoped<BaseEntity>();
-
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(MappingProfiles));
@@ -28,13 +25,7 @@ namespace WWMS.BAL
 
             services.AddScoped<IWineService, WineService>();
 
-            services.AddScoped<IWarehouseService, WarehouseService>();
-
-            services.AddScoped<IImportRequestService, ImportRequestService>();
-
             services.AddScoped<IWineCategoryService, WineCategoryService>();
-
-            services.AddScoped<IAdditionalImportRequestService, AdditionalImportRequestService>();
 
             return services;
         }

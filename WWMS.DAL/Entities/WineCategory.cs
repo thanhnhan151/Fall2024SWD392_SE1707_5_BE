@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WWMS.DAL.Entities
 {
@@ -10,9 +6,9 @@ namespace WWMS.DAL.Entities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-        public string CategoryName { get; set; }
-        public string Description { get; set; }
-        public string WineType { get; set; }
-        public ICollection<Wine> Wines { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string WineType { get; set; } = string.Empty;
+        public ICollection<Wine> Wines { get; set; } = [];
     }
 }
