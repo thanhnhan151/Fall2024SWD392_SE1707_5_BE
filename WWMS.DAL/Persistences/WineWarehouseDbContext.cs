@@ -15,865 +15,593 @@ public partial class WineWarehouseDbContext : DbContext
     {
     }
 
-    public virtual DbSet<AdditionalImportRequest> AdditionalImportRequests { get; set; }
-
-    public virtual DbSet<AuditLog> AuditLogs { get; set; }
-
-    public virtual DbSet<CheckRequestWarehouse> CheckRequestWarehouses { get; set; }
-
-    public virtual DbSet<ExportRequest> ExportRequests { get; set; }
-
-    public virtual DbSet<ExportWineWarehouse> ExportWineWarehouses { get; set; }
-
-    public virtual DbSet<ImportRequest> ImportRequests { get; set; }
-
-    public virtual DbSet<InventoryCheckRequest> InventoryCheckRequests { get; set; }
-
-    public virtual DbSet<Report> Reports { get; set; }
-
-    public virtual DbSet<User> Users { get; set; }
-
-    public virtual DbSet<Warehouse> Warehouses { get; set; }
-
-    public virtual DbSet<Wine> Wines { get; set; }
-
-    public virtual DbSet<WineCategory> WineCategories { get; set; }
-
-    public virtual DbSet<WineWarehouse> WineWarehouses { get; set; }
+    // DbSets for entities
+    public DbSet<User> Users { get; set; }
+    public DbSet<Room> Rooms { get; set; }
+    public DbSet<Wine> Wines { get; set; }
+    public DbSet<WineCategory> WineCategories { get; set; }
+    public DbSet<CheckRequest> CheckRequests { get; set; }
+    public DbSet<CheckRequestDetail> CheckRequestDetails { get; set; }
+    public DbSet<IORequest> IORequests { get; set; }
+    public DbSet<IORequestDetail> IORequestDetails { get; set; }
+    public DbSet<WineRoom> WineRooms { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var builder = new ConfigurationBuilder()
-                                  .SetBasePath(Directory.GetCurrentDirectory())
-                                  .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-        IConfigurationRoot configuration = builder.Build();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"));    
+        // var builder = new ConfigurationBuilder()
+        //                           .SetBasePath(Directory.GetCurrentDirectory())
+        //                           .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        // IConfigurationRoot configuration = builder.Build();
+        // optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"));
+        string temp = " Server=tcp:db-fu.database.windows.net,1433;Initial Catalog=FU-SWD-FA24;Persist Security Info=False;User ID=sa123;Password=FUdb123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        optionsBuilder.UseSqlServer(
+           temp,
+            sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5, // Maximum number of retries
+                    maxRetryDelay: TimeSpan.FromSeconds(30), // Maximum delay between retries
+                    errorNumbersToAdd: null // Add specific error numbers if needed
+                );
+            });
     }
+
+
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AdditionalImportRequest>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("additional_import_request_id_primary");
-
-            entity.ToTable("Additional_Import_Request");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.AdditionalQuantity).HasColumnName("additional_quantity");
-            entity.Property(e => e.Comments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("comments");
-            entity.Property(e => e.ExportRequestId).HasColumnName("export_request_id");
-            entity.Property(e => e.ImportDate).HasColumnName("import_date");
-            entity.Property(e => e.ImportRequestId).HasColumnName("import_request_id");
-            entity.Property(e => e.InventoryCheckRequestId).HasColumnName("inventory_check_request_id");
-            entity.Property(e => e.RequestCode)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("request_code");
-            entity.Property(e => e.RequesterName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("requester_name");
-            entity.Property(e => e.Status)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("status");
-            entity.Property(e => e.Supplier)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("supplier");
-            entity.Property(e => e.TotalValue)
-                .HasColumnType("decimal(15, 2)")
-                .HasColumnName("total_value");
-            entity.Property(e => e.TransportDetails)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("transport_details");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.WarehouseLocation)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("warehouse_location");
-            entity.Property(e => e.ReporterName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("reporter_name");
-
-            entity.HasOne(d => d.ExportRequest).WithMany(p => p.AdditionalImportRequests)
-                .HasForeignKey(d => d.ExportRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("export_request_foreign_3");
-
-            entity.HasOne(d => d.ImportRequest).WithMany(p => p.AdditionalImportRequests)
-                .HasForeignKey(d => d.ImportRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("import_request_foreign_3");
-
-            entity.HasOne(d => d.InventoryCheckRequest).WithMany(p => p.AdditionalImportRequests)
-                .HasForeignKey(d => d.InventoryCheckRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("inventory_check_request_foreign_3");
-
-            entity.HasOne(d => d.User).WithMany(p => p.AdditionalImportRequests)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign_5");
-        });
-
-        modelBuilder.Entity<AuditLog>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("audit_log_id_primary");
-
-            entity.ToTable("Audit_Log");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.ActionDescription)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("action_description");
-            entity.Property(e => e.ActionType)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("action_type");
-            entity.Property(e => e.DeviceDetails)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("device_details");
-            entity.Property(e => e.DurationMs).HasColumnName("duration_ms");
-            entity.Property(e => e.ErrorDetails)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("error_details");
-            entity.Property(e => e.IpAddress)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ip_address");
-            entity.Property(e => e.Location)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("location");
-            entity.Property(e => e.PerformedAt).HasColumnName("performed_at");
-            entity.Property(e => e.RequestMethod)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("request_method");
-            entity.Property(e => e.RequestUrl)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("request_url");
-            entity.Property(e => e.ResponseSize).HasColumnName("response_size");
-            entity.Property(e => e.ResponseStatus)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("response_status");
-            entity.Property(e => e.ResponseTime)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("response_time");
-            entity.Property(e => e.SessionId)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("session_id");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-
-            entity.HasOne(d => d.User).WithMany(p => p.AuditLogs)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign");
-        });
-
-        modelBuilder.Entity<CheckRequestWarehouse>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("check_request_warehouse_id_primary");
-
-            entity.ToTable("Check_Request_Warehouse");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.CheckerAssigned)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("checker_assigned");
-            entity.Property(e => e.Comments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("comments");
-            entity.Property(e => e.Discrepancies).HasColumnName("discrepancies");
-            entity.Property(e => e.ExpectedCompletionDate).HasColumnName("expected_completion_date");
-            entity.Property(e => e.InventoryCheckRequestId).HasColumnName("inventory_check_request_id");
-            entity.Property(e => e.ItemsChecked).HasColumnName("items_checked");
-            entity.Property(e => e.RequestCode)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("request_code");
-            entity.Property(e => e.RequestStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("request_status");
-            entity.Property(e => e.RequestedAt).HasColumnName("requested_at");
-            entity.Property(e => e.TotalItems).HasColumnName("total_items");
-            entity.Property(e => e.WarehouseId).HasColumnName("warehouse_id");
-            entity.Property(e => e.WarehouseName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("warehouse_name");
-
-            entity.HasOne(d => d.InventoryCheckRequest).WithMany(p => p.CheckRequestWarehouses)
-                .HasForeignKey(d => d.InventoryCheckRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("inventory_check_request_foreign_2");
-
-            entity.HasOne(d => d.Warehouse).WithMany(p => p.CheckRequestWarehouses)
-                .HasForeignKey(d => d.WarehouseId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("warehouse_foreign");
-        });
-
-        modelBuilder.Entity<ExportRequest>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("export_request_id_primary");
-
-            entity.ToTable("Export_Request");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.Comments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("comments");
-            entity.Property(e => e.CustomsStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("customs_status");
-            entity.Property(e => e.DeliveryTerms)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("delivery_terms");
-            entity.Property(e => e.DestinationAddress)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("destination_address");
-            entity.Property(e => e.ExpectedDelivery).HasColumnName("expected_delivery");
-            entity.Property(e => e.ExportDate).HasColumnName("export_date");
-            entity.Property(e => e.FragileItems).HasColumnName("fragile_items");
-            entity.Property(e => e.InsuranceCoverage)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("insurance_coverage");
-            entity.Property(e => e.PackagingInstructions)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("packaging_instructions");
-            entity.Property(e => e.RequestCode)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("request_code");
-            entity.Property(e => e.RequesterName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("requester_name");
-            entity.Property(e => e.ShippingCompany)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("shipping_company");
-            entity.Property(e => e.ShippingTrackingNumber)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("shipping_tracking_number");
-            entity.Property(e => e.Status)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("status");
-            entity.Property(e => e.TotalQuantity).HasColumnName("total_quantity");
-            entity.Property(e => e.TotalValue)
-                .HasColumnType("decimal(15, 2)")
-                .HasColumnName("total_value");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.WineId).HasColumnName("wine_id");
-            entity.Property(e => e.ReporterName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("reporter_name");
-
-            entity.HasOne(d => d.User).WithMany(p => p.ExportRequests)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign_2");
-
-            entity.HasOne(d => d.Wine).WithMany(p => p.ExportRequests)
-                .HasForeignKey(d => d.WineId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("wine_foreign_2");
-        });
-
-        modelBuilder.Entity<ExportWineWarehouse>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Export_W__3213E83FDCC5E67C");
-
-            entity.ToTable("Export_Wine_Warehouse");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.ExportRequestId).HasColumnName("export_request_id");
-            entity.Property(e => e.WineWarehouseId).HasColumnName("wine_warehouse_id");
-
-            entity.HasOne(d => d.ExportRequest).WithMany(p => p.ExportWineWarehouses)
-                .HasForeignKey(d => d.ExportRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("export_request_foreign_2");
-
-            entity.HasOne(d => d.WineWarehouse).WithMany(p => p.ExportWineWarehouses)
-                .HasForeignKey(d => d.WineWarehouseId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("wine_warehouse_foreign");
-        });
-
-        modelBuilder.Entity<ImportRequest>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("import_request_id_primary");
-
-            entity.ToTable("Import_Request");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.Comments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("comments");
-            entity.Property(e => e.CustomsClearance)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("customs_clearance");
-            entity.Property(e => e.DeliveryStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("delivery_status");
-            entity.Property(e => e.ExpectedArrival).HasColumnName("expected_arrival");
-            entity.Property(e => e.ImportDate).HasColumnName("import_date");
-            entity.Property(e => e.InsuranceProvider)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("insurance_provider");
-            entity.Property(e => e.RequestCode)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("request_code");
-            entity.Property(e => e.RequesterName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("requester_name");
-            entity.Property(e => e.ShippingMethod)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("shipping_method");
-            entity.Property(e => e.Status)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("status");
-            entity.Property(e => e.Supplier)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("supplier");
-            entity.Property(e => e.TaxDetails)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("tax_details");
-            entity.Property(e => e.TotalQuantity).HasColumnName("total_quantity");
-            entity.Property(e => e.TotalValue)
-                .HasColumnType("decimal(15, 2)")
-                .HasColumnName("total_value");
-            entity.Property(e => e.TransportDetails)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("transport_details");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.WarehouseLocation)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("warehouse_location");
-            entity.Property(e => e.WineId).HasColumnName("wine_id");
-            entity.Property(e => e.ReporterName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("reporter_name");
-
-            entity.HasOne(d => d.User).WithMany(p => p.ImportRequests)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign_4");
-
-            entity.HasOne(d => d.Wine).WithMany(p => p.ImportRequests)
-                .HasForeignKey(d => d.WineId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("wine_foreign");
-        });
-
-        modelBuilder.Entity<InventoryCheckRequest>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("inventory_check_request_id_primary");
-
-            entity.ToTable("Inventory_Check_Request");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            entity.Property(e => e.Attachments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("attachments");
-            entity.Property(e => e.AuditReference)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("audit_reference");
-            entity.Property(e => e.CheckPurpose)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("check_purpose");
-            entity.Property(e => e.CheckerAssigned)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("checker_assigned");
-            entity.Property(e => e.Comments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("comments");
-            entity.Property(e => e.Deadline).HasColumnName("deadline");
-            entity.Property(e => e.Discrepancies).HasColumnName("discrepancies");
-            entity.Property(e => e.ExpectedCompletionDate).HasColumnName("expected_completion_date");
-            entity.Property(e => e.ItemsChecked).HasColumnName("items_checked");
-            entity.Property(e => e.RequestCode)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("request_code");
-            entity.Property(e => e.RequestPriority)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("request_priority");
-            entity.Property(e => e.RequestStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("request_status");
-            entity.Property(e => e.RequestedAt).HasColumnName("requested_at");
-            entity.Property(e => e.RequesterName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("requester_name");
-            entity.Property(e => e.TotalItems).HasColumnName("total_items");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.ReporterName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("reporter_name");
-
-            entity.HasOne(d => d.User).WithMany(p => p.InventoryCheckRequests)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign_8");
-        });
-
-        modelBuilder.Entity<Report>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("report_id_primary");
-
-            entity.ToTable("Report");
-
-            entity.HasIndex(e => e.ExportRequestId, "UQ__Report__42A76907FBF5270C").IsUnique();
-
-            entity.HasIndex(e => e.AdditionalImportRequestId, "UQ__Report__554DA09A96662158").IsUnique();
-
-            entity.HasIndex(e => e.InventoryCheckRequestId, "UQ__Report__8099F7E53B1391DC").IsUnique();
-
-            entity.HasIndex(e => e.ImportRequestId, "UQ__Report__C75CF497B655D9AD").IsUnique();
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.AdditionalImportRequestId).HasColumnName("additional_import_request_id");
-            entity.Property(e => e.DamageReport)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("damage_report");
-            entity.Property(e => e.DiscrepanciesFound).HasColumnName("discrepancies_found");
-            entity.Property(e => e.ExportRequestId).HasColumnName("export_request_id");
-            entity.Property(e => e.FileAttachment)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("file_attachment");
-            entity.Property(e => e.FinalApprovalDate).HasColumnName("final_approval_date");
-            entity.Property(e => e.ImportDate).HasColumnName("import_date");
-            entity.Property(e => e.ImportRequestId).HasColumnName("import_request_id");
-            entity.Property(e => e.InventoryCheckRequestId).HasColumnName("inventory_check_request_id");
-            entity.Property(e => e.ItemsImported).HasColumnName("items_imported");
-            entity.Property(e => e.PreparedAt).HasColumnName("prepared_at");
-            entity.Property(e => e.ReportDescription)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("report_description");
-            entity.Property(e => e.ReportPreparedBy)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("report_prepared_by");
-            entity.Property(e => e.ReportStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("report_status");
-            entity.Property(e => e.ReviewComments)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("review_comments");
-            entity.Property(e => e.SignOffBy)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("sign_off_by");
-            entity.Property(e => e.SupplierFeedback)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("supplier_feedback");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-
-            entity.HasOne(d => d.AdditionalImportRequest).WithOne(p => p.Report)
-                .HasForeignKey<Report>(d => d.AdditionalImportRequestId)
-                .HasConstraintName("additional_import_request_foreign");
-
-            entity.HasOne(d => d.ExportRequest).WithOne(p => p.Report)
-                .HasForeignKey<Report>(d => d.ExportRequestId)
-                .HasConstraintName("export_request_foreign");
-
-            entity.HasOne(d => d.ImportRequest).WithOne(p => p.Report)
-                .HasForeignKey<Report>(d => d.ImportRequestId)
-                .HasConstraintName("import_request_foreign");
-
-            entity.HasOne(d => d.InventoryCheckRequest).WithOne(p => p.Report)
-                .HasForeignKey<Report>(d => d.InventoryCheckRequestId)
-                .HasConstraintName("inventory_check_request_foreign");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Reports)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_foreign_6");
-        });
-
+        // USER
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("user_id_primary");
+            // Primary key configuration
+            entity.HasKey(u => u.Id);
 
-            entity.ToTable("User");
+            // Properties configuration
+            entity.Property(u => u.Username)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
 
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.AccountStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("account_status");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
-            entity.Property(e => e.Email)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("email");
-            entity.Property(e => e.FirstName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("first_name");
-            entity.Property(e => e.LastName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("last_name");
-            entity.Property(e => e.PasswordHash)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("password_hash");
-            entity.Property(e => e.PhoneNumber)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("phone_number");
-            entity.Property(e => e.ProfileImageUrl)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("profile_image_url");
-            entity.Property(e => e.Role)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("role");
-            entity.Property(e => e.Username)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("username");
+            entity.Property(u => u.PasswordHash)
+                .IsRequired()
+                .HasMaxLength(256); // Adjust length as necessary
+
+            entity.Property(u => u.FirstName)
+                .HasMaxLength(100); // Adjust length as necessary
+
+            entity.Property(u => u.LastName)
+                .HasMaxLength(100); // Adjust length as necessary
+
+            entity.Property(u => u.Email)
+                .HasMaxLength(256); // Adjust length as necessary
+
+            entity.Property(u => u.PhoneNumber)
+                .HasMaxLength(15); // Adjust length as necessary
+
+            entity.Property(u => u.Role)
+                .IsRequired()
+                .HasMaxLength(20) // Adjust length as necessary
+                .HasConversion<string>(); // Ensure the role is stored as a string
+
+            entity.Property(u => u.ProfileImageUrl)
+                .HasMaxLength(256); // Adjust length as necessary
+
+            // Common fields from CommonEntity
+            entity.Property(u => u.createdTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(u => u.updatedTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(u => u.deletedTime)
+                .IsRequired(false); // Optional: make nullable if it's not always set
+
+            entity.Property(u => u.createdBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(u => u.updatedBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(u => u.deletedBy)
+                .HasMaxLength(50); // Adjust length as necessary
+
+
+
+            entity.HasMany(u => u.IORequests)
+                .WithOne() // Assuming IORequest does not have a navigation property back to User
+                .HasForeignKey(ir => ir.RequesterId) // Ensure the RequesterId exists in the IORequest entity
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ; // Adjust delete behavior as necessary
+
+            entity.HasMany(u => u.CheckRequests)
+                .WithOne() // Assuming CheckRequest does not have a navigation property back to User
+                .HasForeignKey(cr => cr.RequesterId) // Ensure the RequesterId exists in the CheckRequest entity
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ; // Adjust delete behavior as necessary
         });
 
-        modelBuilder.Entity<Warehouse>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("warehouse_id_primary");
-
-            entity.ToTable("Warehouse");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.Capacity).HasColumnName("capacity");
-            entity.Property(e => e.ClimateControl).HasColumnName("climate_control");
-            entity.Property(e => e.ContactPhone)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("contact_phone");
-            entity.Property(e => e.CurrentOccupancy).HasColumnName("current_occupancy");
-            entity.Property(e => e.EmergencyContact)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("emergency_contact");
-            entity.Property(e => e.FireSafetyStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("fire_safety_status");
-            entity.Property(e => e.InspectionFrequency)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("inspection_frequency");
-            entity.Property(e => e.InsuranceCoverage)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("insurance_coverage");
-            entity.Property(e => e.LocationAddress)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("location_address");
-            entity.Property(e => e.ManagerName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("manager_name");
-            entity.Property(e => e.NumberOfEmployees).HasColumnName("number_of_employees");
-            entity.Property(e => e.OperationalHours)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("operational_hours");
-            entity.Property(e => e.SecurityLevel)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("security_level");
-            entity.Property(e => e.WarehouseArea)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("warehouse_area");
-            entity.Property(e => e.WarehouseName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("warehouse_name");
-            entity.Property(e => e.YearBuilt).HasColumnName("year_built");
-        });
-
-        modelBuilder.Entity<Wine>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("wine_id_primary");
-
-            entity.ToTable("Wine");
-
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.AcidityLevel)
-                .HasColumnType("decimal(4, 2)")
-                .HasColumnName("acidity_level");
-            entity.Property(e => e.AlcoholContent)
-                .HasColumnType("decimal(5, 2)")
-                .HasColumnName("alcohol_content");
-            entity.Property(e => e.AvailableStock).HasColumnName("available_stock");
-            entity.Property(e => e.BottleSize)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("bottle_size");
-            entity.Property(e => e.BottleWeight)
-                .HasColumnType("decimal(6, 2)")
-                .HasColumnName("bottle_weight");
-            entity.Property(e => e.Description)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("description");
-            entity.Property(e => e.FermentationProcess)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("fermentation_process");
-            entity.Property(e => e.HarvestDate).HasColumnName("harvest_date");
-            entity.Property(e => e.LabelImageUrl)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("label_image_url");
-            entity.Property(e => e.Price)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("price");
-            entity.Property(e => e.SweetnessLevel)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("sweetness_level");
-            entity.Property(e => e.TanninContent)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("tannin_content");
-            entity.Property(e => e.Vintage).HasColumnName("vintage");
-            entity.Property(e => e.WineAgeingTime)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("wine_ageing_time");
-            entity.Property(e => e.WineCategoryId).HasColumnName("wine_category_id");
-            entity.Property(e => e.WineName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("wine_name");
-            entity.Property(e => e.WineStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("wine_status");
-
-            entity.HasOne(d => d.WineCategory).WithMany(p => p.Wines)
-                .HasForeignKey(d => d.WineCategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("wine_category_foreign");
-        });
-
+        // WINE CATEGORY
         modelBuilder.Entity<WineCategory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("wine_category_id_primary");
+            // Primary key configuration
+            entity.HasKey(wc => wc.Id);
 
-            entity.ToTable("Wine_Category");
+            // Properties configuration
+            entity.Property(wc => wc.CategoryName)
+                .IsRequired()
+                .HasMaxLength(100); // Adjust length as necessary
 
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.AcidityLevel)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("acidity_level");
-            entity.Property(e => e.AgeingPotential)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("ageing_potential");
-            entity.Property(e => e.AromaProfile)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("aroma_profile");
-            entity.Property(e => e.BottleShape)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("bottle_shape");
-            entity.Property(e => e.CategoryName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("category_name");
-            entity.Property(e => e.Color)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("color");
-            entity.Property(e => e.Description)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("description");
-            entity.Property(e => e.FlavorProfile)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("flavor_profile");
-            entity.Property(e => e.FoodPairing)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("food_pairing");
-            entity.Property(e => e.GrapeVariety)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("grape_variety");
-            entity.Property(e => e.IdealServingTemp)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ideal_serving_temp");
-            entity.Property(e => e.ProductionMethod)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("production_method");
-            entity.Property(e => e.Region)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("region");
-            entity.Property(e => e.SugarContent)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("sugar_content");
-            entity.Property(e => e.TanninLevel)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("tannin_level");
-            entity.Property(e => e.Vineyard)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("vineyard");
+            entity.Property(wc => wc.Description)
+                .HasMaxLength(500); // Adjust length as necessary
+
+            entity.Property(wc => wc.WineType)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            // Common fields from CommonEntity
+            entity.Property(wc => wc.createdTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(wc => wc.updatedTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(wc => wc.deletedTime)
+                .IsRequired(false); // Optional: make nullable if it's not always set
+
+            entity.Property(wc => wc.createdBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(wc => wc.updatedBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(wc => wc.deletedBy)
+                .HasMaxLength(50); // Adjust length as necessary
+
+            // Relationships
+            entity.HasMany(wc => wc.Wines)
+                .WithOne(w => w.WineCategory) // Assuming Wine has a navigation property for WineCategory
+                .HasForeignKey(w => w.WineCategoryId) // Ensure the WineCategoryId exists in the Wine entity
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ; // Adjust delete behavior as necessary
         });
 
-        modelBuilder.Entity<WineWarehouse>(entity =>
+
+
+        // WINE
+        modelBuilder.Entity<Wine>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("wine_warehouse_id_primary");
+            // Primary key configuration
+            entity.HasKey(w => w.Id);
 
-            entity.ToTable("Wine_Warehouse");
+            // Properties configuration
+            entity.Property(w => w.WineName)
+                .IsRequired()
+                .HasMaxLength(100); // Adjust length as necessary
 
-            entity.Property(e => e.Id)
-                .HasColumnName("id");
-            entity.Property(e => e.ArrivalDate).HasColumnName("arrival_date");
-            entity.Property(e => e.DepartureDate).HasColumnName("departure_date");
-            entity.Property(e => e.ExpiryDate).HasColumnName("expiry_date");
-            entity.Property(e => e.HandlingInstructions)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("handling_instructions");
-            entity.Property(e => e.HumidityLevel)
-                .HasColumnType("decimal(4, 2)")
-                .HasColumnName("humidity_level");
-            entity.Property(e => e.ImportRequestId).HasColumnName("import_request_id");
-            entity.Property(e => e.InspectionStatus)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("inspection_status");
-            entity.Property(e => e.LastInspectionDate).HasColumnName("last_inspection_date");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
-            entity.Property(e => e.Rack)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("rack");
-            entity.Property(e => e.Section)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("section");
-            entity.Property(e => e.StorageTemperature)
-                .HasColumnType("decimal(4, 2)")
-                .HasColumnName("storage_temperature");
-            entity.Property(e => e.WarehouseId).HasColumnName("warehouse_id");
-            entity.Property(e => e.WarehouseLocation)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("warehouse_location");
-            entity.Property(e => e.WineCode)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("wine_code");
-            entity.Property(e => e.WineCondition)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("wine_condition");
-            entity.Property(e => e.WineId).HasColumnName("wine_id");
-            entity.Property(e => e.WineName)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("wine_name");
+            entity.Property(w => w.AlcoholContent)
+                .HasColumnType("decimal(5, 2)"); // Example precision, adjust as necessary
 
-            entity.HasOne(d => d.ImportRequest).WithMany(p => p.WineWarehouses)
-                .HasForeignKey(d => d.ImportRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("import_request_foreign_2");
+            entity.Property(w => w.BottleSize)
+                .HasMaxLength(50); // Adjust length as necessary
 
-            entity.HasOne(d => d.Warehouse).WithMany(p => p.WineWarehouses)
-                .HasForeignKey(d => d.WarehouseId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("warehouse_foreign_2");
+            entity.Property(w => w.AvailableStock)
+                .IsRequired()
+                .HasDefaultValue(0); // Default value if needed
 
-            entity.HasOne(d => d.Wine).WithMany(p => p.WineWarehouses)
-                .HasForeignKey(d => d.WineId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("wine_foreign_3");
+            entity.Property(w => w.Description)
+                .HasMaxLength(500); // Adjust length as necessary
+
+            entity.Property(w => w.ImageUrl)
+                .HasMaxLength(200); // Adjust length as necessary
+
+            entity.Property(w => w.Supplier)
+                .IsRequired()
+                .HasMaxLength(100); // Adjust length as necessary
+
+            entity.Property(w => w.MFD)
+                .IsRequired(); // Ensure this property is required
+
+            // Common fields from CommonEntity
+            entity.Property(w => w.createdTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(w => w.updatedTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(w => w.deletedTime)
+                .IsRequired(false); // Optional: make nullable if it's not always set
+
+            entity.Property(w => w.createdBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(w => w.updatedBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(w => w.deletedBy)
+                .HasMaxLength(50); // Adjust length as necessary
+
+            // Foreign key configuration
+            entity.HasOne(w => w.WineCategory)
+                .WithMany(wc => wc.Wines)
+                .HasForeignKey(w => w.WineCategoryId)
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ; // Adjust delete behavior as necessary
+
+            // Relationships
+            entity.HasMany(w => w.WineRooms)
+                .WithOne(wr => wr.Wine) // Assuming WineRoom has a navigation property for Wine
+                .HasForeignKey(wr => wr.WineId) // Ensure the WineId exists in the WineRoom entity
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ; // Adjust delete behavior as necessary
+        });
+        // ROOM
+        modelBuilder.Entity<Room>(entity =>
+        {
+            // Primary key configuration
+            entity.HasKey(r => r.Id);
+
+            // Properties configuration
+            entity.Property(r => r.RoomName)
+                .IsRequired()
+                .HasMaxLength(100); // Adjust length as necessary
+
+            entity.Property(r => r.LocationAddress)
+                .HasMaxLength(200); // Adjust length as necessary
+
+            entity.Property(r => r.ManagerName)
+                .HasMaxLength(100); // Adjust length as necessary
+
+            // Common fields from CommonEntity
+            entity.Property(r => r.createdTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(r => r.updatedTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(r => r.deletedTime)
+                .IsRequired(false); // Optional: make nullable if it's not always set
+
+            entity.Property(r => r.createdBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(r => r.updatedBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(r => r.deletedBy)
+                .HasMaxLength(50); // Adjust length as necessary
+
+            // Relationships configuration
+            entity.HasMany(r => r.WineRooms)
+                .WithOne(wr => wr.Room)
+                .HasForeignKey(wr => wr.RoomId) // Ensure this matches the foreign key in WineRoom
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ; // Adjust delete behavior as necessary
         });
 
-        OnModelCreatingPartial(modelBuilder);
-    }
 
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        // WINE_ROOM
+        modelBuilder.Entity<WineRoom>(entity =>
+        {
+            // Primary key configuration
+            entity.HasKey(wr => wr.Id);
+
+            // Properties configuration
+            entity.Property(wr => wr.CurrQuantity)
+                .IsRequired();
+
+            entity.Property(wr => wr.TotalQuantity)
+                .IsRequired();
+
+            // Common fields from CommonEntity
+            entity.Property(wr => wr.createdTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(wr => wr.updatedTime)
+                .IsRequired(); // Optional: set as required if needed
+
+            entity.Property(wr => wr.deletedTime)
+                .IsRequired(false); // Optional: make nullable if it's not always set
+
+            entity.Property(wr => wr.createdBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(wr => wr.updatedBy)
+                .IsRequired()
+                .HasMaxLength(50); // Adjust length as necessary
+
+            entity.Property(wr => wr.deletedBy)
+                .HasMaxLength(50); // Adjust length as necessary
+
+            // Foreign key configuration for Room
+            entity.HasOne(wr => wr.Room)
+                .WithMany(r => r.WineRooms) // Ensure the Room entity has a collection for WineRooms
+                .HasForeignKey(wr => wr.RoomId)
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ; // Adjust delete behavior if needed
+
+            // Foreign key configuration for Wine
+            entity.HasOne(wr => wr.Wine)
+                .WithMany(w => w.WineRooms) // Ensure the Wine entity has a collection for WineRooms
+                .HasForeignKey(wr => wr.WineId)
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ;
+        });
+
+
+
+        // Configuring CheckRequest entity
+        modelBuilder.Entity<CheckRequest>(entity =>
+        {
+            entity.HasKey(cr => cr.Id);
+
+            // CommonEntity properties
+            entity.Property(cr => cr.createdTime)
+                .IsRequired();
+
+            entity.Property(cr => cr.updatedTime)
+                .IsRequired();
+
+            entity.Property(cr => cr.deletedTime)
+                .IsRequired(false); // Nullable if soft delete is not implemented
+
+            entity.Property(cr => cr.createdBy)
+                .IsRequired();
+
+            entity.Property(cr => cr.updatedBy)
+                .IsRequired(false); // Nullable if not updated yet
+
+            entity.Property(cr => cr.deletedBy)
+                .IsRequired(false); // Nullable if not deleted yet
+
+            entity.Property(cr => cr.Status)
+                .IsRequired();
+
+            // Specific properties
+            entity.Property(cr => cr.Purpose)
+                .IsRequired();
+
+            entity.Property(cr => cr.RequestCode)
+                .IsRequired();
+
+            entity.Property(cr => cr.StartDate)
+                .IsRequired();
+
+            entity.Property(cr => cr.DueDate)
+                .IsRequired();
+
+            entity.Property(cr => cr.Comments)
+                .IsRequired(false); // Nullable property
+
+            entity.Property(cr => cr.PriorityLevel)
+                .IsRequired();
+
+            // Foreign key configuration for Requester
+            entity.Property(cr => cr.RequesterId)
+                .IsRequired();
+
+            entity.Property(cr => cr.RequesterName)
+                .IsRequired(false); // Nullable property
+
+            // Configure one-to-many relationship with CheckRequestDetail
+            entity.HasMany(cr => cr.CheckRequestDetails)
+                .WithOne(crd => crd.CheckRequest)
+                .HasForeignKey(crd => crd.CheckRequestId)
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ;
+        });
+
+        // Configuring CheckRequestDetail entity
+        modelBuilder.Entity<CheckRequestDetail>(entity =>
+        {
+            entity.HasKey(crd => crd.Id);
+
+            // CommonEntity properties
+            entity.Property(crd => crd.createdTime)
+                .IsRequired();
+
+            entity.Property(crd => crd.updatedTime)
+                .IsRequired();
+
+            entity.Property(crd => crd.deletedTime)
+                .IsRequired(false); // Nullable if soft delete is not implemented
+
+            entity.Property(crd => crd.createdBy)
+                .IsRequired();
+
+            entity.Property(crd => crd.updatedBy)
+                .IsRequired(false); // Nullable if not updated yet
+
+            entity.Property(crd => crd.deletedBy)
+                .IsRequired(false); // Nullable if not deleted yet
+
+            entity.Property(crd => crd.Status)
+                .IsRequired();
+
+            // Specific properties
+            entity.Property(crd => crd.Purpose)
+                .IsRequired();
+
+            entity.Property(crd => crd.StartDate)
+                .IsRequired();
+
+            entity.Property(crd => crd.DueDate)
+                .IsRequired();
+
+            entity.Property(crd => crd.Comments)
+                .IsRequired();
+
+            entity.Property(crd => crd.CheckRequestCode)
+                .IsRequired();
+            // Report fields
+            entity.Property(crd => crd.ReportCode)
+                .IsRequired();
+
+            entity.Property(crd => crd.ReportDescription)
+                .IsRequired(false); // Optional
+
+            entity.Property(crd => crd.ReporterAssigned)
+                .IsRequired();
+
+            entity.Property(crd => crd.DiscrepanciesFound)
+                .IsRequired(false); // Optional
+
+            entity.Property(crd => crd.ActualQuantity)
+                .IsRequired();
+
+            entity.Property(crd => crd.ReportFile)
+                .IsRequired(false); // Optional
+
+            // Foreign keys
+            entity.Property(crd => crd.CheckRequestId)
+                .IsRequired();
+
+        });
+
+        // Configuring IORequest entity
+        modelBuilder.Entity<IORequest>(entity =>
+        {
+            entity.HasKey(ir => ir.Id);
+
+            // CommonEntity properties
+            entity.Property(ir => ir.createdTime)
+                .IsRequired();
+
+            entity.Property(ir => ir.updatedTime)
+                .IsRequired();
+
+            entity.Property(ir => ir.deletedTime)
+                .IsRequired(false); // Nullable if soft delete is not implemented
+
+            entity.Property(ir => ir.createdBy)
+                .IsRequired();
+
+            entity.Property(ir => ir.updatedBy)
+                .IsRequired(false); // Nullable if not updated yet
+
+            entity.Property(ir => ir.deletedBy)
+                .IsRequired(false); // Nullable if not deleted yet
+
+            entity.Property(ir => ir.Status)
+                .IsRequired();
+
+            // Specific properties
+            entity.Property(ir => ir.RequestCode)
+                .IsRequired();
+
+            entity.Property(ir => ir.StartDate)
+                .IsRequired(false); // Nullable property
+
+            entity.Property(ir => ir.DueDate)
+                .IsRequired(false); // Nullable property
+
+            entity.Property(ir => ir.TotalQuantity)
+                .IsRequired(false); // Nullable property
+
+            entity.Property(ir => ir.Comments)
+                .IsRequired(false); // Nullable property
+
+            entity.Property(ir => ir.IOType)
+                .IsRequired();
+
+            entity.Property(ir => ir.PriorityLevel)
+                .IsRequired();
+
+            // Foreign key configuration for Requester
+            entity.Property(ir => ir.RequesterId)
+                .IsRequired();
+
+            entity.Property(ir => ir.RequesterName)
+                .IsRequired(false); // Nullable property
+
+            // Configure one-to-many relationship with IORequestDetail
+            entity.HasMany(ir => ir.IORequestDetails)
+                .WithOne(ird => ird.IORequest)
+                .HasForeignKey(ird => ird.IORequestId)
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            ;
+        });
+
+        // Configuring IORequestDetail entity
+        modelBuilder.Entity<IORequestDetail>(entity =>
+        {
+            entity.HasKey(ird => ird.Id);
+
+            // CommonEntity properties
+            entity.Property(ird => ird.createdTime)
+                .IsRequired();
+
+            entity.Property(ird => ird.updatedTime)
+                .IsRequired();
+
+            entity.Property(ird => ird.deletedTime)
+                .IsRequired(false); // Nullable if soft delete is not implemented
+
+            entity.Property(ird => ird.createdBy)
+                .IsRequired();
+
+            entity.Property(ird => ird.updatedBy)
+                .IsRequired(false); // Nullable if not updated yet
+
+            entity.Property(ird => ird.deletedBy)
+                .IsRequired(false); // Nullable if not deleted yet
+
+            entity.Property(ird => ird.Status)
+                .IsRequired();
+
+            // Specific properties
+            entity.Property(ird => ird.Quantity)
+                .IsRequired();
+
+            entity.Property(ird => ird.StartDate)
+                .IsRequired();
+
+            entity.Property(ird => ird.EndDate)
+                .IsRequired();
+
+            entity.Property(ird => ird.Comments)
+                .IsRequired();
+            // Report fields
+            entity.Property(crd => crd.ReportCode)
+                .IsRequired();
+
+            entity.Property(crd => crd.ReportDescription)
+                .IsRequired(false); // Optional
+
+            entity.Property(crd => crd.ReporterAssigned)
+                .IsRequired();
+
+            entity.Property(crd => crd.DiscrepanciesFound)
+                .IsRequired(false); // Optional
+
+            entity.Property(crd => crd.ActualQuantity)
+                .IsRequired();
+
+            entity.Property(crd => crd.ReportFile)
+                .IsRequired(false); // Optional
+
+            // Foreign keys
+            entity.Property(ird => ird.WineId)
+                .IsRequired();
+
+            entity.Property(ird => ird.RoomId)
+                .IsRequired();
+
+            entity.Property(ird => ird.IORequestId)
+                .IsRequired();
+
+            entity.Property(ird => ird.IORequestCode)
+                .IsRequired();
+        });
+
+    }
 }

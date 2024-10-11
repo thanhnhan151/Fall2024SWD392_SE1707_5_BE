@@ -28,15 +28,15 @@ namespace WWMS.DAL.Repositories
         {
             var checkExistWine = await _dbSet.FindAsync(id) ?? throw new Exception($"Bottle of wine with {id} does not exist");
 
-            if (checkExistWine.WineStatus == null) throw new Exception($"Bottle of wine with {id}'s status is null");
+            if (checkExistWine.Status == null) throw new Exception($"Bottle of wine with {id}'s status is null");
 
-            if (checkExistWine.WineStatus.Equals("Active"))
+            if (checkExistWine.Status.Equals("Active"))
             {
-                checkExistWine.WineStatus = "Inactive";
+                checkExistWine.Status = "Inactive";
             }
             else
             {
-                checkExistWine.WineStatus = "Active";
+                checkExistWine.Status = "Active";
             }
 
             _dbSet.Update(checkExistWine);

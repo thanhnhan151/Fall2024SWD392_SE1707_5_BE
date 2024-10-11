@@ -20,15 +20,15 @@ namespace WWMS.DAL.Repositories
         {
             var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"User with {id} does not exist");
 
-            if (checkExistUser.AccountStatus == null) throw new Exception($"User {id}'s account status is null");
+            if (checkExistUser.Status == null) throw new Exception($"User {id}'s account status is null");
 
-            if (checkExistUser.AccountStatus.Equals("Active"))
+            if (checkExistUser.Status.Equals("Active"))
             {
-                checkExistUser.AccountStatus = "Inactive";
+                checkExistUser.Status = "Inactive";
             }
             else
             {
-                checkExistUser.AccountStatus = "Active";
+                checkExistUser.Status = "Active";
             }
 
             _dbSet.Update(checkExistUser);
