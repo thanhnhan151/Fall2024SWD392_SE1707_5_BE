@@ -33,7 +33,7 @@ public partial class WineWarehouseDbContext : DbContext
         //                           .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         // IConfigurationRoot configuration = builder.Build();
         // optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"));
-        string temp = " Server=tcp:db-fu.database.windows.net,1433;Initial Catalog=FU-SWD-FA24;Persist Security Info=False;User ID=sa123;Password=FUdb123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        string temp = "Server=tcp:db-fu.database.windows.net,1433;Initial Catalog=FU-SWD-FA24;Persist Security Info=False;User ID=sa123;Password=FUdb123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         optionsBuilder.UseSqlServer(
            temp,
             sqlOptions =>

@@ -31,22 +31,15 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "username": "test3",
-        ///       "password": "test3",
-        ///       "firstName": "test3",
-        ///       "lastName": "test3",
-        ///       "email": "test3",
-        ///       "phoneNumber": "test3",
-        ///       "role": "test3",
-        ///       "status": "test3",
-        ///       "lastLogin": "2024-09-25T09:00:27.824Z",
-        ///       "createdAt": "2024-09-25T09:00:27.824Z",
-        ///       "profileImageUrl": "test3",
-        ///       "bio": "test3",
-        ///       "lastPasswordChange": "2024-09-25T09:00:27.824Z",
-        ///       "accountStatus": "Active",
-        ///       "preferredLanguage": "test3",
-        ///       "timeZone": "test3"
+        ///       "wineName": "Red Majestic Wine",
+        ///       "alcoholContent": "Heavy",
+        ///       "bottleSize": "Large",
+        ///       "availableStock": 10,
+        ///       "description": "This wine is just so good",
+        ///       "imageUrl": "testImage",
+        ///       "supplier": "Downtoad store in the corner",
+        ///       "mfd": "2024-09-25T09:00:27.824Z",
+        ///       "wineCategoryId": 1
         ///     }
         ///         
         /// </remarks> 
@@ -153,17 +146,16 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "id": "3",
-        ///       "username": "hello",
-        ///       "passwordHash": "gggg",
-        ///       "firstName": "test3",
-        ///       "lastName": "test3",
-        ///       "email": "test3",
-        ///       "phoneNumber": "test3",
-        ///       "role": "test3",
-        ///       "status": "test3",
-        ///       "profileImageUrl": "test3",
-        ///       "bio": "test3"
+        ///       "id": 1,
+        ///       "wineName": "Blue Majestic Wine",
+        ///       "alcoholContent": "Heavy",
+        ///       "bottleSize": "Large",
+        ///       "availableStock": 10,
+        ///       "description": "This wine is just so good",
+        ///       "imageUrl": "testImage",
+        ///       "supplier": "Downtoad store in the corner",
+        ///       "mfd": "2024-09-25T09:00:27.824Z",
+        ///       "wineCategoryId": 1
         ///     }
         ///         
         /// </remarks> 
