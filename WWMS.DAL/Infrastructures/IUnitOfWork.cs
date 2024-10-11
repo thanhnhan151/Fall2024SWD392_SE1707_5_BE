@@ -10,6 +10,7 @@ namespace WWMS.DAL.Infrastructures
 
         IWineCategoryRepository WineCategories { get; }
 
+        IRoomRepository Rooms { get; }
 
         Task CompleteAsync();
     }

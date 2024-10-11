@@ -15,7 +15,7 @@ namespace WWMS.DAL.Infrastructures
 
         public IWineRepository Wines { get; private set; }
 
-
+        public IRoomRepository Rooms { get; private set; }
 
         public IWineCategoryRepository WineCategories { get; private set; }
 
@@ -32,6 +32,7 @@ namespace WWMS.DAL.Infrastructures
 
             WineCategories = new WineCategoryRepository(context, _logger);
 
+            Rooms = new RoomRepository(context, _logger);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

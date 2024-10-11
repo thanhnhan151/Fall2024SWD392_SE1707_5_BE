@@ -1,62 +1,72 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
-using WWMS.BAL.Models.Users;
+using WWMS.BAL.Models.Rooms;
 
 namespace WWMS.API.Controllers
 {
     [ApiVersion(1)]
-    [Route("api/v{version:apiVersion}/users")]
-    [ApiController]   
-    public class UsersController : ControllerBase
+    [Route("api/v{version:apiVersion}/rooms")]
+    [ApiController]
+    public class RoomsController : ControllerBase
     {
-        private readonly ILogger<UsersController> _logger;
-        private readonly IUserService _userService;
+        private readonly ILogger<RoomsController> _logger;
+        private readonly IRoomService _roomService;
 
-        public UsersController(
-            ILogger<UsersController> logger,
-            IUserService userService)
+        public RoomsController(
+            ILogger<RoomsController> logger,
+            IRoomService roomService)
         {
             _logger = logger;
-            _userService = userService;
+            _roomService = roomService;
         }
 
-        #region Create An User
+        #region Create A Room
         /// <summary>
-        /// Add an user in the system
+        /// Add a room in the system
         /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
         ///     {
-        ///       "username": "staff",
-        ///       "password": "staff",
-        ///       "firstName": "Tran Van",
-        ///       "lastName": "A",
-        ///       "email": "test@gmail.com",
-        ///       "phoneNumber": "0123456789",
-        ///       "role": "Staff",
-        ///       "profileImageUrl": "TestImg"
+        ///       "roomName": "staff",
+        ///       "locationAddress": "staff",
+        ///       "capacity": "Tran Van",
+        ///       "currentOccupancy": "A",
+        ///       "managerName": "test@gmail.com",
+        ///       "wineRooms": [
+        ///         {
+        ///           "currQuantity": 10,
+        ///           "totalQuantity": 20,
+        ///           "roomId": 1,
+        ///           "wineId": 1
+        ///         },
+        ///         {
+        ///           "currQuantity": 10,
+        ///           "totalQuantity": 20,
+        ///           "roomId": 1,
+        ///           "wineId": 2         
+        ///         }
+        ///       ]
         ///     }
         ///         
         /// </remarks> 
-        /// <returns>User that was created</returns>
-        /// <response code="200">User that was created</response>
+        /// <returns>Room that was created</returns>
+        /// <response code="200">Room that was created</response>
         /// <response code="400">Failed validation</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest createUserRequest)
+        public async Task<IActionResult> AddAsync([FromBody] CreateRoomRequest createRoomRequest)
         {
             try
             {
-                await _userService.CreateUserAsync(createUserRequest);
+                await _roomService.CreateRoomAsync(createRoomRequest);
 
-                return Ok(createUserRequest);
+                return Ok(createRoomRequest);
             }
             catch (Exception ex)
             {
@@ -68,13 +78,13 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Gell All Users
+        #region Gell All Rooms
         /// <summary>
-        /// Get all users in the system
+        /// Get all rooms in the system
         /// </summary>
-        /// <returns>A list of all users</returns>
-        /// <response code="200">Return all users in the system</response>
-        /// <response code="400">If no users are in the system</response>
+        /// <returns>A list of all rooms</returns>
+        /// <response code="200">Return all rooms in the system</response>
+        /// <response code="400">If no rooms are in the system</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
@@ -85,7 +95,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var result = await _userService.GetUserListAsync();
+                var result = await _roomService.GetRoomListAsync();
 
                 if (result is not null)
                 {
@@ -101,14 +111,14 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Get An User By Id
+        #region Get A Room By Id
         /// <summary>
-        /// Get an user in the system
+        /// Get a room in the system
         /// </summary>
-        /// <param name="id">Id of the user you want to get</param>
-        /// <returns>An user</returns>
-        /// <response code="200">Return an user in the system</response>
-        /// <response code="400">If the user is null</response>
+        /// <param name="id">Id of the room you want to get</param>
+        /// <returns>An Room</returns>
+        /// <response code="200">Return ar room in the system</response>
+        /// <response code="400">If the Room is null</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
@@ -118,7 +128,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var result = await _userService.GetUserByIdAsync(id);
+                var result = await _roomService.GetRoomByIdAsync(id);
 
                 if (result is not null)
                 {
@@ -132,53 +142,64 @@ namespace WWMS.API.Controllers
 
             return NotFound(new
             {
-                ErrorMessage = $"User with id: {id} does not exist"
+                ErrorMessage = $"Room with id: {id} does not exist"
             });
         }
         #endregion
 
-        #region Update An User
+        #region Update A Room
         /// <summary>
-        /// Update an user in the system
+        /// Update a room in the system
         /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
         ///     {
-        ///       "id": "3",
-        ///       "username": "hello",
-        ///       "passwordHash": "gggg",
-        ///       "firstName": "test3",
-        ///       "lastName": "test3",
-        ///       "email": "test3",
-        ///       "phoneNumber": "test3",
-        ///       "role": "test3",
-        ///       "profileImageUrl": "test3"
+        ///       "id": 1,
+        ///       "roomName": "staff",
+        ///       "locationAddress": "staff",
+        ///       "capacity": "Tran Van",
+        ///       "currentOccupancy": "A",
+        ///       "managerName": "test@gmail.com",
+        ///       "wineRooms": [
+        ///         {
+        ///           "currQuantity": 10,
+        ///           "totalQuantity": 20,
+        ///           "roomId": 2,
+        ///           "wineId": 1
+        ///         },
+        ///         {
+        ///           "currQuantity": 10,
+        ///           "totalQuantity": 20,
+        ///           "roomId": 2,
+        ///           "wineId": 2         
+        ///         }
+        ///       ]
         ///     }
         ///         
         /// </remarks> 
-        /// <response code="200">User that was updated</response>
+        /// <response code="200">Room that was updated</response>
         /// <response code="204">No content</response>
-        /// <response code="400">User does not exist</response>
+        /// <response code="400">Room does not exist</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserRequest updateUserRequest)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateRoomRequest updateRoomRequest)
         {
             try
             {
-                var user = await _userService.GetUserByIdAsync(updateUserRequest.Id);
+                var Room = await _roomService.GetRoomByIdAsync(updateRoomRequest.Id);
 
-                if (user == null) return NotFound(new
+                if (Room == null) return NotFound(new
                 {
-                    ErrorMessage = $"User with id: {updateUserRequest.Id} does not exist"
+                    ErrorMessage = $"Room with id: {updateRoomRequest.Id} does not exist"
                 }); ;
 
-                await _userService.UpdateUserAsync(updateUserRequest);
+                await _roomService.UpdateRoomAsync(updateRoomRequest);
 
-                return Ok(updateUserRequest);
+                return Ok(updateRoomRequest);
             }
             catch (Exception ex)
             {
@@ -190,15 +211,15 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Disable An User
+        #region Disable A Room
         /// <summary>
-        /// Disable an user in the system
+        /// Disable a room in the system
         /// </summary>
-        /// <param name="id">Id of the user you want to change</param>
+        /// <param name="id">Id of the room you want to change</param>
         /// <response code="200">Ok</response>
         /// <response code="201">Created At</response>
         /// <response code="204">No Content</response>
-        /// <response code="400">If the user is null</response>
+        /// <response code="400">If the room is null</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
@@ -208,7 +229,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                await _userService.DisableUserAsync(id);
+                await _roomService.DisableRoomAsync(id);
 
                 return Ok("Update Successfully!");
             }

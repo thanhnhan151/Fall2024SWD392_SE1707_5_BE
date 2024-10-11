@@ -25,6 +25,8 @@ namespace WWMS.BAL
 
             services.AddScoped<IWineService, WineService>();
 
+            services.AddScoped<IRoomService, RoomService>();
+
             services.AddScoped<IWineCategoryService, WineCategoryService>();
 
             return services;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WWMS.BAL.Models.Rooms;
 using WWMS.BAL.Models.Users;
 using WWMS.BAL.Models.WineCategories;
 using WWMS.BAL.Models.Wines;
@@ -25,10 +26,20 @@ namespace WWMS.BAL.Mappings
             CreateMap<CreateUpdateWineRequest, Wine>();
             #endregion
 
-            #region WineCategory
+            #region Wine Category
             CreateMap<WineCategory, GetWineCategoryResponse>();
 
             CreateMap<CreateWineCategoryRequest, WineCategory>();
+            #endregion
+
+            #region Room
+            CreateMap<WineRoom, RoomItem>();
+
+            CreateMap<Room, GetRoomResponse>();
+
+            CreateMap<CreateRoomRequest, Room>();
+
+            CreateMap<UpdateRoomRequest, Room>();
             #endregion
         }
     }
