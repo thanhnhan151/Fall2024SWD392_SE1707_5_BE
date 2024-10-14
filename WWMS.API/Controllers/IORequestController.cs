@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
-using WWMS.BAL.Models.Rooms;
-using WWMS.BAL.Services;
 
 namespace WWMS.API.Controllers
 {
@@ -15,13 +13,16 @@ namespace WWMS.API.Controllers
     {
         private readonly ILogger<IORequestController> _logger;
         private readonly IIORequestService _iORequestService;
+        private readonly IVnPayService _vnPayService;
 
         public IORequestController(
             ILogger<IORequestController> logger,
-            IIORequestService iORequestService)
+            IIORequestService iORequestService,
+            IVnPayService vnPayService)
         {
             _logger = logger;
             _iORequestService = iORequestService;
+            _vnPayService = vnPayService;
         }
 
         #region Gell All Import/Export Request
@@ -93,8 +94,6 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-
-
         #region Create A Import/Export Request
         /// <summary>
         /// Add a room in the system
@@ -137,8 +136,7 @@ namespace WWMS.API.Controllers
         ///      "reportFile": "path/to/report/file.pdf"
         ///    }
         ///  ]
-        //}
-
+        ///}
         ///         
         /// </remarks> 
         /// <returns>Room that was created</returns>
@@ -228,6 +226,30 @@ namespace WWMS.API.Controllers
                     ErrorMessage = ex.Message
                 });
             }
+        }
+        #endregion
+
+        #region Import Checkout
+        /// <summary>
+        /// Check out an import request in the system
+        /// </summary>
+        /// <param name="id">Id of the import request you want to pay</param>
+        /// <returns>An url to  VnPay</returns>
+        /// <response code="200">Return an url to VnPay</response>
+        /// <response code="400">If the import request is null</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        [HttpPost("{id}/payment")]
+        public async Task<IActionResult> CreateAsync(int id)
+        {
+            var url = await _vnPayService.CreateUrl(id);
+
+            return Ok(new
+            {
+                PaymentUrl = url
+            });
         }
         #endregion
     }

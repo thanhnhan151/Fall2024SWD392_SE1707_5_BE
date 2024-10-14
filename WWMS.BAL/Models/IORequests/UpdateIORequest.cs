@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WWMS.BAL.Models.IORequestDetails;
-using WWMS.DAL.Entities;
+﻿using WWMS.BAL.Models.IORequestDetails;
 
 namespace WWMS.BAL.Models.IORequests
 {
     public class UpdateIORequest
     {
-
         public long Id { get; set; }
         public string RequestCode { get; set; } = null!;
         public DateTime? StartDate { get; set; }

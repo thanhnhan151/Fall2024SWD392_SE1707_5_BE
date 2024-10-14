@@ -31,6 +31,10 @@ namespace WWMS.BAL
 
             services.AddScoped<IIORequestService, IORequestService>();
 
+            services.AddScoped<IEmailService, EmailService>();
+
+            services.AddScoped<IVnPayService, VnPayService>();
+
             return services;
         }
     }
