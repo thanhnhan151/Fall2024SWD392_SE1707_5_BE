@@ -19,6 +19,11 @@ namespace WWMS.DAL.Infrastructures
 
         public IWineCategoryRepository WineCategories { get; private set; }
 
+        public IIORequestRepository IIORequests { get; private set; }
+
+        public IIORequestDetailRepository IIORequestsDetail { get; private set; }
+
+
 
         public UnitOfWork(WineWarehouseDbContext context, ILoggerFactory loggerFactory)
         {
@@ -33,6 +38,10 @@ namespace WWMS.DAL.Infrastructures
             WineCategories = new WineCategoryRepository(context, _logger);
 
             Rooms = new RoomRepository(context, _logger);
+
+            IIORequests = new IORequestRepository(context, _logger);
+
+            IIORequestsDetail = new IORequestDetailRepository(context, _logger);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

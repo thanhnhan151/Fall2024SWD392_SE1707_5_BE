@@ -29,6 +29,8 @@ namespace WWMS.BAL
 
             services.AddScoped<IWineCategoryService, WineCategoryService>();
 
+            services.AddScoped<IIORequestService, IORequestService>();
+
             return services;
         }
     }

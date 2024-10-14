@@ -12,6 +12,10 @@ namespace WWMS.DAL.Infrastructures
 
         IRoomRepository Rooms { get; }
 
+        IIORequestRepository IIORequests { get; }
+
+        IIORequestDetailRepository IIORequestsDetail { get; }
+
         Task CompleteAsync();
     }
 }

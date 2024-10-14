@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using WWMS.BAL.Models.IORequestDetails;
+using WWMS.BAL.Models.IORequests;
 using WWMS.BAL.Models.Rooms;
 using WWMS.BAL.Models.Users;
 using WWMS.BAL.Models.WineCategories;
@@ -40,6 +42,20 @@ namespace WWMS.BAL.Mappings
             CreateMap<CreateRoomRequest, Room>();
 
             CreateMap<UpdateRoomRequest, Room>();
+            #endregion
+
+            #region IORequest
+
+
+            CreateMap<IORequest, GetIORequest>();
+
+            CreateMap<CreateIORequest, IORequest>();
+
+
+            CreateMap<CreateIORequestDetail, IORequestDetail>();
+            CreateMap<UpdateIORequestDetail, IORequestDetail>();
+
+            CreateMap<UpdateIORequest, IORequest>();
             #endregion
         }
     }
