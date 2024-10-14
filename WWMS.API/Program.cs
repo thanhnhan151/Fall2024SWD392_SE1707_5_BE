@@ -91,7 +91,7 @@ builder.Services.AddCors(options =>
 #region Third-party
 builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-//builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection(VnPayConfig.ConfigName));
+builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection(VnPayConfig.ConfigName));
 #endregion
 
 #region Versoning
