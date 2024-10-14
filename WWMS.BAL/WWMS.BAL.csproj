@@ -9,6 +9,8 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+		<PackageReference Include="MailKit" Version="4.8.0" />
+		<PackageReference Include="MimeKit" Version="4.8.0" />
 		<Using Include="BCrypt.Net.BCrypt" Alias="BC" />
 		<PackageReference Include="FluentValidation" Version="11.10.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.8" />
@@ -20,7 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Helpers\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>
 

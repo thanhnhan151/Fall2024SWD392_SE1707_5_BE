@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Asp.Versioning;
+using WWMS.BAL.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,7 +90,7 @@ builder.Services.AddCors(options =>
 
 #region Third-party
 builder.Services.AddHttpContextAccessor();
-//builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 //builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection(VnPayConfig.ConfigName));
 #endregion
 
