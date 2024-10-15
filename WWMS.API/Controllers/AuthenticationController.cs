@@ -37,8 +37,8 @@ namespace WWMS.API.Controllers
         /// Sample request:  
         /// 
         ///     {
-        ///       "username": "test4",
-        ///       "password": "test4"
+        ///       "username": "admin",
+        ///       "password": "admin"
         ///     }   
         ///         
         /// </remarks>
@@ -62,7 +62,7 @@ namespace WWMS.API.Controllers
                     ErrorMessage = "Wrong UserName or Password"
                 });
 
-                if (result.AccountStatus.Equals("Active"))
+                if (result.Status.Equals("Active"))
                 {
                     var accessToken = GenerateAccessToken(result);
                     return Ok(new { AccessToken = accessToken });
@@ -89,7 +89,8 @@ namespace WWMS.API.Controllers
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim("Role", user.Role),
-                new Claim("Id", user.Id.ToString())
+                new Claim("Id", user.Id.ToString()),
+                new Claim("Username", user.Username)
             };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

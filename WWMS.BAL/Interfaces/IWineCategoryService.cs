@@ -8,6 +8,6 @@ namespace WWMS.BAL.Interfaces
 
         Task<List<GetWineCategoryResponse>> GetWineCategoryListAsync();
 
-        Task<GetWineCategoryResponse?> GetAllWinesByWineCategoryIdAsync(long id);
+        Task<GetWineCategoryWithList?> GetAllWinesByWineCategoryIdAsync(long id);
     }
 }

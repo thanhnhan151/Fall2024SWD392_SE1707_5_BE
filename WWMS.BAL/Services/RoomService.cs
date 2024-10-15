@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Rooms;
 using WWMS.DAL.Entities;
@@ -10,18 +11,43 @@ namespace WWMS.BAL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public RoomService(
             IUnitOfWork unitOfWork
-            , IMapper mapper)
+            , IMapper mapper
+            , IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task CreateRoomAsync(CreateRoomRequest createRoomRequest)
         {
-            await _unitOfWork.Rooms.AddEntityAsync(_mapper.Map<Room>(createRoomRequest));
+            if (await _unitOfWork.Rooms.CheckExistRoomName(createRoomRequest.RoomName)) throw new Exception($"Room with name: {createRoomRequest.RoomName} has already existed");
+
+            var room = new Room
+            {
+                RoomName = createRoomRequest.RoomName,
+                LocationAddress = createRoomRequest.LocationAddress,
+                Capacity = createRoomRequest.Capacity
+            };
+
+            var managerName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+            if (managerName != null)
+            {
+                room.CreatedBy = managerName.Value;
+
+                room.ManagerName = managerName.Value;
+            }
+
+            room.Status = "Active";
+
+            room.CreatedTime = DateTime.Now;
+
+            await _unitOfWork.Rooms.AddEntityAsync(room);
 
             await _unitOfWork.CompleteAsync();
         }

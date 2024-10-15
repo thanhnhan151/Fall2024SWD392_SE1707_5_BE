@@ -32,12 +32,12 @@ namespace WWMS.API.Controllers
         /// 
         ///     {
         ///       "wineName": "Red Majestic Wine",
-        ///       "alcoholContent": "Heavy",
+        ///       "alcoholContent": 7,
         ///       "bottleSize": "Large",
         ///       "availableStock": 10,
         ///       "description": "This wine is just so good",
         ///       "imageUrl": "testImage",
-        ///       "supplier": "Downtoad store in the corner",
+        ///       "supplier": "Downtown store in the corner",
         ///       "mfd": "2024-09-25T09:00:27.824Z",
         ///       "wineCategoryId": 1
         ///     }

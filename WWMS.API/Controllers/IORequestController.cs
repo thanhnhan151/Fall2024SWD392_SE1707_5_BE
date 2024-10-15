@@ -8,7 +8,7 @@ using WWMS.BAL.Services;
 namespace WWMS.API.Controllers
 {
     [ApiVersion(1)]
-    [Route("api/v{version:apiVersion}/iorequest")]
+    [Route("api/v{version:apiVersion}/iorequests")]
     [ApiController]
     public class IORequestController : ControllerBase
     {

@@ -1,4 +1,8 @@
+
+﻿using Microsoft.AspNetCore.Http;
+
 ﻿using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Logging;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
@@ -9,7 +13,7 @@ namespace WWMS.DAL.Repositories
 {
     public class IORequestDetailRepository : GenericRepository<IORequestDetail>, IIORequestDetailRepository
     {
-        public IORequestDetailRepository(WineWarehouseDbContext context, ILogger logger) : base(context, logger)
+        public IORequestDetailRepository(WineWarehouseDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor) : base(context, logger, httpContextAccessor)
         {
 
         }

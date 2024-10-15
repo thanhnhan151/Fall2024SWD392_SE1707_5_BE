@@ -18,8 +18,8 @@
 
         public string Role { get; set; } = string.Empty;
 
-        public string? ProfileImageUrl { get; set; }
+        //public string? ProfileImageUrl { get; set; }
 
-        public string AccountStatus { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
     }
 }

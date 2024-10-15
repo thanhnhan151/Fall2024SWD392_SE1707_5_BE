@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using WWMS.DAL.Interfaces;
 using WWMS.DAL.Persistences;
 using WWMS.DAL.Repositories;
@@ -7,6 +8,8 @@ namespace WWMS.DAL.Infrastructures
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         private readonly WineWarehouseDbContext _context;
 
         private readonly ILogger _logger;
@@ -24,24 +27,27 @@ namespace WWMS.DAL.Infrastructures
         public IIORequestDetailRepository IIORequestsDetail { get; private set; }
 
 
-
-        public UnitOfWork(WineWarehouseDbContext context, ILoggerFactory loggerFactory)
+        public UnitOfWork(WineWarehouseDbContext context
+            , ILoggerFactory loggerFactory
+            , IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
+
             _context = context;
 
             _logger = loggerFactory.CreateLogger("logs");
 
-            Users = new UserRepository(_context, _logger);
+            Users = new UserRepository(_context, _logger, _httpContextAccessor);
 
-            Wines = new WineRepository(_context, _logger);
+            Wines = new WineRepository(_context, _logger, _httpContextAccessor);
 
-            WineCategories = new WineCategoryRepository(context, _logger);
+            WineCategories = new WineCategoryRepository(context, _logger, _httpContextAccessor);
 
-            Rooms = new RoomRepository(context, _logger);
+            Rooms = new RoomRepository(context, _logger, _httpContextAccessor);
 
-            IIORequests = new IORequestRepository(context, _logger);
+            IIORequests = new IORequestRepository(context, _logger, _httpContextAccessor);
 
-            IIORequestsDetail = new IORequestDetailRepository(context, _logger);
+            IIORequestsDetail = new IORequestDetailRepository(context, _logger, _httpContextAccessor);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

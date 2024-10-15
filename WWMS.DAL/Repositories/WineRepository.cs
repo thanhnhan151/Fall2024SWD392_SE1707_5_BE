@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
@@ -9,7 +10,7 @@ namespace WWMS.DAL.Repositories
 {
     public class WineRepository : GenericRepository<Wine>, IWineRepository
     {
-        public WineRepository(WineWarehouseDbContext context, ILogger logger) : base(context, logger)
+        public WineRepository(WineWarehouseDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor) : base(context, logger, httpContextAccessor)
         {
         }
 

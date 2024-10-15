@@ -21,7 +21,11 @@ namespace WWMS.BAL.Services
 
         public async Task CreateWineAsync(CreateUpdateWineRequest createWineRequest)
         {
-            await _unitOfWork.Wines.AddEntityAsync(_mapper.Map<Wine>(createWineRequest));
+            var wine = _mapper.Map<Wine>(createWineRequest);
+
+            wine.Status = "Active";
+
+            await _unitOfWork.Wines.AddEntityAsync(wine);
 
             await _unitOfWork.CompleteAsync();
         }

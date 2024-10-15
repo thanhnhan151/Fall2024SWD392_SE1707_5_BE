@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Users;
 using WWMS.DAL.Entities;
@@ -10,20 +11,41 @@ namespace WWMS.BAL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserService(
             IUnitOfWork unitOfWork
-            , IMapper mapper)
+            , IMapper mapper
+            , IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        private string GenerateRandomPassword(int length = 12)
+        {
+            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            Random random = new();
+            return new string(Enumerable.Repeat(validChars, length)
+                                        .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public async Task CreateUserAsync(CreateUserRequest createUserRequest)
         {
+            if (await _unitOfWork.Users.CheckExistUsernameAsync(createUserRequest.Username)) throw new Exception($"User with username: {createUserRequest.Username} has already existed");
+
             var user = _mapper.Map<User>(createUserRequest);
 
-            user.PasswordHash = BC.EnhancedHashPassword(createUserRequest.Password, 13);
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userName != null) user.CreatedBy = userName.Value;
+
+            user.CreatedTime = DateTime.Now;
+
+            user.Status = "Active";
+
+            user.PasswordHash = BC.EnhancedHashPassword(GenerateRandomPassword(), 13);
 
             await _unitOfWork.Users.AddEntityAsync(user);
 
@@ -45,6 +67,14 @@ namespace WWMS.BAL.Services
 
         public async Task UpdateUserAsync(UpdateUserRequest updateUserRequest)
         {
+            var user = await _unitOfWork.Users.GetEntityByIdAsync(updateUserRequest.Id) ?? throw new Exception($"User with id: {updateUserRequest.Id} does not exist");
+
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userName != null) user.UpdatedBy = userName.Value;
+
+            user.UpdatedTime = DateTime.Now;
+
             _unitOfWork.Users.UpdateEntity(_mapper.Map<User>(updateUserRequest));
 
             await _unitOfWork.CompleteAsync();

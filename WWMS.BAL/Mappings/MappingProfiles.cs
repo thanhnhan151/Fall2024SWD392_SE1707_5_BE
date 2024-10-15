@@ -31,6 +31,8 @@ namespace WWMS.BAL.Mappings
             #region Wine Category
             CreateMap<WineCategory, GetWineCategoryResponse>();
 
+            CreateMap<WineCategory, GetWineCategoryWithList>();
+
             CreateMap<CreateWineCategoryRequest, WineCategory>();
             #endregion
 
@@ -39,10 +41,12 @@ namespace WWMS.BAL.Mappings
 
             CreateMap<Room, GetRoomResponse>();
 
+
             CreateMap<CreateRoomRequest, Room>();
 
 
             CreateMap<UpdateRoomRequest, Room>();
+
             #endregion
 
             #region IORequest

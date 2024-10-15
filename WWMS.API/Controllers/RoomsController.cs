@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Rooms;
 
@@ -30,25 +31,9 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "roomName": "staff",
-        ///       "locationAddress": "staff",
-        ///       "capacity": "Tran Van",
-        ///       "currentOccupancy": "A",
-        ///       "managerName": "test@gmail.com",
-        ///       "wineRooms": [
-        ///         {
-        ///           "currQuantity": 10,
-        ///           "totalQuantity": 20,
-        ///           "roomId": 1,
-        ///           "wineId": 1
-        ///         },
-        ///         {
-        ///           "currQuantity": 10,
-        ///           "totalQuantity": 20,
-        ///           "roomId": 1,
-        ///           "wineId": 2         
-        ///         }
-        ///       ]
+        ///       "roomName": "Hybrid Overdrive",
+        ///       "locationAddress": "In the middle of nowhere",
+        ///       "capacity": 100
         ///     }
         ///         
         /// </remarks> 
@@ -59,6 +44,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("Manager")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateRoomRequest createRoomRequest)
         {
@@ -185,6 +171,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("Manager")]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateRoomRequest updateRoomRequest)
         {
@@ -224,6 +211,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
