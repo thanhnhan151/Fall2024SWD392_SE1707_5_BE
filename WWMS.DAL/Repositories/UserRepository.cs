@@ -11,15 +11,8 @@ namespace WWMS.DAL.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public UserRepository(
-            WineWarehouseDbContext context,
-            ILogger logger,
-            IHttpContextAccessor httpContextAccessor
-            ) : base(context, logger)
+        public UserRepository(WineWarehouseDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor) : base(context, logger, httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public override async Task<ICollection<User>> GetAllEntitiesAsync() => await _dbSet.Where(u => u.Id != GetLoggedUserId()).OrderByDescending(u => u.Id).ToListAsync();
@@ -39,7 +32,7 @@ namespace WWMS.DAL.Repositories
         {
             var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"User with {id} does not exist");
 
-            if (checkExistUser.Status == null) throw new Exception($"User {id}'s account status is null");
+            if (checkExistUser.Status == null) throw new Exception($"User {id}'s status is null");
 
             if (checkExistUser.Status.Equals("Active"))
             {

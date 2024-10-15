@@ -32,13 +32,11 @@ namespace WWMS.API.Controllers
         /// 
         ///     {
         ///       "username": "staff",
-        ///       "password": "staff",
         ///       "firstName": "Tran Van",
         ///       "lastName": "A",
         ///       "email": "test@gmail.com",
         ///       "phoneNumber": "0123456789",
-        ///       "role": "Staff",
-        ///       "profileImageUrl": "TestImg"
+        ///       "role": "Staff"
         ///     }
         ///         
         /// </remarks> 
