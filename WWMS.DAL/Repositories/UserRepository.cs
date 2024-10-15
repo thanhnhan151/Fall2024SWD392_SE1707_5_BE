@@ -43,7 +43,15 @@ namespace WWMS.DAL.Repositories
 
         public override async Task DisableAsync(long id)
         {
-            var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"User with {id} does not exist");
+            long Id = 0;
+
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userId != null) Id = long.Parse(userId.Value);
+
+            if (Id == id) throw new Exception($"User with Id: {id} is currently logging in");
+
+            var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"User with Id: {id} does not exist");
 
             if (checkExistUser.Status == null) throw new Exception($"User {id}'s status is null");
 
