@@ -16,7 +16,7 @@ public partial class CheckRequest : CommonEntity
     public DateTime? DueDate { get; set; }
 
     public string? Comments { get; set; }
-
+      
     public string PriorityLevel { get; set; } = string.Empty;
 
     //FOREIGN KEY
