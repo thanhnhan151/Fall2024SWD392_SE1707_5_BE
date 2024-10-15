@@ -14,17 +14,12 @@
         public string Comments { get; set; } = string.Empty;
         public long WineId { get; set; }
         public string Supplier { get; set; } = string.Empty;
-        public string WineName { get; set; } = string.Empty;
         public DateTime? MFD { get; set; }
-
         public long RoomId { get; set; }
-        public string RoomName { get; set; } = string.Empty;
-
-        public string IORequestCode { get; set; } = string.Empty;
         public long CheckerId { get; set; }
-        public string CheckerName { get; set; } = string.Empty;
-
         public long WineRoomId { get; set; }
+
+        public string Status { get; set; } = string.Empty;
 
         //    public IORequest IORequest { get; set; } = null!;
 

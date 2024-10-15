@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+		<PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
 		<PackageReference Include="MailKit" Version="4.8.0" />
 		<PackageReference Include="MimeKit" Version="4.8.0" />
 		<Using Include="BCrypt.Net.BCrypt" Alias="BC" />

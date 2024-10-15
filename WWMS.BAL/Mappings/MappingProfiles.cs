@@ -41,6 +41,7 @@ namespace WWMS.BAL.Mappings
 
             CreateMap<CreateRoomRequest, Room>();
 
+
             CreateMap<UpdateRoomRequest, Room>();
             #endregion
 
@@ -48,10 +49,10 @@ namespace WWMS.BAL.Mappings
 
 
             CreateMap<IORequest, GetIORequest>();
-
+            CreateMap<IORequest, GetIORequest>();
             CreateMap<CreateIORequest, IORequest>();
 
-
+            CreateMap<IORequestDetail, GetIORequestDetail>();
             CreateMap<CreateIORequestDetail, IORequestDetail>();
             CreateMap<UpdateIORequestDetail, IORequestDetail>();
 
