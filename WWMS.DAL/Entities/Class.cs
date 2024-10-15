@@ -3,12 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WWMS.DAL.Entities
 {
-    [Table("Role")]
-    public class Role
+    [Table("Class")]
+    public class Class
     {
         [Key]
         public long Id { get; set; }
-        public string RoleName { get; set; } = string.Empty;
-        public virtual ICollection<User> Users { get; set; } = [];
+
+        public string ClassType { get; set; } = string.Empty;
+
+        public virtual ICollection<Wine> Wines { get; set; } = [];
     }
 }

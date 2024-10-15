@@ -26,6 +26,13 @@ public partial class WineWarehouseDbContext : DbContext
     public DbSet<IORequestDetail> IORequestDetails { get; set; }
     public DbSet<WineRoom> WineRooms { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<Taste> Tastes { get; set; }
+    public DbSet<Class> Classes { get; set; }
+    public DbSet<Qualification> Qualifications { get; set; }
+    public DbSet<Cork> Corks { get; set; }
+    public DbSet<Brand> Brands { get; set; }
+    public DbSet<AlcoholByVolume> AlcoholByVolumes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -38,7 +45,7 @@ public partial class WineWarehouseDbContext : DbContext
             sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null));
+                errorNumbersToAdd: null));       
     }
 
 
@@ -70,11 +77,6 @@ public partial class WineWarehouseDbContext : DbContext
 
             entity.Property(u => u.PhoneNumber)
                 .HasMaxLength(15); // Adjust length as necessary
-
-            entity.Property(u => u.Role)
-                .IsRequired()
-                .HasMaxLength(20) // Adjust length as necessary
-                .HasConversion<string>(); // Ensure the role is stored as a string
 
             entity.Property(u => u.ProfileImageUrl)
                 .HasMaxLength(256); // Adjust length as necessary
@@ -128,14 +130,7 @@ public partial class WineWarehouseDbContext : DbContext
             // Properties configuration
             entity.Property(wc => wc.CategoryName)
                 .IsRequired()
-                .HasMaxLength(100); // Adjust length as necessary
-
-            entity.Property(wc => wc.Description)
-                .HasMaxLength(500); // Adjust length as necessary
-
-            entity.Property(wc => wc.WineType)
-                .IsRequired()
-                .HasMaxLength(50); // Adjust length as necessary
+                .HasMaxLength(25); // Adjust length as necessary
 
             // Common fields from CommonEntity
             entity.Property(u => u.CreatedTime)
@@ -178,11 +173,11 @@ public partial class WineWarehouseDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(100); // Adjust length as necessary
 
-            entity.Property(w => w.AlcoholContent)
-                .HasColumnType("decimal(5, 2)"); // Example precision, adjust as necessary
+            entity.Property(w => w.ImportPrice)
+                .HasColumnType("decimal(8, 2)");
 
-            entity.Property(w => w.BottleSize)
-                .HasMaxLength(50); // Adjust length as necessary
+            entity.Property(w => w.ExportPrice)
+                .HasColumnType("decimal(8, 2)");
 
             entity.Property(w => w.AvailableStock)
                 .IsRequired()
@@ -235,6 +230,46 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasForeignKey(wr => wr.WineId) // Ensure the WineId exists in the WineRoom entity
                  .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
             ; // Adjust delete behavior as necessary
+
+            entity.HasOne(w => w.Country)
+                  .WithMany(c => c.Wines)
+                  .HasForeignKey(w => w.CountryId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(w => w.Taste)
+                  .WithMany(c => c.Wines)
+                  .HasForeignKey(w => w.TasteId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(w => w.Class)
+                  .WithMany(c => c.Wines)
+                  .HasForeignKey(w => w.ClassId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(w => w.Qualification)
+                  .WithMany(c => c.Wines)
+                  .HasForeignKey(w => w.QualificationId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(w => w.Cork)
+                  .WithMany(c => c.Wines)
+                  .HasForeignKey(w => w.CorkId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(w => w.Brand)
+                  .WithMany(c => c.Wines)
+                  .HasForeignKey(w => w.BrandId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(w => w.BottleSize)
+                  .WithMany(c => c.Wines)
+                  .HasForeignKey(w => w.BottleSizeId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(w => w.AlcoholByVolume)
+                  .WithMany(c => c.Wines)
+                  .HasForeignKey(w => w.AlcoholByVolumeId)
+                  .OnDelete(DeleteBehavior.Restrict);
         });
         // ROOM
         modelBuilder.Entity<Room>(entity =>
@@ -595,10 +630,65 @@ public partial class WineWarehouseDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(r => r.Id);
-
             entity.Property(r => r.RoleName)
-                .IsRequired(false); // Optional: set as required if needed
+                  .HasMaxLength(7)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<Country>(entity =>
+        {
+            entity.Property(r => r.CountryName)
+                  .HasMaxLength(12)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<Taste>(entity =>
+        {
+            entity.Property(r => r.TasteType)
+                  .HasMaxLength(11)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<Class>(entity =>
+        {
+            entity.Property(r => r.ClassType)
+                  .HasMaxLength(10)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<Qualification>(entity =>
+        {
+            entity.Property(r => r.QualificationType)
+                  .HasMaxLength(10)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<Cork>(entity =>
+        {
+            entity.Property(r => r.CorkType)
+                  .HasMaxLength(8)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<Brand>(entity =>
+        {
+            entity.Property(r => r.BrandName)
+                  .HasMaxLength(50)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<BottleSize>(entity =>
+        {
+            entity.Property(r => r.BottleSizeType)
+                  .HasMaxLength(8)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<AlcoholByVolume>(entity =>
+        {
+            entity.Property(r => r.AlcoholByVolumeType)
+                  .HasMaxLength(3)
+                  .IsRequired(); // Optional: set as required if needed
         });
     }
 }
