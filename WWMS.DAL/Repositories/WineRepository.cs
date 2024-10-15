@@ -14,11 +14,22 @@ namespace WWMS.DAL.Repositories
         {
         }
 
-        public override async Task<ICollection<Wine>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.WineCategory).ToListAsync();
+        public override async Task<ICollection<Wine>> GetAllEntitiesAsync()
+            => await _dbSet.OrderByDescending(w => w.Id).ToListAsync();
 
         public override async Task<Wine?> GetEntityByIdAsync(long id)
         {
-            var result = await _dbSet.Include(c => c.WineCategory).FirstOrDefaultAsync(c => c.Id == id);
+            var result = await _dbSet
+                .Include(c => c.WineCategory)
+                .Include(c => c.Country)
+                .Include(c => c.Taste)
+                .Include(c => c.Class)
+                .Include(c => c.Qualification)
+                .Include(c => c.Cork)
+                .Include(c => c.Brand)
+                .Include(c => c.BottleSize)
+                .Include(c => c.AlcoholByVolume)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (result != null) return result;
 
@@ -34,6 +45,12 @@ namespace WWMS.DAL.Repositories
             if (checkExistWine.Status.Equals("Active"))
             {
                 checkExistWine.Status = "Inactive";
+
+                var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+                if (userName != null) checkExistWine.DeletedBy = userName.Value;
+
+                checkExistWine.DeletedTime = DateTime.Now;
             }
             else
             {

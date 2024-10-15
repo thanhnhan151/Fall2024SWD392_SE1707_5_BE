@@ -8,7 +8,7 @@ namespace WWMS.BAL.Interfaces
 
         Task<List<GetWineResponse>> GetWineListAsync();
 
-        Task<GetWineResponse?> GetWineByIdAsync(long id);
+        Task<GetWineDetailResponse?> GetWineByIdAsync(long id);
 
         Task UpdateWineAsync(CreateUpdateWineRequest updateWineRequest);
 
