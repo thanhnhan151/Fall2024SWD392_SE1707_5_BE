@@ -25,20 +25,21 @@ public partial class WineWarehouseDbContext : DbContext
     public DbSet<IORequest> IORequests { get; set; }
     public DbSet<IORequestDetail> IORequestDetails { get; set; }
     public DbSet<WineRoom> WineRooms { get; set; }
+    public DbSet<Role> Roles { get; set; }
 
-protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-{
-    var builder = new ConfigurationBuilder()
-                          .SetBasePath(Directory.GetCurrentDirectory())
-                          .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-    IConfigurationRoot configuration = builder.Build();
-    
-    optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"), sqlOptions =>
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(30),
-            errorNumbersToAdd: null));
-}
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        var builder = new ConfigurationBuilder()
+                              .SetBasePath(Directory.GetCurrentDirectory())
+                              .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        IConfigurationRoot configuration = builder.Build();
+
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"), sqlOptions =>
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null));
+    }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -99,6 +100,10 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             entity.Property(u => u.DeletedBy)
                 .HasMaxLength(50); // Adjust length as necessary
 
+            entity.HasOne(u => u.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             entity.HasMany(u => u.IORequests)
@@ -588,5 +593,12 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
                 .IsRequired();
         });
 
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(r => r.Id);
+
+            entity.Property(r => r.RoleName)
+                .IsRequired(false); // Optional: set as required if needed
+        });
     }
 }

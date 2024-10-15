@@ -12,11 +12,12 @@ public partial class User : CommonEntity
     public string? LastName { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
-    public string? Role { get; set; }//STAFF, MANAGER, ADMIN
     public string? ProfileImageUrl { get; set; }
-
-
     // Relationships
+
+    public long RoleId { get; set; }
+    public virtual Role Role { get; set; } = null!;
+
     public ICollection<IORequest> IORequests { get; set; } = [];
     public ICollection<CheckRequest> CheckRequests { get; set; } = [];
 }
