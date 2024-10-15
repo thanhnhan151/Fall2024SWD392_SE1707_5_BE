@@ -33,20 +33,20 @@ namespace WWMS.DAL.Repositories
         {
            
             var checkExistWine = await _dbSet
-                .Include(r => r.IORequestDetails) // Bao gồm cả IORequestDetails khi lấy dữ liệu
+                .Include(r => r.IORequestDetails) 
                 .FirstOrDefaultAsync(r => r.Id == id)
                 ?? throw new Exception($"Import/Export {id} does not exist");
 
-            // Kiểm tra trạng thái của IORequest
+
             if (checkExistWine.Status == null)
                 throw new Exception($"Import/Export with {id}'s status is null");
 
-            // Nếu trạng thái là "Active", chuyển trạng thái sang "Inactive" và cập nhật chi tiết
+
             if (checkExistWine.Status.Equals("Active", StringComparison.OrdinalIgnoreCase))
             {
                 checkExistWine.Status = "Inactive";
 
-                // Duyệt qua từng IORequestDetail và cập nhật trạng thái thành "Cancel"
+
                 foreach (var detail in checkExistWine.IORequestDetails)
                 {
                     detail.Status = "Cancel";
@@ -54,14 +54,13 @@ namespace WWMS.DAL.Repositories
             }
             else
             {
-                // Ngược lại, nếu không phải "Active", chuyển sang "Active"
+
                 checkExistWine.Status = "Active";
             }
 
-            // Cập nhật IORequest trong DbSet
+      
             _dbSet.Update(checkExistWine);
 
-            // Đừng quên lưu thay đổi vào cơ sở dữ liệu sau khi cập nhật
             await _context.SaveChangesAsync();
         }
     }

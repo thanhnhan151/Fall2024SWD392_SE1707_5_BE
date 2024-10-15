@@ -97,12 +97,12 @@ namespace WWMS.BAL.Services
                         existingDetail.WineRoomId =  existingDetail.WineRoomId;
 
                         // Cập nhật thông tin báo cáo
-                        existingDetail.ReportCode = string.IsNullOrEmpty(newDetail.ReportCode) ? existingDetail.ReportCode : newDetail.ReportCode;
-                        existingDetail.ReportDescription = string.IsNullOrEmpty(newDetail.ReportDescription) ? existingDetail.ReportDescription : newDetail.ReportDescription;
-                        existingDetail.ReporterAssigned = string.IsNullOrEmpty(newDetail.ReporterAssigned) ? existingDetail.ReporterAssigned : newDetail.ReporterAssigned;
-                        existingDetail.DiscrepanciesFound = newDetail.DiscrepanciesFound ?? existingDetail.DiscrepanciesFound;
-                        existingDetail.ActualQuantity = newDetail.ActualQuantity != 0 ? newDetail.ActualQuantity : existingDetail.ActualQuantity;
-                        existingDetail.ReportFile = string.IsNullOrEmpty(newDetail.ReportFile) ? existingDetail.ReportFile : newDetail.ReportFile;
+                        //existingDetail.ReportCode = string.IsNullOrEmpty(newDetail.ReportCode) ? existingDetail.ReportCode : newDetail.ReportCode;
+                        //existingDetail.ReportDescription = string.IsNullOrEmpty(newDetail.ReportDescription) ? existingDetail.ReportDescription : newDetail.ReportDescription;
+                        //existingDetail.ReporterAssigned = string.IsNullOrEmpty(newDetail.ReporterAssigned) ? existingDetail.ReporterAssigned : newDetail.ReporterAssigned;
+                        //existingDetail.DiscrepanciesFound = newDetail.DiscrepanciesFound ?? existingDetail.DiscrepanciesFound;
+                        //existingDetail.ActualQuantity = newDetail.ActualQuantity != 0 ? newDetail.ActualQuantity : existingDetail.ActualQuantity;
+                        //existingDetail.ReportFile = string.IsNullOrEmpty(newDetail.ReportFile) ? existingDetail.ReportFile : newDetail.ReportFile;
 
                         // Cập nhật thời gian
                         existingDetail.UpdatedTime = DateTime.Now;
