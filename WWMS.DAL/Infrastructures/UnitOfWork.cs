@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using WWMS.DAL.Interfaces;
 using WWMS.DAL.Persistences;
 using WWMS.DAL.Repositories;
@@ -7,6 +8,8 @@ namespace WWMS.DAL.Infrastructures
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         private readonly WineWarehouseDbContext _context;
 
         private readonly ILogger _logger;
@@ -24,14 +27,17 @@ namespace WWMS.DAL.Infrastructures
         public IIORequestDetailRepository IIORequestsDetail { get; private set; }
 
 
-
-        public UnitOfWork(WineWarehouseDbContext context, ILoggerFactory loggerFactory)
+        public UnitOfWork(WineWarehouseDbContext context
+            , ILoggerFactory loggerFactory
+            , IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
+
             _context = context;
 
             _logger = loggerFactory.CreateLogger("logs");
 
-            Users = new UserRepository(_context, _logger);
+            Users = new UserRepository(_context, _logger, _httpContextAccessor);
 
             Wines = new WineRepository(_context, _logger);
 

@@ -49,6 +49,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("Admin")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest createUserRequest)
         {
@@ -79,7 +80,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Staff")]
+        [PermissionAuthorize("Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -146,13 +147,10 @@ namespace WWMS.API.Controllers
         /// 
         ///     {
         ///       "id": "3",
-        ///       "username": "hello",
-        ///       "passwordHash": "gggg",
         ///       "firstName": "test3",
         ///       "lastName": "test3",
         ///       "email": "test3",
         ///       "phoneNumber": "test3",
-        ///       "role": "test3",
         ///       "profileImageUrl": "test3"
         ///     }
         ///         
@@ -169,20 +167,13 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var user = await _userService.GetUserByIdAsync(updateUserRequest.Id);
-
-                if (user == null) return NotFound(new
-                {
-                    ErrorMessage = $"User with id: {updateUserRequest.Id} does not exist"
-                }); ;
-
                 await _userService.UpdateUserAsync(updateUserRequest);
 
                 return Ok(updateUserRequest);
             }
             catch (Exception ex)
             {
-                return BadRequest(new
+                return NotFound(new
                 {
                     ErrorMessage = ex.Message
                 });
@@ -203,6 +194,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
