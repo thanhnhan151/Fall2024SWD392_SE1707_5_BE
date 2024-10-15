@@ -40,16 +40,23 @@ namespace WWMS.BAL.Mappings
             CreateMap<WineRoom, RoomItem>();
 
             CreateMap<Room, GetRoomResponse>();
+
+
+            CreateMap<CreateRoomRequest, Room>();
+
+
+            CreateMap<UpdateRoomRequest, Room>();
+
             #endregion
 
             #region IORequest
 
 
             CreateMap<IORequest, GetIORequest>();
-
+            CreateMap<IORequest, GetIORequest>();
             CreateMap<CreateIORequest, IORequest>();
 
-
+            CreateMap<IORequestDetail, GetIORequestDetail>();
             CreateMap<CreateIORequestDetail, IORequestDetail>();
             CreateMap<UpdateIORequestDetail, IORequestDetail>();
 

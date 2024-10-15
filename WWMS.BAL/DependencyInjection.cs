@@ -35,6 +35,8 @@ namespace WWMS.BAL
 
             services.AddScoped<IVnPayService, VnPayService>();
 
+            services.AddScoped<IUploadFileService, UploadFileService>();
+
             return services;
         }
     }

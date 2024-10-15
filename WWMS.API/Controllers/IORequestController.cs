@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
+using WWMS.BAL.Services;
 
 namespace WWMS.API.Controllers
 {
@@ -146,6 +147,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+    
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateIORequest createIORequest)
         {
@@ -252,6 +254,43 @@ namespace WWMS.API.Controllers
             });
         }
         #endregion
+
+
+        #region Disable An Import/Export and details
+        /// <summary>
+        /// Disable an Disable An Import/Export  in the system
+        /// </summary>
+        /// <param name="id">Id of the user you want to change</param>
+        /// <response code="200">Ok</response>
+        /// <response code="201">Created At</response>
+        /// <response code="204">No Content</response>
+        /// <response code="400">If the user is null</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DisableAsync(long id)
+        {
+            try
+            {
+                await _iORequestService.DisableIORequestsAsync(id);
+
+                return Ok("Update Successfully!");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
     }
 
 }
+
+
+
+

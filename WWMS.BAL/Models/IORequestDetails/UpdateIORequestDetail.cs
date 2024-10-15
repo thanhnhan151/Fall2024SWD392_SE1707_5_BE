@@ -11,32 +11,26 @@
 
         public DateTime? UpdatedTime { get; set; }
 
-        public DateTime? DeletedTime { get; set; }
         public string Comments { get; set; } = string.Empty;
         public long WineId { get; set; }
         public string Supplier { get; set; } = string.Empty;
-        public string WineName { get; set; } = string.Empty;
         public DateTime? MFD { get; set; }
-
         public long RoomId { get; set; }
-        public string RoomName { get; set; } = string.Empty;
-
-        public string IORequestCode { get; set; } = string.Empty;
         public long CheckerId { get; set; }
-        public string CheckerName { get; set; } = string.Empty;
-
         public long WineRoomId { get; set; }
+
+        public string Status { get; set; } = string.Empty;
 
         //    public IORequest IORequest { get; set; } = null!;
 
 
         //REPORT INFORMATION
 
-        public string ReportCode { get; set; } = string.Empty;
-        public string? ReportDescription { get; set; } = string.Empty;
-        public string ReporterAssigned { get; set; } = string.Empty;
-        public int? DiscrepanciesFound { get; set; }
-        public int ActualQuantity { get; set; }
-        public string? ReportFile { get; set; }
+        //public string ReportCode { get; set; } = string.Empty;
+        //public string? ReportDescription { get; set; } = string.Empty;
+        //public string ReporterAssigned { get; set; } = string.Empty;
+        //public int? DiscrepanciesFound { get; set; }
+        //public int ActualQuantity { get; set; }
+        //public string? ReportFile { get; set; }
     }
 }

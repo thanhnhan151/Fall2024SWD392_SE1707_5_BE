@@ -1,4 +1,5 @@
-﻿using WWMS.DAL.Entities;
+﻿using WWMS.BAL.Models.IORequestDetails;
+using WWMS.DAL.Entities;
 
 namespace WWMS.BAL.Models.IORequests
 {
@@ -13,7 +14,7 @@ namespace WWMS.BAL.Models.IORequests
         public string IOType { get; set; } = string.Empty;
         public string PriorityLevel { get; set; } = string.Empty;
         public long RequesterId { get; set; }
-        public string? RequesterName { get; set; }
-        public ICollection<IORequestDetail> IORequestDetails { get; set; } = [];
+        public string Status { get; set; } = string.Empty;
+        public ICollection<GetIORequestDetail> IORequestDetails { get; set; } = [];
     }
 }
