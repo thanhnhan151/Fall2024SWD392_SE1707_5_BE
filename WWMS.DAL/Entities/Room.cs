@@ -9,7 +9,7 @@ public partial class Room : CommonEntity
     public string RoomName { get; set; } = null!;
     public string? LocationAddress { get; set; }
     public int? Capacity { get; set; } //MAX SIZE
-    public int? CurrentOccupancy { get; set; }
+    public int? CurrentOccupancy { get; set; } = 0;
     public string? ManagerName { get; set; }
     public ICollection<WineRoom> WineRooms { get; set; } = [];
 }

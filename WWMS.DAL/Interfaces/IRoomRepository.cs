@@ -5,5 +5,6 @@ namespace WWMS.DAL.Interfaces
 {
     public interface IRoomRepository : IGenericRepository<Room>
     {
+        Task<bool> CheckExistRoomName(string roomName);
     }
 }
