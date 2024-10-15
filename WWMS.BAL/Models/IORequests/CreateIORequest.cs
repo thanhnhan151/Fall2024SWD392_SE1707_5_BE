@@ -5,6 +5,7 @@ namespace WWMS.BAL.Models.IORequests
     public class CreateIORequest
     {
         public string RequestCode { get; set; } = null!;
+        public DateTime? DueDate { get; set; }
         public int? TotalQuantity { get; set; }
         public string? Comments { get; set; }
         public string IOType { get; set; } = string.Empty;

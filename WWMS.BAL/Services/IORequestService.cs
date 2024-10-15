@@ -28,7 +28,7 @@ namespace WWMS.BAL.Services
             int quantityMid=0;
             ioRequestEntity.StartDate = DateTime.UtcNow;
             ioRequestEntity.CreatedTime = DateTime.UtcNow;
-
+      
             ioRequestEntity.UpdatedTime = DateTime.UtcNow;
 
             if (ioRequestEntity.IORequestDetails != null)
@@ -36,10 +36,10 @@ namespace WWMS.BAL.Services
                 foreach (var detail in createIORequest.IORequestDetails)
                 {
                     quantityMid += detail.Quantity;
-                    detail.StartDate = DateTime.Now; 
-
-                    detail.CreatedTime = DateTime.Now; 
-                    detail.UpdatedTime = DateTime.Now;
+                    detail.StartDate = DateTime.UtcNow;
+              
+                    detail.CreatedTime = DateTime.UtcNow; 
+                    detail.UpdatedTime = DateTime.UtcNow;
                 }
             }
             ioRequestEntity.TotalQuantity = quantityMid;
@@ -61,11 +61,11 @@ namespace WWMS.BAL.Services
             {
                 throw new Exception("IORequest not found.");
             }
-            // nếu không thay đỗi thì sẽ lấy dữ liệu cũ điền vào 
+
+            // Nếu không thay đổi thì sẽ lấy dữ liệu cũ điền vào 
             currentIORequest.RequestCode = updateIORequest.RequestCode ?? currentIORequest.RequestCode;
             currentIORequest.StartDate = updateIORequest.StartDate ?? currentIORequest.StartDate;
             currentIORequest.DueDate = updateIORequest.DueDate ?? currentIORequest.DueDate;
-            currentIORequest.TotalQuantity = updateIORequest.TotalQuantity ?? currentIORequest.TotalQuantity;
             currentIORequest.Comments = updateIORequest.Comments ?? currentIORequest.Comments;
             currentIORequest.IOType = string.IsNullOrEmpty(updateIORequest.IOType) ? currentIORequest.IOType : updateIORequest.IOType;
             currentIORequest.PriorityLevel = string.IsNullOrEmpty(updateIORequest.PriorityLevel) ? currentIORequest.PriorityLevel : updateIORequest.PriorityLevel;
@@ -73,16 +73,15 @@ namespace WWMS.BAL.Services
             currentIORequest.RequesterName = updateIORequest.RequesterName ?? currentIORequest.RequesterName;
             currentIORequest.UpdatedTime = DateTime.Now;
 
-            if (updateIORequest.UpIORequestDetails != null && updateIORequest.UpIORequestDetails.Any() )
+            if (updateIORequest.UpIORequestDetails != null && updateIORequest.UpIORequestDetails.Any())
             {
                 foreach (var newDetail in updateIORequest.UpIORequestDetails)
                 {
-        
-                    var existingDetail = currentIORequest.IORequestDetails.FirstOrDefault(d => d.Id == newDetail.Id);  
+                    var existingDetail = currentIORequest.IORequestDetails.FirstOrDefault(d => d.Id == newDetail.Id);
 
                     if (existingDetail != null)
                     {
-                        // nếu không thay đỗi thì sẽ lấy dữ liệu cũ điền vào 
+                        // Nếu không thay đổi thì sẽ lấy dữ liệu cũ điền vào 
                         existingDetail.Quantity = newDetail.Quantity != 0 ? newDetail.Quantity : existingDetail.Quantity;
                         existingDetail.StartDate = newDetail.StartDate ?? existingDetail.StartDate;
                         existingDetail.EndDate = newDetail.EndDate ?? existingDetail.EndDate;
@@ -96,6 +95,8 @@ namespace WWMS.BAL.Services
                         existingDetail.IORequestCode = string.IsNullOrEmpty(newDetail.IORequestCode) ? existingDetail.IORequestCode : newDetail.IORequestCode;
                         existingDetail.CheckerId = newDetail.CheckerId != 0 ? newDetail.CheckerId : existingDetail.CheckerId;
                         existingDetail.CheckerName = string.IsNullOrEmpty(newDetail.CheckerName) ? existingDetail.CheckerName : newDetail.CheckerName;
+
+                        // Tự nhập tay
                         existingDetail.WineRoomId = newDetail.WineRoomId != 0 ? newDetail.WineRoomId : existingDetail.WineRoomId;
 
                         // Cập nhật thông tin báo cáo
@@ -111,12 +112,14 @@ namespace WWMS.BAL.Services
                     }
                 }
             }
-            currentIORequest.IORequestDetails = _mapper.Map<List<IORequestDetail>>(updateIORequest.UpIORequestDetails);
-            _unitOfWork.IIORequests.UpdateEntity(currentIORequest);
 
-           
+            // Tính toán tổng số lượng từ cả các chi tiết đã sửa đổi và các chi tiết còn lại trong cơ sở dữ liệu
+            currentIORequest.TotalQuantity = currentIORequest.IORequestDetails.Sum(d => d.Quantity);
+
+            _unitOfWork.IIORequests.UpdateEntity(currentIORequest);
             await _unitOfWork.CompleteAsync();
         }
+
 
         public async Task DisableIORequestsAsync(long id)
         {
