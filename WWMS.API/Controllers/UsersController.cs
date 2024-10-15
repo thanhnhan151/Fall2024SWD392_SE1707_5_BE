@@ -36,7 +36,7 @@ namespace WWMS.API.Controllers
         ///       "lastName": "A",
         ///       "email": "test@gmail.com",
         ///       "phoneNumber": "0123456789",
-        ///       "role": "Staff"
+        ///       "roleId": 3
         ///     }
         ///         
         /// </remarks> 

@@ -15,7 +15,20 @@ namespace WWMS.DAL.Repositories
         {
         }
 
-        public override async Task<ICollection<User>> GetAllEntitiesAsync() => await _dbSet.Where(u => u.Id != GetLoggedUserId()).OrderByDescending(u => u.Id).ToListAsync();
+        public override async Task<ICollection<User>> GetAllEntitiesAsync()
+            => await _dbSet.Where(u => u.Id != GetLoggedUserId())
+                           .Include(u => u.Role)
+                           .OrderByDescending(u => u.Id)
+                           .ToListAsync();
+
+        public override async Task<User?> GetEntityByIdAsync(long id)
+        {
+            var result = await _dbSet.Include(c => c.Role).FirstOrDefaultAsync(c => c.Id == id);
+
+            if (result != null) return result;
+
+            return null;
+        }
 
         public async Task<bool> CheckExistUsernameAsync(string username)
         {
@@ -56,7 +69,9 @@ namespace WWMS.DAL.Repositories
         {
             try
             {
-                var user = await _dbSet.Where(u => u.Username == username).FirstOrDefaultAsync();
+                var user = await _dbSet.Include(u => u.Role)
+                                       .Where(u => u.Username == username)
+                                       .FirstOrDefaultAsync();
 
                 if (user == null) return null;
 

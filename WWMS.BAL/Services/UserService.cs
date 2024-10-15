@@ -35,19 +35,7 @@ namespace WWMS.BAL.Services
         {
             if (await _unitOfWork.Users.CheckExistUsernameAsync(createUserRequest.Username)) throw new Exception($"User with username: {createUserRequest.Username} has already existed");
 
-            var user = _mapper.Map<User>(createUserRequest);
-
-            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
-
-            if (userName != null) user.CreatedBy = userName.Value;
-
-            user.CreatedTime = DateTime.Now;
-
-            user.Status = "Active";
-
-            user.PasswordHash = BC.EnhancedHashPassword(GenerateRandomPassword(), 13);
-
-            await _unitOfWork.Users.AddEntityAsync(user);
+            await _unitOfWork.Users.AddEntityAsync(MappingCreateRequest(createUserRequest));
 
             await _unitOfWork.CompleteAsync();
         }
@@ -69,15 +57,53 @@ namespace WWMS.BAL.Services
         {
             var user = await _unitOfWork.Users.GetEntityByIdAsync(updateUserRequest.Id) ?? throw new Exception($"User with id: {updateUserRequest.Id} does not exist");
 
+            _unitOfWork.Users.UpdateEntity(MappingUpdateRequest(updateUserRequest));
+
+            await _unitOfWork.CompleteAsync();
+        }
+
+        private User MappingCreateRequest(CreateUserRequest createUserRequest)
+        {
+            var user = new User
+            {
+                Username = createUserRequest.Username,
+                FirstName = createUserRequest.FirstName,
+                LastName = createUserRequest.LastName,
+                PhoneNumber = createUserRequest.PhoneNumber,
+                Email = createUserRequest.Email,
+                RoleId = createUserRequest.RoleId,
+                Status = "Active"
+            };
+
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userName != null) user.CreatedBy = userName.Value;
+
+            user.CreatedTime = DateTime.Now;
+
+            user.PasswordHash = BC.EnhancedHashPassword(GenerateRandomPassword(), 13);
+
+            return user;
+        }
+
+        private User MappingUpdateRequest(UpdateUserRequest updateUserRequest)
+        {
+            var user = new User
+            {
+                FirstName = updateUserRequest.FirstName,
+                LastName = updateUserRequest.LastName,
+                PhoneNumber = updateUserRequest.PhoneNumber,
+                Email = updateUserRequest.Email,
+                ProfileImageUrl = updateUserRequest.ProfileImageUrl
+            };
+
             var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 
             if (userName != null) user.UpdatedBy = userName.Value;
 
             user.UpdatedTime = DateTime.Now;
 
-            _unitOfWork.Users.UpdateEntity(_mapper.Map<User>(updateUserRequest));
-
-            await _unitOfWork.CompleteAsync();
+            return user;
         }
     }
 }
