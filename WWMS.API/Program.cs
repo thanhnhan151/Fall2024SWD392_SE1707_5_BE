@@ -86,6 +86,16 @@ builder.Services.AddCors(options =>
                    .AllowAnyMethod();
         });
 });
+
+//Specification CORS config
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:5173")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials());
+});
 #endregion
 
 #region Third-party
