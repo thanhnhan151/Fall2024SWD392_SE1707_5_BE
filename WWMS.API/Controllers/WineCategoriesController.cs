@@ -30,9 +30,9 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "categoryName": "test3",
-        ///       "description": "test3",
-        ///       "wineType": "test3"
+        ///       "categoryName": "Red wine",
+        ///       "description": "A steady and elegant type",
+        ///       "wineType": "cuba"
         ///     }
         ///         
         /// </remarks> 
