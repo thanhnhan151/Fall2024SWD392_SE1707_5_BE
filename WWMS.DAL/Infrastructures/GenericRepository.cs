@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WWMS.DAL.Persistences;
 
@@ -9,11 +10,14 @@ namespace WWMS.DAL.Infrastructures
         protected WineWarehouseDbContext _context;
         protected DbSet<TEntity> _dbSet;
         protected readonly ILogger _logger;
+        protected readonly IHttpContextAccessor _httpContextAccessor;
 
         public GenericRepository(
             WineWarehouseDbContext context,
-            ILogger logger)
+            ILogger logger,
+            IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _context = context;
             _logger = logger;
             _dbSet = _context.Set<TEntity>();

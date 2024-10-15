@@ -39,15 +39,15 @@ namespace WWMS.DAL.Infrastructures
 
             Users = new UserRepository(_context, _logger, _httpContextAccessor);
 
-            Wines = new WineRepository(_context, _logger);
+            Wines = new WineRepository(_context, _logger, _httpContextAccessor);
 
-            WineCategories = new WineCategoryRepository(context, _logger);
+            WineCategories = new WineCategoryRepository(context, _logger, _httpContextAccessor);
 
-            Rooms = new RoomRepository(context, _logger);
+            Rooms = new RoomRepository(context, _logger, _httpContextAccessor);
 
-            IIORequests = new IORequestRepository(context, _logger);
+            IIORequests = new IORequestRepository(context, _logger, _httpContextAccessor);
 
-            IIORequestsDetail = new IORequestDetailRepository(context, _logger);
+            IIORequestsDetail = new IORequestDetailRepository(context, _logger, _httpContextAccessor);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();
