@@ -4,7 +4,7 @@
     {
         public string Username { get; set; } = null!;
 
-        public string Password { get; set; } = null!;
+        // public string Password { get; set; } = null!;
 
         public string? FirstName { get; set; }
 
@@ -16,6 +16,6 @@
 
         public string? Role { get; set; }
 
-        public string? ProfileImageUrl { get; set; }
+        // public string? ProfileImageUrl { get; set; }
     }
 }

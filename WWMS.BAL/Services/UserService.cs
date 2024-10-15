@@ -19,11 +19,18 @@ namespace WWMS.BAL.Services
             _unitOfWork = unitOfWork;
         }
 
+        private string GenerateRandomPassword(int length = 12)
+        {
+            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            Random random = new();
+            return new string(Enumerable.Repeat(validChars, length)
+                                        .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
         public async Task CreateUserAsync(CreateUserRequest createUserRequest)
         {
             var user = _mapper.Map<User>(createUserRequest);
 
-            user.PasswordHash = BC.EnhancedHashPassword(createUserRequest.Password, 13);
+            user.PasswordHash = BC.EnhancedHashPassword(GenerateRandomPassword(), 13);
 
             await _unitOfWork.Users.AddEntityAsync(user);
 
