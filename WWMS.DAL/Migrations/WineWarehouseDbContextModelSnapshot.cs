@@ -22,6 +22,60 @@ namespace WWMS.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("WWMS.DAL.Entities.AlcoholByVolume", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AlcoholByVolumeType")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AlcoholByVolume");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.BottleSize", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("BottleSizeType")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BottleSize");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Brand", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("BrandName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brand");
+                });
+
             modelBuilder.Entity("WWMS.DAL.Entities.CheckRequest", b =>
                 {
                     b.Property<long>("Id")
@@ -215,6 +269,60 @@ namespace WWMS.DAL.Migrations
                     b.ToTable("CheckRequestDetails");
                 });
 
+            modelBuilder.Entity("WWMS.DAL.Entities.Class", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ClassType")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Class");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Cork", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CorkType")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cork");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Country", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CountryName")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Country");
+                });
+
             modelBuilder.Entity("WWMS.DAL.Entities.IORequest", b =>
                 {
                     b.Property<long>("Id")
@@ -402,6 +510,42 @@ namespace WWMS.DAL.Migrations
                     b.ToTable("IORequestDetails");
                 });
 
+            modelBuilder.Entity("WWMS.DAL.Entities.Qualification", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("QualificationType")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Qualification");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Role", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
+                });
+
             modelBuilder.Entity("WWMS.DAL.Entities.Room", b =>
                 {
                     b.Property<long>("Id")
@@ -460,6 +604,24 @@ namespace WWMS.DAL.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("WWMS.DAL.Entities.Taste", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("TasteType")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Taste");
+                });
+
             modelBuilder.Entity("WWMS.DAL.Entities.User", b =>
                 {
                     b.Property<long>("Id")
@@ -508,10 +670,8 @@ namespace WWMS.DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -531,6 +691,8 @@ namespace WWMS.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Users");
                 });
 
@@ -542,8 +704,8 @@ namespace WWMS.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal?>("AlcoholContent")
-                        .HasColumnType("decimal(5, 2)");
+                    b.Property<long>("AlcoholByVolumeId")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("AvailableStock")
                         .IsRequired()
@@ -551,9 +713,20 @@ namespace WWMS.DAL.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<string>("BottleSize")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<long>("BottleSizeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BrandId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ClassId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CorkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CountryId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
@@ -574,13 +747,22 @@ namespace WWMS.DAL.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<decimal>("ExportPrice")
+                        .HasColumnType("decimal(15, 2)");
+
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<decimal>("ImportPrice")
+                        .HasColumnType("decimal(15, 2)");
+
                     b.Property<DateTime?>("MFD")
                         .IsRequired()
                         .HasColumnType("datetime2");
+
+                    b.Property<long>("QualificationId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -590,6 +772,9 @@ namespace WWMS.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<long>("TasteId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("UpdatedBy")
                         .HasMaxLength(50)
@@ -608,6 +793,22 @@ namespace WWMS.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AlcoholByVolumeId");
+
+                    b.HasIndex("BottleSizeId");
+
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("CorkId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("QualificationId");
+
+                    b.HasIndex("TasteId");
+
                     b.HasIndex("WineCategoryId");
 
                     b.ToTable("Wines");
@@ -623,8 +824,8 @@ namespace WWMS.DAL.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
@@ -641,11 +842,6 @@ namespace WWMS.DAL.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -656,11 +852,6 @@ namespace WWMS.DAL.Migrations
 
                     b.Property<DateTime?>("UpdatedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("WineType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -774,13 +965,88 @@ namespace WWMS.DAL.Migrations
                     b.Navigation("IORequest");
                 });
 
+            modelBuilder.Entity("WWMS.DAL.Entities.User", b =>
+                {
+                    b.HasOne("WWMS.DAL.Entities.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("WWMS.DAL.Entities.Wine", b =>
                 {
+                    b.HasOne("WWMS.DAL.Entities.AlcoholByVolume", "AlcoholByVolume")
+                        .WithMany("Wines")
+                        .HasForeignKey("AlcoholByVolumeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WWMS.DAL.Entities.BottleSize", "BottleSize")
+                        .WithMany("Wines")
+                        .HasForeignKey("BottleSizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WWMS.DAL.Entities.Brand", "Brand")
+                        .WithMany("Wines")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WWMS.DAL.Entities.Class", "Class")
+                        .WithMany("Wines")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WWMS.DAL.Entities.Cork", "Cork")
+                        .WithMany("Wines")
+                        .HasForeignKey("CorkId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WWMS.DAL.Entities.Country", "Country")
+                        .WithMany("Wines")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WWMS.DAL.Entities.Qualification", "Qualification")
+                        .WithMany("Wines")
+                        .HasForeignKey("QualificationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WWMS.DAL.Entities.Taste", "Taste")
+                        .WithMany("Wines")
+                        .HasForeignKey("TasteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("WWMS.DAL.Entities.WineCategory", "WineCategory")
                         .WithMany("Wines")
                         .HasForeignKey("WineCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("AlcoholByVolume");
+
+                    b.Navigation("BottleSize");
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Cork");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Qualification");
+
+                    b.Navigation("Taste");
 
                     b.Navigation("WineCategory");
                 });
@@ -804,9 +1070,39 @@ namespace WWMS.DAL.Migrations
                     b.Navigation("Wine");
                 });
 
+            modelBuilder.Entity("WWMS.DAL.Entities.AlcoholByVolume", b =>
+                {
+                    b.Navigation("Wines");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.BottleSize", b =>
+                {
+                    b.Navigation("Wines");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Brand", b =>
+                {
+                    b.Navigation("Wines");
+                });
+
             modelBuilder.Entity("WWMS.DAL.Entities.CheckRequest", b =>
                 {
                     b.Navigation("CheckRequestDetails");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Class", b =>
+                {
+                    b.Navigation("Wines");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Cork", b =>
+                {
+                    b.Navigation("Wines");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Country", b =>
+                {
+                    b.Navigation("Wines");
                 });
 
             modelBuilder.Entity("WWMS.DAL.Entities.IORequest", b =>
@@ -814,9 +1110,24 @@ namespace WWMS.DAL.Migrations
                     b.Navigation("IORequestDetails");
                 });
 
+            modelBuilder.Entity("WWMS.DAL.Entities.Qualification", b =>
+                {
+                    b.Navigation("Wines");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("WWMS.DAL.Entities.Room", b =>
                 {
                     b.Navigation("WineRooms");
+                });
+
+            modelBuilder.Entity("WWMS.DAL.Entities.Taste", b =>
+                {
+                    b.Navigation("Wines");
                 });
 
             modelBuilder.Entity("WWMS.DAL.Entities.User", b =>

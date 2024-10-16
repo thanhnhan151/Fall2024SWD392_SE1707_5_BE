@@ -44,7 +44,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Manager")]
+        //[PermissionAuthorize("Manager")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateRoomRequest createRoomRequest)
         {
@@ -171,7 +171,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Manager")]
+        //[PermissionAuthorize("Manager")]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateRoomRequest updateRoomRequest)
         {
@@ -211,7 +211,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Manager")]
+        //[PermissionAuthorize("Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {

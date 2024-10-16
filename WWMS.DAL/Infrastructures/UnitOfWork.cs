@@ -26,6 +26,23 @@ namespace WWMS.DAL.Infrastructures
 
         public IIORequestDetailRepository IIORequestsDetail { get; private set; }
 
+        public IRoleRepository Roles { get; private set; }
+
+        public ICountryRepository Countries { get; private set; }
+
+        public ITasteRepository Tastes { get; private set; }
+
+        public IClassRepository Classes { get; private set; }
+
+        public IQualificationRepository Qualifications { get; private set; }
+
+        public ICorkRepository Corks { get; private set; }
+
+        public IBrandRepository Brands { get; private set; }
+
+        public IBottleSizeRepository BottleSizes { get; private set; }
+
+        public IAlcoholByVolumeRepository AlcoholByVolumes { get; private set; }
 
         public UnitOfWork(WineWarehouseDbContext context
             , ILoggerFactory loggerFactory
@@ -41,13 +58,31 @@ namespace WWMS.DAL.Infrastructures
 
             Wines = new WineRepository(_context, _logger, _httpContextAccessor);
 
-            WineCategories = new WineCategoryRepository(context, _logger, _httpContextAccessor);
+            WineCategories = new WineCategoryRepository(_context, _logger, _httpContextAccessor);
 
-            Rooms = new RoomRepository(context, _logger, _httpContextAccessor);
+            Rooms = new RoomRepository(_context, _logger, _httpContextAccessor);
 
-            IIORequests = new IORequestRepository(context, _logger, _httpContextAccessor);
+            IIORequests = new IORequestRepository(_context, _logger, _httpContextAccessor);
 
-            IIORequestsDetail = new IORequestDetailRepository(context, _logger, _httpContextAccessor);
+            IIORequestsDetail = new IORequestDetailRepository(_context, _logger, _httpContextAccessor);
+
+            Roles = new RoleRepository(_context, _logger, _httpContextAccessor);
+
+            Countries = new CountryRepository(_context, _logger, _httpContextAccessor);
+
+            Tastes = new TasteRepository(_context, _logger, _httpContextAccessor);
+
+            Classes = new ClassRepository(_context, _logger, _httpContextAccessor);
+
+            Qualifications = new QualificationRepository(_context, _logger, _httpContextAccessor);
+
+            Corks = new CorkRepository(_context, _logger, _httpContextAccessor);
+
+            Brands = new BrandRepository(_context, _logger, _httpContextAccessor);
+
+            BottleSizes = new BottleSizeRepository(_context, _logger, _httpContextAccessor);
+
+            AlcoholByVolumes = new AlcoholByVolumeRepository(_context, _logger, _httpContextAccessor);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

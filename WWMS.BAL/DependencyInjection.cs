@@ -37,6 +37,24 @@ namespace WWMS.BAL
 
             services.AddScoped<IUploadFileService, UploadFileService>();
 
+            services.AddScoped<ICountryService, CountryService>();
+
+            services.AddScoped<ITasteService, TasteService>();
+
+            services.AddScoped<IClassService, ClassService>();
+
+            services.AddScoped<IQualificationService, QualificationService>();
+
+            services.AddScoped<ICorkService, CorkService>();
+
+            services.AddScoped<IBrandService, BrandService>();
+
+            services.AddScoped<IBottleSizeService, BottleSizeService>();
+
+            services.AddScoped<IAlcoholByVolumeService, AlcoholByVolumeService>();
+
+            services.AddScoped<IRoleService, RoleService>();
+
             return services;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using WWMS.BAL.Helpers;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Users;
 using WWMS.DAL.Entities;
@@ -12,15 +13,18 @@ namespace WWMS.BAL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEmailService _emailService;
 
         public UserService(
             IUnitOfWork unitOfWork
             , IMapper mapper
-            , IHttpContextAccessor httpContextAccessor)
+            , IHttpContextAccessor httpContextAccessor
+            , IEmailService emailService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
+            _emailService = emailService;
         }
 
         private string GenerateRandomPassword(int length = 12)
@@ -35,19 +39,7 @@ namespace WWMS.BAL.Services
         {
             if (await _unitOfWork.Users.CheckExistUsernameAsync(createUserRequest.Username)) throw new Exception($"User with username: {createUserRequest.Username} has already existed");
 
-            var user = _mapper.Map<User>(createUserRequest);
-
-            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
-
-            if (userName != null) user.CreatedBy = userName.Value;
-
-            user.CreatedTime = DateTime.Now;
-
-            user.Status = "Active";
-
-            user.PasswordHash = BC.EnhancedHashPassword(GenerateRandomPassword(), 13);
-
-            await _unitOfWork.Users.AddEntityAsync(user);
+            await _unitOfWork.Users.AddEntityAsync(await MappingCreateRequest(createUserRequest));
 
             await _unitOfWork.CompleteAsync();
         }
@@ -69,13 +61,79 @@ namespace WWMS.BAL.Services
         {
             var user = await _unitOfWork.Users.GetEntityByIdAsync(updateUserRequest.Id) ?? throw new Exception($"User with id: {updateUserRequest.Id} does not exist");
 
+            _unitOfWork.Users.UpdateEntity(MappingUpdateRequest(updateUserRequest));
+
+            await _unitOfWork.CompleteAsync();
+        }
+
+        private async Task<User> MappingCreateRequest(CreateUserRequest createUserRequest)
+        {
+            var password = GenerateRandomPassword();
+
+            var user = new User
+            {
+                Username = createUserRequest.Username,
+                FirstName = createUserRequest.FirstName,
+                LastName = createUserRequest.LastName,
+                PhoneNumber = createUserRequest.PhoneNumber,
+                Email = createUserRequest.Email,
+                RoleId = createUserRequest.RoleId,
+                Status = "Active"
+            };
+
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userName != null) user.CreatedBy = userName.Value;
+
+            user.CreatedTime = DateTime.Now;
+
+            user.PasswordHash = BC.EnhancedHashPassword(password, 13);
+
+            if (user == null) return new User();
+
+            var mailRequest = new MailRequest
+            {
+                ToEmail = user.Email,
+                Subject = "Welcome to Wine Warehouse System",
+                Body = $"Username: {user.Username} Password: {password}"
+            };
+
+            await _emailService.SendEmailAsync(mailRequest);
+
+            return user;
+        }
+
+        private User MappingUpdateRequest(UpdateUserRequest updateUserRequest)
+        {
+            var user = new User
+            {
+                FirstName = updateUserRequest.FirstName,
+                LastName = updateUserRequest.LastName,
+                PhoneNumber = updateUserRequest.PhoneNumber,
+                Email = updateUserRequest.Email,
+                ProfileImageUrl = updateUserRequest.ProfileImageUrl
+            };
+
             var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 
             if (userName != null) user.UpdatedBy = userName.Value;
 
             user.UpdatedTime = DateTime.Now;
 
-            _unitOfWork.Users.UpdateEntity(_mapper.Map<User>(updateUserRequest));
+            return user;
+        }
+
+        public async Task ResetPasswordAsync(ResetPasswordRequest resetPasswordRequest)
+        {
+            var user = await _unitOfWork.Users.GetByUsernameAsync(resetPasswordRequest.Username) ?? throw new Exception($"Username: {resetPasswordRequest.Username} does not exist");
+
+            if (!BC.EnhancedVerify(resetPasswordRequest.Password, user.PasswordHash)) throw new Exception($"Invalid password");
+
+            if (!resetPasswordRequest.Password.Equals(resetPasswordRequest.ConfirmPassword)) throw new Exception($"Confirm password does not match");
+
+            user.PasswordHash = BC.EnhancedHashPassword(resetPasswordRequest.NewPassword, 13);
+
+            _unitOfWork.Users.UpdateEntity(user);
 
             await _unitOfWork.CompleteAsync();
         }

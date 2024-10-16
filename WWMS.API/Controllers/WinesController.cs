@@ -32,14 +32,22 @@ namespace WWMS.API.Controllers
         /// 
         ///     {
         ///       "wineName": "Red Majestic Wine",
-        ///       "alcoholContent": 7,
-        ///       "bottleSize": "Large",
         ///       "availableStock": 10,
         ///       "description": "This wine is just so good",
         ///       "imageUrl": "testImage",
         ///       "supplier": "Downtown store in the corner",
         ///       "mfd": "2024-09-25T09:00:27.824Z",
-        ///       "wineCategoryId": 1
+        ///       "importPrice": 10000000,
+        ///       "exportPrice": 11000000,
+        ///       "categoryId": 1,
+        ///       "countryId": 1,
+        ///       "tasteId": 1,
+        ///       "classId": 1,
+        ///       "qualificationId": 1,
+        ///       "corkId": 1,
+        ///       "brandId": 1,
+        ///       "bottleSizeId": 1,
+        ///       "alcoholByVolumeId": 1
         ///     }
         ///         
         /// </remarks> 
@@ -147,15 +155,23 @@ namespace WWMS.API.Controllers
         /// 
         ///     {
         ///       "id": 1,
-        ///       "wineName": "Blue Majestic Wine",
-        ///       "alcoholContent": "Heavy",
-        ///       "bottleSize": "Large",
+        ///       "wineName": "More Red Majestic Wine",
         ///       "availableStock": 10,
         ///       "description": "This wine is just so good",
         ///       "imageUrl": "testImage",
-        ///       "supplier": "Downtoad store in the corner",
+        ///       "supplier": "Downtown store in the corner",
         ///       "mfd": "2024-09-25T09:00:27.824Z",
-        ///       "wineCategoryId": 1
+        ///       "importPrice": 10000000,
+        ///       "exportPrice": 11000000,
+        ///       "categoryId": 2,
+        ///       "countryId": 2,
+        ///       "tasteId": 2,
+        ///       "classId": 2,
+        ///       "qualificationId": 2,
+        ///       "corkId": 2,
+        ///       "brandId": 2,
+        ///       "bottleSizeId": 2,
+        ///       "alcoholByVolumeId": 2
         ///     }
         ///         
         /// </remarks> 
@@ -171,20 +187,13 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var user = await _wineService.GetWineByIdAsync(updateWineRequest.Id);
-
-                if (user == null) return NotFound(new
-                {
-                    ErrorMessage = $"Bottle of wine with id: {updateWineRequest.Id} does not exist"
-                });
-
                 await _wineService.UpdateWineAsync(updateWineRequest);
 
                 return Ok(updateWineRequest);
             }
             catch (Exception ex)
             {
-                return BadRequest(new
+                return NotFound(new
                 {
                     ErrorMessage = ex.Message
                 });

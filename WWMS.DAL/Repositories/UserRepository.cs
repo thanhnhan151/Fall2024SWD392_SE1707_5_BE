@@ -15,7 +15,20 @@ namespace WWMS.DAL.Repositories
         {
         }
 
-        public override async Task<ICollection<User>> GetAllEntitiesAsync() => await _dbSet.Where(u => u.Id != GetLoggedUserId()).OrderByDescending(u => u.Id).ToListAsync();
+        public override async Task<ICollection<User>> GetAllEntitiesAsync()
+            => await _dbSet.Where(u => u.Id != GetLoggedUserId())
+                           .Include(u => u.Role)
+                           .OrderByDescending(u => u.Id)
+                           .ToListAsync();
+
+        public override async Task<User?> GetEntityByIdAsync(long id)
+        {
+            var result = await _dbSet.Include(c => c.Role).FirstOrDefaultAsync(c => c.Id == id);
+
+            if (result != null) return result;
+
+            return null;
+        }
 
         public async Task<bool> CheckExistUsernameAsync(string username)
         {
@@ -30,7 +43,15 @@ namespace WWMS.DAL.Repositories
 
         public override async Task DisableAsync(long id)
         {
-            var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"User with {id} does not exist");
+            long Id = 0;
+
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userId != null) Id = long.Parse(userId.Value);
+
+            if (Id == id) throw new Exception($"User with Id: {id} is currently logging in");
+
+            var checkExistUser = await _dbSet.FindAsync(id) ?? throw new Exception($"User with Id: {id} does not exist");
 
             if (checkExistUser.Status == null) throw new Exception($"User {id}'s status is null");
 
@@ -56,7 +77,9 @@ namespace WWMS.DAL.Repositories
         {
             try
             {
-                var user = await _dbSet.Where(u => u.Username == username).FirstOrDefaultAsync();
+                var user = await _dbSet.Include(u => u.Role)
+                                       .Where(u => u.Username == username)
+                                       .FirstOrDefaultAsync();
 
                 if (user == null) return null;
 
@@ -79,5 +102,7 @@ namespace WWMS.DAL.Repositories
 
             return long.Parse(userId.Value);
         }
+
+        public async Task<User?> GetByUsernameAsync(string username) => await _dbSet.Where(u => u.Username.Equals(username)).FirstOrDefaultAsync();
     }
 }

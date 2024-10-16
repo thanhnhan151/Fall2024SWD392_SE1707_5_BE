@@ -15,5 +15,7 @@ namespace WWMS.BAL.Interfaces
         Task DisableUserAsync(long id);
 
         Task<GetUserResponse?> LoginAsync(string username, string password);
+
+        Task ResetPasswordAsync(ResetPasswordRequest resetPasswordRequest);
     }
 }

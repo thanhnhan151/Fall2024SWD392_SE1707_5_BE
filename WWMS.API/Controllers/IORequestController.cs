@@ -102,42 +102,42 @@ namespace WWMS.API.Controllers
         /// <remarks>
         /// Sample request:
         /// 
-        ///{
-        ///  "requestCode": "REQ-001",
-        ///  "totalQuantity": 10,
-        ///  "comments": "Request for inventory adjustment.",
-        ///  "ioType": "Adjustment",
-        ///  "priorityLevel": "High",
-        ///  "requesterId": 2,
-        ///  "requesterName": "John Doe",
-        ///  "ioRequestDetails": [
-        ///    {
-        ///      "quantity": 5,
-        ///      "startDate": "2024-10-13T08:34:48.529Z",
-        ///      "endDate": "2024-10-20T08:34:48.529Z",
-        ///      "createdTime": "2024-10-13T08:34:48.529Z",
-        ///      "updatedTime": "2024-10-13T08:34:48.529Z",
-        ///      "deletedTime": null,
-        ///      "comments": "Adjusting inventory for special event.",
-        ///      "wineId": 5,
-        ///      "supplier": "Wine Supplier Co.",
-        ///      "wineName": "Chardonnay",
-        ///      "mfd": "2023-01-15T08:34:48.529Z",
-        ///      "roomId": 2,
-        ///      "roomName": "Main Storage Room",
-        ///      "ioRequestCode": "IO-REQ-001",
-        ///      "checkerId": 2,
-        ///      "checkerName": "Jane Smith",
-        ///      "wineRoomId": 5,
-        ///      "reportCode": "RPT-001",
-        ///      "reportDescription": "Inventory adjustment report.",
-        ///      "reporterAssigned": "John Doe",
-        ///      "discrepanciesFound": 0,
-        ///      "actualQuantity": 5,
-        ///      "reportFile": "path/to/report/file.pdf"
-        ///    }
-        ///  ]
-        ///}
+        ///     {
+        ///       "requestCode": "REQ-001",
+        ///       "totalQuantity": 10,
+        ///       "comments": "Request for inventory adjustment.",
+        ///       "ioType": "Adjustment",
+        ///       "priorityLevel": "High",
+        ///       "requesterId": 2,
+        ///       "requesterName": "John Doe",
+        ///       "ioRequestDetails": [
+        ///         {
+        ///           "quantity": 5,
+        ///           "startDate": "2024-10-13T08:34:48.529Z",
+        ///           "endDate": "2024-10-20T08:34:48.529Z",
+        ///           "createdTime": "2024-10-13T08:34:48.529Z",
+        ///           "updatedTime": "2024-10-13T08:34:48.529Z",
+        ///           "deletedTime": null,
+        ///           "comments": "Adjusting inventory for special event.",
+        ///           "wineId": 5,
+        ///           "supplier": "Wine Supplier Co.",
+        ///           "wineName": "Chardonnay",
+        ///           "mfd": "2023-01-15T08:34:48.529Z",
+        ///           "roomId": 2,
+        ///           "roomName": "Main Storage Room",
+        ///           "ioRequestCode": "IO-REQ-001",
+        ///           "checkerId": 2,
+        ///           "checkerName": "Jane Smith",
+        ///           "wineRoomId": 5,
+        ///           "reportCode": "RPT-001",
+        ///           "reportDescription": "Inventory adjustment report.",
+        ///           "reporterAssigned": "John Doe",
+        ///           "discrepanciesFound": 0,
+        ///           "actualQuantity": 5,
+        ///           "reportFile": "path/to/report/file.pdf"
+        ///         }
+        ///       ]
+        ///     }
         ///         
         /// </remarks> 
         /// <returns>Room that was created</returns>
@@ -254,7 +254,6 @@ namespace WWMS.API.Controllers
             });
         }
         #endregion
-
 
         #region Disable An Import/Export and details
         /// <summary>

@@ -36,7 +36,7 @@ namespace WWMS.API.Controllers
         ///       "lastName": "A",
         ///       "email": "test@gmail.com",
         ///       "phoneNumber": "0123456789",
-        ///       "role": "Staff"
+        ///       "roleId": 3
         ///     }
         ///         
         /// </remarks> 
@@ -47,7 +47,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Admin")]
+        //[PermissionAuthorize("Admin")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest createUserRequest)
         {
@@ -78,7 +78,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Admin")]
+        //[PermissionAuthorize("Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -192,7 +192,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Admin")]
+        //[PermissionAuthorize("Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
