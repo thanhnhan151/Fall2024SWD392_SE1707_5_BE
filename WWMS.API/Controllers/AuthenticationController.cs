@@ -59,13 +59,13 @@ namespace WWMS.API.Controllers
 
                 if (result == null) return NotFound(new
                 {
-                    ErrorMessage = "Wrong UserName or Password"
+                    ErrorMessage = "Invalid UserName or Password"
                 });
 
                 if (result.Status.Equals("Active"))
                 {
                     var accessToken = GenerateAccessToken(result);
-                    return Ok(new { AccessToken = accessToken });
+                    return Ok(new { AccessToken = accessToken, userInfo = result });
                 }
 
                 return BadRequest(new
@@ -76,6 +76,46 @@ namespace WWMS.API.Controllers
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Reset Password
+        /// <summary>
+        /// Log into system using username and password
+        /// </summary>    
+        /// <remarks>
+        /// Sample request:  
+        /// 
+        ///     {
+        ///       "username": "staff4",
+        ///       "password": "pJ#ns$9SD@C^",
+        ///       "confirmPassword": "pJ#ns$9SD@C^",
+        ///       "newPassword": "staff"
+        ///     }   
+        ///         
+        /// </remarks>
+        /// <returns>Json Web Token with User Role</returns>
+        /// <response code="200">Return home screen if the access is successful</response>
+        /// <response code="400">If the account is null</response>
+        /// <response code="500">Internal Server</response>
+        [HttpPost("reset-password")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Boolean), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordRequest request)
+        {
+            try
+            {
+                await _userService.ResetPasswordAsync(request);
+
+                return Ok("Updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = ex.Message
+                });
             }
         }
         #endregion

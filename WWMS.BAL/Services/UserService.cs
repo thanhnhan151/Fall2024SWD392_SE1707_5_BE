@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using WWMS.BAL.Helpers;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Users;
 using WWMS.DAL.Entities;
@@ -12,15 +13,18 @@ namespace WWMS.BAL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEmailService _emailService;
 
         public UserService(
             IUnitOfWork unitOfWork
             , IMapper mapper
-            , IHttpContextAccessor httpContextAccessor)
+            , IHttpContextAccessor httpContextAccessor
+            , IEmailService emailService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
+            _emailService = emailService;
         }
 
         private string GenerateRandomPassword(int length = 12)
@@ -35,7 +39,7 @@ namespace WWMS.BAL.Services
         {
             if (await _unitOfWork.Users.CheckExistUsernameAsync(createUserRequest.Username)) throw new Exception($"User with username: {createUserRequest.Username} has already existed");
 
-            await _unitOfWork.Users.AddEntityAsync(MappingCreateRequest(createUserRequest));
+            await _unitOfWork.Users.AddEntityAsync(await MappingCreateRequest(createUserRequest));
 
             await _unitOfWork.CompleteAsync();
         }
@@ -62,8 +66,10 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        private User MappingCreateRequest(CreateUserRequest createUserRequest)
+        private async Task<User> MappingCreateRequest(CreateUserRequest createUserRequest)
         {
+            var password = GenerateRandomPassword();
+
             var user = new User
             {
                 Username = createUserRequest.Username,
@@ -81,7 +87,18 @@ namespace WWMS.BAL.Services
 
             user.CreatedTime = DateTime.Now;
 
-            user.PasswordHash = BC.EnhancedHashPassword("123456", 13);
+            user.PasswordHash = BC.EnhancedHashPassword(password, 13);
+
+            if (user == null) return new User();
+
+            var mailRequest = new MailRequest
+            {
+                ToEmail = user.Email,
+                Subject = "Welcome to Wine Warehouse System",
+                Body = $"Username: {user.Username} Password: {password}"
+            };
+
+            await _emailService.SendEmailAsync(mailRequest);
 
             return user;
         }
@@ -104,6 +121,21 @@ namespace WWMS.BAL.Services
             user.UpdatedTime = DateTime.Now;
 
             return user;
+        }
+
+        public async Task ResetPasswordAsync(ResetPasswordRequest resetPasswordRequest)
+        {
+            var user = await _unitOfWork.Users.GetByUsernameAsync(resetPasswordRequest.Username) ?? throw new Exception($"Username: {resetPasswordRequest.Username} does not exist");
+
+            if (!BC.EnhancedVerify(resetPasswordRequest.Password, user.PasswordHash)) throw new Exception($"Invalid password");
+
+            if (!resetPasswordRequest.Password.Equals(resetPasswordRequest.ConfirmPassword)) throw new Exception($"Confirm password does not match");
+
+            user.PasswordHash = BC.EnhancedHashPassword(resetPasswordRequest.NewPassword, 13);
+
+            _unitOfWork.Users.UpdateEntity(user);
+
+            await _unitOfWork.CompleteAsync();
         }
     }
 }

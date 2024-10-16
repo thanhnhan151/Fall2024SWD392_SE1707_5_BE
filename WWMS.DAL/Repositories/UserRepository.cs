@@ -102,5 +102,7 @@ namespace WWMS.DAL.Repositories
 
             return long.Parse(userId.Value);
         }
+
+        public async Task<User?> GetByUsernameAsync(string username) => await _dbSet.Where(u => u.Username.Equals(username)).FirstOrDefaultAsync();
     }
 }
