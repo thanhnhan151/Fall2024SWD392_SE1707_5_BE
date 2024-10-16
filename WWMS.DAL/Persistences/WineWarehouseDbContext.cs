@@ -45,7 +45,7 @@ public partial class WineWarehouseDbContext : DbContext
             sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null));       
+                errorNumbersToAdd: null));
     }
 
 
@@ -174,10 +174,10 @@ public partial class WineWarehouseDbContext : DbContext
                 .HasMaxLength(100); // Adjust length as necessary
 
             entity.Property(w => w.ImportPrice)
-                .HasColumnType("decimal(8, 2)");
+                .HasColumnType("decimal(15, 2)");
 
             entity.Property(w => w.ExportPrice)
-                .HasColumnType("decimal(8, 2)");
+                .HasColumnType("decimal(15, 2)");
 
             entity.Property(w => w.AvailableStock)
                 .IsRequired()

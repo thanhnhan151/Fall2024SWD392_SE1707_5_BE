@@ -1,7 +1,16 @@
 ﻿using AutoMapper;
+using WWMS.BAL.Models.AlcoholByVolumes;
+using WWMS.BAL.Models.BottleSizes;
+using WWMS.BAL.Models.Brands;
+using WWMS.BAL.Models.Classes;
+using WWMS.BAL.Models.Corks;
+using WWMS.BAL.Models.Countries;
 using WWMS.BAL.Models.IORequestDetails;
 using WWMS.BAL.Models.IORequests;
+using WWMS.BAL.Models.Qualifications;
+using WWMS.BAL.Models.Roles;
 using WWMS.BAL.Models.Rooms;
+using WWMS.BAL.Models.Tastes;
 using WWMS.BAL.Models.Users;
 using WWMS.BAL.Models.WineCategories;
 using WWMS.BAL.Models.Wines;
@@ -31,8 +40,6 @@ namespace WWMS.BAL.Mappings
                 .ForMember(w => w.Brand, w => w.MapFrom(w => w.Brand.BrandName))
                 .ForMember(w => w.BottleSize, w => w.MapFrom(w => w.BottleSize.BottleSizeType))
                 .ForMember(w => w.AlcoholByVolume, w => w.MapFrom(w => w.AlcoholByVolume.AlcoholByVolumeType));
-
-            CreateMap<CreateUpdateWineRequest, Wine>();
             #endregion
 
             #region Wine Category
@@ -68,6 +75,42 @@ namespace WWMS.BAL.Mappings
             CreateMap<UpdateIORequestDetail, IORequestDetail>();
 
             CreateMap<UpdateIORequest, IORequest>();
+            #endregion
+
+            #region Country
+            CreateMap<Country, GetCountryResponse>();
+            #endregion
+
+            #region Taste
+            CreateMap<Taste, GetTasteResponse>();
+            #endregion
+
+            #region Class
+            CreateMap<Class, GetClassResponse>();
+            #endregion
+
+            #region Qualification
+            CreateMap<Qualification, GetQualificationResponse>();
+            #endregion
+
+            #region Cork
+            CreateMap<Cork, GetCorkResponse>();
+            #endregion
+
+            #region Brand
+            CreateMap<Brand, GetBrandResponse>();
+            #endregion
+
+            #region BottleSize
+            CreateMap<BottleSize, GetBottleSizeResponse>();
+            #endregion
+
+            #region AlcoholByVolume
+            CreateMap<AlcoholByVolume, GetVolumeResponse>();
+            #endregion
+
+            #region Role
+            CreateMap<Role, GetRoleResponse>();
             #endregion
         }
     }
