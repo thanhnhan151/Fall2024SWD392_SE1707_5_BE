@@ -47,7 +47,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Admin")]
+        // [PermissionAuthorize("Admin")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest createUserRequest)
         {
