@@ -9,6 +9,5 @@
         public int? CurrentOccupancy { get; set; }
         public string? ManagerName { get; set; }
         public string Status { get; set; } = string.Empty;
-        public ICollection<RoomItem> WineRooms { get; set; } = [];
     }
 }

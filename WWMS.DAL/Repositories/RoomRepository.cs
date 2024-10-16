@@ -14,8 +14,6 @@ namespace WWMS.DAL.Repositories
         {
         }
 
-        public override async Task<ICollection<Room>> GetAllEntitiesAsync() => await _dbSet.OrderByDescending(r => r.Id).Include(w => w.WineRooms).ToListAsync();
-
         public override async Task<Room?> GetEntityByIdAsync(long id)
         {
             var result = await _dbSet.Include(w => w.WineRooms).FirstOrDefaultAsync(c => c.Id == id);

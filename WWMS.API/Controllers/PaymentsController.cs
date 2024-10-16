@@ -32,23 +32,11 @@ namespace WWMS.API.Controllers
             {
                 var response = await _vnPayService.ExecutePayment(Request.Query);
 
-                if (response != null)
-                {
-                    if (response.VnPayResponseCode == "00")
-                    {
-                        return Redirect("http://localhost:5173/#/payment/success");
-                    }
-                    else
-                    {
-                        //return BadRequest(new
-                        //{
-                        //    ErrorMessage = response.VnPayResponseCode
-                        //});
-                        return Redirect("http://localhost:5173/#/payment/fail");
-                    }
-                }
+                if (response == null) return Redirect("http://localhost:5173/#/payment/fail");
 
-                return NoContent();
+                if (response.VnPayResponseCode == "00") return Redirect("http://localhost:5173/#/payment/success");
+
+                return Redirect("http://localhost:5173/#/payment/fail");
             }
             catch (Exception)
             {
