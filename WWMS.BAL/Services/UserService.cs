@@ -81,7 +81,7 @@ namespace WWMS.BAL.Services
 
             user.CreatedTime = DateTime.Now;
 
-            user.PasswordHash = BC.EnhancedHashPassword(GenerateRandomPassword(), 13);
+            user.PasswordHash = BC.EnhancedHashPassword("123456", 13);
 
             return user;
         }

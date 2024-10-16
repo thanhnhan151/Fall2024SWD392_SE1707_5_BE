@@ -47,7 +47,7 @@ namespace WWMS.API.Controllers
         ///       "corkId": 1,
         ///       "brandId": 1,
         ///       "bottleSizeId": 1,
-        ///       "alcolholByVolume": 1
+        ///       "alcoholByVolumeId": 1
         ///     }
         ///         
         /// </remarks> 
@@ -171,7 +171,7 @@ namespace WWMS.API.Controllers
         ///       "corkId": 2,
         ///       "brandId": 2,
         ///       "bottleSizeId": 2,
-        ///       "alcolholByVolume": 2
+        ///       "alcoholByVolumeId": 2
         ///     }
         ///         
         /// </remarks> 
@@ -187,20 +187,13 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var user = await _wineService.GetWineByIdAsync(updateWineRequest.Id);
-
-                if (user == null) return NotFound(new
-                {
-                    ErrorMessage = $"Bottle of wine with id: {updateWineRequest.Id} does not exist"
-                });
-
                 await _wineService.UpdateWineAsync(updateWineRequest);
 
                 return Ok(updateWineRequest);
             }
             catch (Exception ex)
             {
-                return BadRequest(new
+                return NotFound(new
                 {
                     ErrorMessage = ex.Message
                 });

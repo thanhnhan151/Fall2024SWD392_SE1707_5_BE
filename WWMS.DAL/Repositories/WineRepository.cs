@@ -17,7 +17,7 @@ namespace WWMS.DAL.Repositories
         public override async Task<ICollection<Wine>> GetAllEntitiesAsync()
             => await _dbSet.OrderByDescending(w => w.Id).ToListAsync();
 
-        public override async Task<Wine?> GetEntityByIdAsync(long id)
+        public async Task<Wine?> GetByIdWithIncludeAsync(long id)
         {
             var result = await _dbSet
                 .Include(c => c.WineCategory)
