@@ -17,7 +17,7 @@ namespace WWMS.DAL.Repositories
         public async Task<bool> CheckExistAsync(string request)
         {
             var user = await _dbSet.Where(u => u.CountryName == request)
-                                   .Select(u => new AlcoholByVolume { Id = u.Id })
+                                   .Select(u => new Country { Id = u.Id })
                                    .FirstOrDefaultAsync();
 
             if (user == null) return false;

@@ -56,12 +56,11 @@ namespace WWMS.BAL.Mappings
 
             CreateMap<Room, GetRoomResponse>();
 
+            CreateMap<Room, GetRoomDetailResponse>();
 
             CreateMap<CreateRoomRequest, Room>();
 
-
             CreateMap<UpdateRoomRequest, Room>();
-
             #endregion
 
             #region IORequest

@@ -17,6 +17,7 @@ namespace WWMS.API.Controllers
         private readonly ILogger<ReportIORequestController> _logger;
         private readonly IReportIORequestService _reportIORequest;
         private readonly IUploadFileService _uploadFileService;
+
         public ReportIORequestController(
             ILogger<ReportIORequestController> logger,
             IReportIORequestService reportIORequest,
@@ -104,7 +105,6 @@ namespace WWMS.API.Controllers
         /// <remarks>
         /// Sample request:
         /// 
-
         /// </remarks> 
         /// <response code="200">Room that was updated</response>
         /// <response code="204">No content</response>
