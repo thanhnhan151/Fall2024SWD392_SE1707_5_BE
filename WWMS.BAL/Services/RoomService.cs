@@ -31,17 +31,13 @@ namespace WWMS.BAL.Services
             {
                 RoomName = createRoomRequest.RoomName,
                 LocationAddress = createRoomRequest.LocationAddress,
-                Capacity = createRoomRequest.Capacity
+                Capacity = createRoomRequest.Capacity,
+                ManagerName = createRoomRequest.ManagerName
             };
 
-            var managerName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 
-            if (managerName != null)
-            {
-                room.CreatedBy = managerName.Value;
-
-                room.ManagerName = managerName.Value;
-            }
+            if (userName != null) room.CreatedBy = userName.Value;
 
             room.Status = "Active";
 
@@ -66,6 +62,8 @@ namespace WWMS.BAL.Services
         public async Task UpdateRoomAsync(long id, UpdateRoomRequest updateRoomRequest)
         {
             var room = await _unitOfWork.Rooms.GetEntityByIdAsync(id) ?? throw new Exception($"Room with id: {id} does not exist");
+
+            if (updateRoomRequest.CurrentOccupancy > updateRoomRequest.Capacity) throw new Exception($"Room's capacity is: {updateRoomRequest.Capacity}, but current occupancy is: {updateRoomRequest.CurrentOccupancy}. Please take {updateRoomRequest.CurrentOccupancy - updateRoomRequest.Capacity} bottles out");
 
             room.Capacity = updateRoomRequest.Capacity;
 
