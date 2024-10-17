@@ -137,30 +137,17 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Update a room in the system
         /// </summary>
+        /// <param name="id">Id of the room you want to update</param>
+        /// <param name="updateRoomRequest">Room update request</param>
         /// <remarks>
         /// Sample request:
         /// 
         ///     {
-        ///       "id": 1,
-        ///       "roomName": "staff",
-        ///       "locationAddress": "staff",
-        ///       "capacity": "Tran Van",
-        ///       "currentOccupancy": "A",
-        ///       "managerName": "test@gmail.com",
-        ///       "wineRooms": [
-        ///         {
-        ///           "currQuantity": 10,
-        ///           "totalQuantity": 20,
-        ///           "roomId": 2,
-        ///           "wineId": 1
-        ///         },
-        ///         {
-        ///           "currQuantity": 10,
-        ///           "totalQuantity": 20,
-        ///           "roomId": 2,
-        ///           "wineId": 2         
-        ///         }
-        ///       ]
+        ///       "roomName": "Vintage Only",
+        ///       "locationAddress": "On the very top",
+        ///       "capacity": 100,
+        ///       "currentOccupancy": 1,
+        ///       "managerName": "Tran Van Teo"
         ///     }
         ///         
         /// </remarks> 
@@ -172,19 +159,12 @@ namespace WWMS.API.Controllers
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
         //[PermissionAuthorize("Manager")]
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateRoomRequest updateRoomRequest)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(long id, [FromBody] UpdateRoomRequest updateRoomRequest)
         {
             try
             {
-                var Room = await _roomService.GetRoomByIdAsync(updateRoomRequest.Id);
-
-                if (Room == null) return NotFound(new
-                {
-                    ErrorMessage = $"Room with id: {updateRoomRequest.Id} does not exist"
-                }); ;
-
-                await _roomService.UpdateRoomAsync(updateRoomRequest);
+                await _roomService.UpdateRoomAsync(id, updateRoomRequest);
 
                 return Ok(updateRoomRequest);
             }

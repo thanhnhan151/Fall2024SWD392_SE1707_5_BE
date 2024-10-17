@@ -108,7 +108,7 @@ namespace WWMS.API.Controllers
             {
                 await _userService.ResetPasswordAsync(request);
 
-                return Ok("Updated successfully");
+                return Ok("Updated Successfully");
             }
             catch (Exception ex)
             {

@@ -50,7 +50,7 @@ namespace WWMS.API.Controllers
             {
                 await _countryService.CreateAsync(request);
 
-                return Ok(request);
+                return Ok("Created Successfully");
             }
             catch (Exception ex)
             {
