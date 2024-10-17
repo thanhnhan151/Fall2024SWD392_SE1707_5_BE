@@ -33,7 +33,8 @@ namespace WWMS.API.Controllers
         ///     {
         ///       "roomName": "Hybrid Overdrive",
         ///       "locationAddress": "In the middle of nowhere",
-        ///       "capacity": 100
+        ///       "capacity": 100,
+        ///       "managerName": "Tran Van Bao"
         ///     }
         ///         
         /// </remarks> 
