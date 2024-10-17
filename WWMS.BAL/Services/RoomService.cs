@@ -31,17 +31,13 @@ namespace WWMS.BAL.Services
             {
                 RoomName = createRoomRequest.RoomName,
                 LocationAddress = createRoomRequest.LocationAddress,
-                Capacity = createRoomRequest.Capacity
+                Capacity = createRoomRequest.Capacity,
+                ManagerName = createRoomRequest.ManagerName
             };
 
-            var managerName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 
-            if (managerName != null)
-            {
-                room.CreatedBy = managerName.Value;
-
-                room.ManagerName = managerName.Value;
-            }
+            if (userName != null) room.CreatedBy = userName.Value;
 
             room.Status = "Active";
 
