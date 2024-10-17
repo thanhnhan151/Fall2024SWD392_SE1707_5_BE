@@ -38,7 +38,7 @@ namespace WWMS.BAL.Services
                    
                     detail.CreatedTime = DateTime.UtcNow; 
                     detail.UpdatedTime = DateTime.UtcNow;
-                    detail.WineRoomId = detail.WineId;
+                    detail.WineRoomId = detail.RoomId;
                     detail.Status = "InProcess"; 
 
                 }
