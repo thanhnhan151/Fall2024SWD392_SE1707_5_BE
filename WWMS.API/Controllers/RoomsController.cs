@@ -53,7 +53,7 @@ namespace WWMS.API.Controllers
             {
                 await _roomService.CreateRoomAsync(createRoomRequest);
 
-                return Ok(createRoomRequest);
+                return Ok("Created Successfully");
             }
             catch (Exception ex)
             {
@@ -167,7 +167,7 @@ namespace WWMS.API.Controllers
             {
                 await _roomService.UpdateRoomAsync(id, updateRoomRequest);
 
-                return Ok(updateRoomRequest);
+                return Ok("Updated Successfully");
             }
             catch (Exception ex)
             {
@@ -200,7 +200,7 @@ namespace WWMS.API.Controllers
             {
                 await _roomService.DisableRoomAsync(id);
 
-                return Ok("Update Successfully!");
+                return Ok("Disabled Successfully!");
             }
             catch (Exception ex)
             {
