@@ -175,24 +175,31 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "id": 1,
-        ///       "roomName": "staff",
-        ///       "locationAddress": "staff",
-        ///       "capacity": "Tran Van",
-        ///       "currentOccupancy": "A",
-        ///       "managerName": "test@gmail.com",
-        ///       "wineRooms": [
+        ///       "id": 0,
+        ///       "requestCode": "string",
+        ///       "startDate": "2024-10-16T19:36:09.424Z",
+        ///       "dueDate": "2024-10-16T19:36:09.424Z",
+        ///       "comments": "string",
+        ///       "ioType": "string",
+        ///       "priorityLevel": "string",
+        ///       "requesterId": 0,
+        ///       "status": "string",
+        ///       "upIORequestDetails": [
         ///         {
-        ///           "currQuantity": 10,
-        ///           "totalQuantity": 20,
-        ///           "roomId": 2,
-        ///           "wineId": 1
-        ///         },
-        ///         {
-        ///           "currQuantity": 10,
-        ///           "totalQuantity": 20,
-        ///           "roomId": 2,
-        ///           "wineId": 2         
+        ///           "id": 0,
+        ///           "quantity": 0,
+        ///           "startDate": "2024-10-16T19:36:09.424Z",
+        ///           "endDate": "2024-10-16T19:36:09.424Z",
+        ///           "createdTime": "2024-10-16T19:36:09.424Z",
+        ///           "updatedTime": "2024-10-16T19:36:09.424Z",
+        ///           "comments": "string",
+        ///           "wineId": 0,
+        ///           "supplier": "string",
+        ///           "mfd": "2024-10-16T19:36:09.424Z",
+        ///           "roomId": 0,
+        ///           "checkerId": 0,
+        ///           "wineRoomId": 0,
+        ///           "status": "string"
         ///         }
         ///       ]
         ///     }
@@ -215,7 +222,7 @@ namespace WWMS.API.Controllers
                 if (Room == null) return NotFound(new
                 {
                     ErrorMessage = $" Import/Export with id: {updateIO.Id} does not exist"
-                }); ;
+                });
 
                 await _iORequestService.UpdateIORequestsAsync(updateIO);
 
@@ -230,6 +237,7 @@ namespace WWMS.API.Controllers
             }
         }
         #endregion
+
 
         #region Import Checkout
         /// <summary>

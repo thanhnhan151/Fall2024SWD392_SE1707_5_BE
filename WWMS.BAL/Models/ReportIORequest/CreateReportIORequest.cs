@@ -14,5 +14,7 @@ namespace WWMS.BAL.Models.ReportIORequest
         public int? DiscrepanciesFound { get; set; }
         public int ActualQuantity { get; set; }
         public string? ReportFile { get; set; }
+
+
     }
 }

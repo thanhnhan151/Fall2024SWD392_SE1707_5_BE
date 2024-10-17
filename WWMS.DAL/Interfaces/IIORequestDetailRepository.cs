@@ -5,5 +5,6 @@ namespace WWMS.DAL.Interfaces
 {
     public interface IIORequestDetailRepository : IGenericRepository<IORequestDetail>
     {
+        Task CheckDoneAsync(long id);
     }
 }

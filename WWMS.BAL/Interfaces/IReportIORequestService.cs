@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +14,12 @@ namespace WWMS.BAL.Interfaces
     {
  //        Task CreateReportIORequestAsync(CreateIORequest createIORequest);
 
- //       Task<List<GetIORequest>> GetReportIORequestListAsync();
+        Task<List<GetReportIORequest>> GetReportIORequestListAsync();
 
         Task<GetReportIORequest?> GetReportIORequestByIdAsync(long id);
 
-        Task UpdateReportIORequestAsync(UpdateIORequest updateIORequest);
+        Task UpdateReportIORequestAsync(UpdateReportIORequest updateReportIO,string file);
+
 
         Task DisableReportIORequestsAsync(long id);
     }

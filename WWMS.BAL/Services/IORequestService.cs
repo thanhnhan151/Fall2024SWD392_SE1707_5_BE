@@ -123,10 +123,7 @@ namespace WWMS.BAL.Services
     
             await _unitOfWork.IIORequests.DisableAsync(id);
             await _unitOfWork.CompleteAsync();
-        
-            var ioRequestDetails = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
 
-            await _unitOfWork.CompleteAsync();
         }
 
         public async Task<GetIORequest?> GetIORequestsByIdAsync(long id) => _mapper.Map<GetIORequest?>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
