@@ -65,7 +65,7 @@ namespace WWMS.API.Controllers
             {
                 await _wineService.CreateWineAsync(createWineRequest);
 
-                return Ok(createWineRequest);
+                return Ok("Created Successfully");
             }
             catch (Exception ex)
             {
@@ -189,7 +189,7 @@ namespace WWMS.API.Controllers
             {
                 await _wineService.UpdateWineAsync(updateWineRequest);
 
-                return Ok(updateWineRequest);
+                return Ok("Updated Successfully");
             }
             catch (Exception ex)
             {
@@ -221,7 +221,7 @@ namespace WWMS.API.Controllers
             {
                 await _wineService.DisableWineAsync(id);
 
-                return Ok("Update Successfully!");
+                return Ok("Disabled Successfully!");
             }
             catch (Exception ex)
             {

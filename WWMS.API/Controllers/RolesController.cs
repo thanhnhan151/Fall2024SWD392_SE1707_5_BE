@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
+using WWMS.BAL.Models.Roles;
 
 namespace WWMS.API.Controllers
 {
@@ -22,6 +23,45 @@ namespace WWMS.API.Controllers
             _roleService = roleService;
         }
 
+        #region Create Role
+        /// <summary>
+        /// Add a role in the system
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     {
+        ///       "roleName": "Admin"
+        ///     }
+        ///         
+        /// </remarks> 
+        /// <returns>Role that was created</returns>
+        /// <response code="200">Role that was created</response>
+        /// <response code="400">Failed Validation</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("Admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddAsync([FromBody] CreateRoleRequest request)
+        {
+            try
+            {
+                await _roleService.CreateAsync(request);
+
+                return Ok("Created Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
+
         #region Gell All Roles
         /// <summary>
         /// Get all roles in the system
@@ -33,7 +73,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Admin")]
+        [PermissionAuthorize("Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {

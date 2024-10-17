@@ -50,7 +50,7 @@ namespace WWMS.API.Controllers
             {
                 await _tasteService.CreateAsync(request);
 
-                return Ok(request);
+                return Ok("Created Successfully");
             }
             catch (Exception ex)
             {

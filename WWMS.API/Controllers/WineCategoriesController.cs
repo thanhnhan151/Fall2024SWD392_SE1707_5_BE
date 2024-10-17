@@ -48,7 +48,7 @@ namespace WWMS.API.Controllers
             {
                 await _wineCategoryService.CreateWineCategoryAsync(createWineCategoryRequest);
 
-                return Ok(createWineCategoryRequest);
+                return Ok("Created Successfully");
             }
             catch (Exception ex)
             {

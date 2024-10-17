@@ -59,13 +59,31 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<GetRoomResponse?> GetRoomByIdAsync(long id) => _mapper.Map<GetRoomResponse?>(await _unitOfWork.Rooms.GetEntityByIdAsync(id));
+        public async Task<GetRoomDetailResponse?> GetRoomByIdAsync(long id) => _mapper.Map<GetRoomDetailResponse?>(await _unitOfWork.Rooms.GetEntityByIdAsync(id));
 
         public async Task<List<GetRoomResponse>> GetRoomListAsync() => _mapper.Map<List<GetRoomResponse>>(await _unitOfWork.Rooms.GetAllEntitiesAsync());
 
-        public async Task UpdateRoomAsync(UpdateRoomRequest updateRoomRequest)
+        public async Task UpdateRoomAsync(long id, UpdateRoomRequest updateRoomRequest)
         {
-            _unitOfWork.Rooms.UpdateEntity(_mapper.Map<Room>(updateRoomRequest));
+            var room = await _unitOfWork.Rooms.GetEntityByIdAsync(id) ?? throw new Exception($"Room with id: {id} does not exist");
+
+            room.Capacity = updateRoomRequest.Capacity;
+
+            room.CurrentOccupancy = updateRoomRequest.CurrentOccupancy;
+
+            room.LocationAddress = updateRoomRequest.LocationAddress;
+
+            room.ManagerName = updateRoomRequest.ManagerName;
+
+            room.RoomName = updateRoomRequest.RoomName;
+
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userName != null) room.UpdatedBy = userName.Value;
+
+            room.UpdatedTime = DateTime.Now;
+
+            _unitOfWork.Rooms.UpdateEntity(room);
 
             await _unitOfWork.CompleteAsync();
         }

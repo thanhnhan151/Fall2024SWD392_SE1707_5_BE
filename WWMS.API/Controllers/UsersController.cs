@@ -55,7 +55,7 @@ namespace WWMS.API.Controllers
             {
                 await _userService.CreateUserAsync(createUserRequest);
 
-                return Ok(createUserRequest);
+                return Ok("Created Successfully");
             }
             catch (Exception ex)
             {
@@ -78,7 +78,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Admin")]
+        [PermissionAuthorize("Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -167,7 +167,7 @@ namespace WWMS.API.Controllers
             {
                 await _userService.UpdateUserAsync(updateUserRequest);
 
-                return Ok(updateUserRequest);
+                return Ok("Updated Successfully");
             }
             catch (Exception ex)
             {
@@ -192,7 +192,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Admin")]
+        [PermissionAuthorize("Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
@@ -200,7 +200,7 @@ namespace WWMS.API.Controllers
             {
                 await _userService.DisableUserAsync(id);
 
-                return Ok("Update Successfully!");
+                return Ok("Disabled Successfully!");
             }
             catch (Exception ex)
             {
