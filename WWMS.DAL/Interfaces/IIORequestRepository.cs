@@ -6,5 +6,7 @@ namespace WWMS.DAL.Interfaces
     public interface IIORequestRepository : IGenericRepository<IORequest>
     {
         Task<IORequest?> GetAllIORequestDetailsByIORequestAsync(long id);
+
+
     }
 }

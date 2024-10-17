@@ -123,29 +123,16 @@ namespace WWMS.BAL.Services
     
             await _unitOfWork.IIORequests.DisableAsync(id);
             await _unitOfWork.CompleteAsync();
-        
-            var ioRequestDetails = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
 
-    
-            //if (ioRequestDetails != null && ioRequestDetails.IORequestDetails.Any())
-            //{
-            //    foreach (var detail in ioRequestDetails.IORequestDetails)
-            //    {
-            //        // Cập nhật trạng thái của từng chi tiết thành "Cancel"
-            //        detail.Status = "Cancel";
-            //        detail.UpdatedTime = DateTime.UtcNow;
-
-            //        // Cập nhật lại thực thể chi tiết
-            //        _unitOfWork.IIORequestsDetail.UpdateEntity(detail);
-            //    }
-            //}
-
-            // Lưu các thay đổi vào cơ sở dữ liệu
-            await _unitOfWork.CompleteAsync();
         }
 
         public async Task<GetIORequest?> GetIORequestsByIdAsync(long id) => _mapper.Map<GetIORequest?>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
 
         public async Task<List<GetIORequest>> GetIORequestsListAsync() => _mapper.Map<List<GetIORequest>>(await _unitOfWork.IIORequests.GetAllEntitiesAsync());
+
+
+
+
+  
     }
 }

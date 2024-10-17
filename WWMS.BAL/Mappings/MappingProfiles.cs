@@ -8,6 +8,7 @@ using WWMS.BAL.Models.Countries;
 using WWMS.BAL.Models.IORequestDetails;
 using WWMS.BAL.Models.IORequests;
 using WWMS.BAL.Models.Qualifications;
+using WWMS.BAL.Models.ReportIORequest;
 using WWMS.BAL.Models.Roles;
 using WWMS.BAL.Models.Rooms;
 using WWMS.BAL.Models.Tastes;
@@ -75,6 +76,12 @@ namespace WWMS.BAL.Mappings
             CreateMap<UpdateIORequestDetail, IORequestDetail>();
 
             CreateMap<UpdateIORequest, IORequest>();
+            #endregion
+
+            #region Report
+            CreateMap<IORequestDetail, GetReportIORequest>();
+            CreateMap<UpdateReportIORequest, GetReportIORequest>();
+
             #endregion
 
             #region Country

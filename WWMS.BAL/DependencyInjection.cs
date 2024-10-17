@@ -55,6 +55,8 @@ namespace WWMS.BAL
 
             services.AddScoped<IRoleService, RoleService>();
 
+            services.AddScoped<IReportIORequestService, ReportIORequestService>();
+
             return services;
         }
     }

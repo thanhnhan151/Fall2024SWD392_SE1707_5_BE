@@ -32,22 +32,22 @@ namespace WWMS.DAL.Repositories
         public override async Task DisableAsync(long id)
         {
            
-            var checkExistWine = await _dbSet
+            var checkExist = await _dbSet
                 .Include(r => r.IORequestDetails) 
                 .FirstOrDefaultAsync(r => r.Id == id)
                 ?? throw new Exception($"Import/Export {id} does not exist");
 
 
-            if (checkExistWine.Status == null)
+            if (checkExist.Status == null)
                 throw new Exception($"Import/Export with {id}'s status is null");
 
 
-            if (checkExistWine.Status.Equals("Active", StringComparison.OrdinalIgnoreCase))
+            if (checkExist.Status.Equals("Active", StringComparison.OrdinalIgnoreCase))
             {
-                checkExistWine.Status = "Inactive";
+                checkExist.Status = "Inactive";
 
 
-                foreach (var detail in checkExistWine.IORequestDetails)
+                foreach (var detail in checkExist.IORequestDetails)
                 {
                     detail.Status = "Cancel";
                 }
@@ -55,11 +55,11 @@ namespace WWMS.DAL.Repositories
             else
             {
 
-                checkExistWine.Status = "Active";
+                checkExist.Status = "Active";
             }
 
       
-            _dbSet.Update(checkExistWine);
+            _dbSet.Update(checkExist);
 
             await _context.SaveChangesAsync();
         }
