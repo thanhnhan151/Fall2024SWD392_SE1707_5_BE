@@ -47,7 +47,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Admin")]
+        [PermissionAuthorize("ADMIN")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest createUserRequest)
         {
@@ -78,7 +78,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        // [PermissionAuthorize("ADMIN", "MANAGER")]
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -192,7 +192,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        // [PermissionAuthorize("Admin")]
+        [PermissionAuthorize("ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
@@ -224,7 +224,8 @@ namespace WWMS.API.Controllers
         ///       "oldPass": "Tran Van",
         ///       "userId": "A",
         ///     }
-        ///         
+        ///     
+        /// </remarks>        
         [HttpPost]
         [Route("update-password")]
         public async Task<IActionResult> UpdatePasswordAsync([FromBody] UpdatePasswordRequest updatePasswordRequest)
@@ -245,8 +246,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-
-         #region Send code to reset password
+        #region Send code to reset password
         /// <summary>
         /// Send the code for user to reset password
         /// </summary>
@@ -258,7 +258,8 @@ namespace WWMS.API.Controllers
         ///       "oldPass": "Tran Van",
         ///       "userId": "A",
         ///     }
-        ///         
+        ///     
+        /// </remarks>
         [HttpPost]
         [Route("mail-forget-pass")]
         public async Task<IActionResult> SendCodeResetPassAsync([FromBody] SendCodeResetPassRequest sendCodeResetPassRequest)
