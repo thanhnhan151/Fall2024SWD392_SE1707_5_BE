@@ -47,6 +47,8 @@ namespace WWMS.DAL.Repositories
             _dbSet.Update(checkExistRoom);
         }
 
+
+
         public async Task<bool> CheckExistRoomName(string roomName)
         {
             var room = await _dbSet.Where(r => r.RoomName == roomName)
@@ -57,5 +59,7 @@ namespace WWMS.DAL.Repositories
 
             return true;
         }
+
+
     }
 }

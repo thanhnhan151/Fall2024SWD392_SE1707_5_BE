@@ -137,7 +137,7 @@ namespace WWMS.API.Controllers
                 await _reportIORequest.UpdateReportIORequestAsync(updateIO, file);
                 
 
-                return Ok(updateIO);
+                return Ok("Create Report for Iorequest sucessfully");
             }
             catch (Exception ex)
             {
@@ -169,7 +169,7 @@ namespace WWMS.API.Controllers
             {
                 await _reportIORequest.DisableReportIORequestsAsync(id);
 
-                return Ok("Update Successfully!");
+                return Ok("Disable Successfully!");
             }
             catch (Exception ex)
             {

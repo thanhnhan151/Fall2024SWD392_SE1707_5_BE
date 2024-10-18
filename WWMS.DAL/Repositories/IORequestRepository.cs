@@ -44,7 +44,7 @@ namespace WWMS.DAL.Repositories
 
             if (checkExist.Status.Equals("Active", StringComparison.OrdinalIgnoreCase))
             {
-                checkExist.Status = "Inactive";
+                checkExist.Status = "InActive";
 
 
                 foreach (var detail in checkExist.IORequestDetails)
@@ -52,11 +52,7 @@ namespace WWMS.DAL.Repositories
                     detail.Status = "Cancel";
                 }
             }
-            else
-            {
 
-                checkExist.Status = "Active";
-            }
 
       
             _dbSet.Update(checkExist);

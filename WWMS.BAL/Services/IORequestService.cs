@@ -45,7 +45,7 @@ namespace WWMS.BAL.Services
             }
             ioRequestEntity.TotalQuantity = quantityMid;
             ioRequestEntity.IORequestDetails = _mapper.Map<List<IORequestDetail>>(createIORequest.IORequestDetails);
-
+           
             await _unitOfWork.IIORequests.AddEntityAsync(ioRequestEntity);
             await _unitOfWork.CompleteAsync();
         }
@@ -53,6 +53,7 @@ namespace WWMS.BAL.Services
 
         // update iOREQUEST nếu nhập thiếu  thì sẽ lấy dữ liệu cũ chèn vào  : donne (chưa test)
         // update iOREQUESTdETAILS nếu nhập thiếu  thì sẽ lấy dữ liệu cũ chèn vào  : (chưa test)
+        // cộng thẳng giá tiền vào số lượng rượu
       
         public async Task UpdateIORequestsAsync(UpdateIORequest updateIORequest)
         {

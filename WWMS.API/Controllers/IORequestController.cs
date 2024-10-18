@@ -155,7 +155,7 @@ namespace WWMS.API.Controllers
             {
                 await _iORequestService.CreateIORequestsAsync(createIORequest);
 
-                return Ok(createIORequest);
+                return Ok("Created Successfully");
             }
             catch (Exception ex)
             {
@@ -226,7 +226,7 @@ namespace WWMS.API.Controllers
 
                 await _iORequestService.UpdateIORequestsAsync(updateIO);
 
-                return Ok(updateIO);
+                return Ok("Update Successfully");
             }
             catch (Exception ex)
             {
@@ -283,7 +283,7 @@ namespace WWMS.API.Controllers
             {
                 await _iORequestService.DisableIORequestsAsync(id);
 
-                return Ok("Update Successfully!");
+                return Ok("Disable Successfully!");
             }
             catch (Exception ex)
             {
