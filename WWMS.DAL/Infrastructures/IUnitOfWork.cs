@@ -34,6 +34,8 @@ namespace WWMS.DAL.Infrastructures
 
         IAlcoholByVolumeRepository AlcoholByVolumes { get; }
 
+
+
         Task CompleteAsync();
     }
 }

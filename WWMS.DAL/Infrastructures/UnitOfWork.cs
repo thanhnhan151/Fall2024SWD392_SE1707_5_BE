@@ -44,6 +44,9 @@ namespace WWMS.DAL.Infrastructures
 
         public IAlcoholByVolumeRepository AlcoholByVolumes { get; private set; }
 
+
+
+
         public UnitOfWork(WineWarehouseDbContext context
             , ILoggerFactory loggerFactory
             , IHttpContextAccessor httpContextAccessor)
@@ -83,6 +86,7 @@ namespace WWMS.DAL.Infrastructures
             BottleSizes = new BottleSizeRepository(_context, _logger, _httpContextAccessor);
 
             AlcoholByVolumes = new AlcoholByVolumeRepository(_context, _logger, _httpContextAccessor);
+
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

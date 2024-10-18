@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
+using WWMS.BAL.Models.WineRoom;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 
@@ -25,36 +26,66 @@ namespace WWMS.BAL.Services
         public async Task CreateIORequestsAsync(CreateIORequest createIORequest)
         {
             var ioRequestEntity = _mapper.Map<IORequest>(createIORequest);
-            int quantityMid=0;
+            int quantityMid = 0;
             ioRequestEntity.StartDate = DateTime.UtcNow;
             ioRequestEntity.CreatedTime = DateTime.UtcNow;
             ioRequestEntity.UpdatedTime = DateTime.UtcNow;
             ioRequestEntity.Status = "Active";
+
             if (ioRequestEntity.IORequestDetails != null)
             {
                 foreach (var detail in createIORequest.IORequestDetails)
                 {
                     quantityMid += detail.Quantity;
-                   
-                    detail.CreatedTime = DateTime.UtcNow; 
+                    detail.CreatedTime = DateTime.UtcNow;
                     detail.UpdatedTime = DateTime.UtcNow;
-                    detail.WineRoomId = detail.RoomId;
-                    detail.Status = "InProcess"; 
 
+                    var midRoom = await _unitOfWork.Rooms.GetEntityByIdAsync(detail.RoomId);
+                    var midWine = await _unitOfWork.Wines.GetEntityByIdAsync(detail.WineId);
+
+                    var wi = new WineRoom()
+                    {
+                        RoomId = detail.RoomId,
+                        WineId = detail.WineId,
+                        TotalQuantity = (int)midWine.AvailableStock,
+                        CurrQuantity = detail.Quantity
+                    };
+
+                    midRoom.WineRooms.Add(wi);
+                    _unitOfWork.Rooms.UpdateEntity(midRoom);
+                    await _unitOfWork.CompleteAsync();
+
+                    var room = _mapper.Map<GetRoom?>(await _unitOfWork.Rooms.GetEntityByIdAsync(detail.RoomId));
+
+                    // Kiểm tra nếu WineRooms không rỗng trước khi lấy phần tử cuối
+                    if (room?.WineRooms != null && room.WineRooms.Any())
+                    {
+                        var lastWineRoom = room.WineRooms.Last();
+                        detail.WineRoomId = lastWineRoom.Id;
+                    }
+                    else
+                    {
+                        // Xử lý nếu không có WineRoom nào
+                        throw new Exception($"No WineRoom found for Room ID: {detail.RoomId}");
+                    }
+
+                    detail.Status = "InProcess";
                 }
             }
+
             ioRequestEntity.TotalQuantity = quantityMid;
             ioRequestEntity.IORequestDetails = _mapper.Map<List<IORequestDetail>>(createIORequest.IORequestDetails);
-           
+
             await _unitOfWork.IIORequests.AddEntityAsync(ioRequestEntity);
             await _unitOfWork.CompleteAsync();
         }
 
 
+
         // update iOREQUEST nếu nhập thiếu  thì sẽ lấy dữ liệu cũ chèn vào  : donne (chưa test)
         // update iOREQUESTdETAILS nếu nhập thiếu  thì sẽ lấy dữ liệu cũ chèn vào  : (chưa test)
         // cộng thẳng giá tiền vào số lượng rượu
-      
+
         public async Task UpdateIORequestsAsync(UpdateIORequest updateIORequest)
         {
             var currentIORequest = await _unitOfWork.IIORequests.GetEntityByIdAsync(updateIORequest.Id);
