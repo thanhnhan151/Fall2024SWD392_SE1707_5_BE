@@ -9,7 +9,7 @@ namespace WWMS.API.Controllers
 {
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/users")]
-    [ApiController]   
+    [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly ILogger<UsersController> _logger;
@@ -47,7 +47,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Admin")]
+        [PermissionAuthorize("ADMIN")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest createUserRequest)
         {
@@ -78,7 +78,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Admin")]
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -192,7 +192,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Admin")]
+        [PermissionAuthorize("ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
@@ -205,6 +205,74 @@ namespace WWMS.API.Controllers
             catch (Exception ex)
             {
                 return NotFound(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region Update user password
+        /// <summary>
+        /// Normal user update password in profile
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     {
+        ///       "newPass": "staff",
+        ///       "oldPass": "Tran Van",
+        ///       "userId": "A",
+        ///     }
+        ///     
+        /// </remarks>        
+        [HttpPost]
+        [Route("update-password")]
+        public async Task<IActionResult> UpdatePasswordAsync([FromBody] UpdatePasswordRequest updatePasswordRequest)
+        {
+            try
+            {
+                await _userService.UpdatePasswordAsync(updatePasswordRequest);
+
+                return Ok("Updated Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region Send code to reset password
+        /// <summary>
+        /// Send the code for user to reset password
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     {
+        ///       "newPass": "staff",
+        ///       "oldPass": "Tran Van",
+        ///       "userId": "A",
+        ///     }
+        ///     
+        /// </remarks>
+        [HttpPost]
+        [Route("mail-forget-pass")]
+        public async Task<IActionResult> SendCodeResetPassAsync([FromBody] SendCodeResetPassRequest sendCodeResetPassRequest)
+        {
+            try
+            {
+                await _userService.SendCodeResetPassAsync(sendCodeResetPassRequest);
+
+                return Ok("Sent Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
                 {
                     ErrorMessage = ex.Message
                 });

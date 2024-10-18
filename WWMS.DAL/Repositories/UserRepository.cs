@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 using WWMS.DAL.Interfaces;
@@ -16,10 +15,30 @@ namespace WWMS.DAL.Repositories
         }
 
         public override async Task<ICollection<User>> GetAllEntitiesAsync()
-            => await _dbSet.Where(u => u.Id != GetLoggedUserId())
+        {
+            var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase));
+
+            if (role == null) return new List<User>();
+
+            var lowerRole = role.Value.ToString().ToLower();
+
+            if (lowerRole == "manager")
+            {
+                var usersManager = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 3)
                            .Include(u => u.Role)
                            .OrderByDescending(u => u.Id)
                            .ToListAsync();
+
+                return usersManager;
+            }
+
+            var usersAdmin = await _dbSet.Where(u => u.Id != GetLoggedUserId())
+                           .Include(u => u.Role)
+                           .OrderByDescending(u => u.Id)
+                           .ToListAsync();
+
+            return usersAdmin;
+        }
 
         public override async Task<User?> GetEntityByIdAsync(long id)
         {

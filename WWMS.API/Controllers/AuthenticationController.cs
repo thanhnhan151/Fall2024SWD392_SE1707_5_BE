@@ -82,23 +82,8 @@ namespace WWMS.API.Controllers
 
         #region Reset Password
         /// <summary>
-        /// Log into system using username and password
+        /// Admin/Manager reset the password for user
         /// </summary>    
-        /// <remarks>
-        /// Sample request:  
-        /// 
-        ///     {
-        ///       "username": "staff4",
-        ///       "password": "pJ#ns$9SD@C^",
-        ///       "confirmPassword": "pJ#ns$9SD@C^",
-        ///       "newPassword": "staff"
-        ///     }   
-        ///         
-        /// </remarks>
-        /// <returns>Json Web Token with User Role</returns>
-        /// <response code="200">Return home screen if the access is successful</response>
-        /// <response code="400">If the account is null</response>
-        /// <response code="500">Internal Server</response>
         [HttpPost("reset-password")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status400BadRequest)]

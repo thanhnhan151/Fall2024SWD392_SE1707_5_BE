@@ -17,5 +17,9 @@ namespace WWMS.BAL.Interfaces
         Task<GetUserResponse?> LoginAsync(string username, string password);
 
         Task ResetPasswordAsync(ResetPasswordRequest resetPasswordRequest);
+
+        Task UpdatePasswordAsync(UpdatePasswordRequest updatePasswordRequest);
+
+        Task SendCodeResetPassAsync(SendCodeResetPassRequest sendCodeResetPassRequest);
     }
 }
