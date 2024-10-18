@@ -33,7 +33,8 @@ namespace WWMS.DAL.Infrastructures
         IBottleSizeRepository BottleSizes { get; }
 
         IAlcoholByVolumeRepository AlcoholByVolumes { get; }
+
         ICodeResetPassRepository CodeResetPasses { get; }
-        Task CompleteAsync();
+
     }
 }

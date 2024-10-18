@@ -14,7 +14,8 @@ namespace WWMS.BAL.Models.IORequests
         public string PriorityLevel { get; set; } = string.Empty;
         public long RequesterId { get; set; }
         public string Status { get; set; } = string.Empty;
-        //       public string? RequesterName { get; set; }
+
+
         public ICollection<CreateIORequestDetail> IORequestDetails { get; set; } = [];
     }
 }

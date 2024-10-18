@@ -16,6 +16,8 @@ namespace WWMS.DAL.Repositories
 
         public override async Task<ICollection<IORequest>> GetAllEntitiesAsync() => await _dbSet.Include(w => w.IORequestDetails).ToListAsync();
 
+
+
         public async Task<IORequest?> GetAllIORequestDetailsByIORequestAsync(long id)
     => await _dbSet.Include(w => w.IORequestDetails)
                    .FirstOrDefaultAsync(c => c.Id == id);

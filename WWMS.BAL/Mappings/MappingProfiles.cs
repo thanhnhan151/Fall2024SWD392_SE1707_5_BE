@@ -14,6 +14,7 @@ using WWMS.BAL.Models.Rooms;
 using WWMS.BAL.Models.Tastes;
 using WWMS.BAL.Models.Users;
 using WWMS.BAL.Models.WineCategories;
+using WWMS.BAL.Models.WineRoom;
 using WWMS.BAL.Models.Wines;
 using WWMS.DAL.Entities;
 
@@ -61,6 +62,11 @@ namespace WWMS.BAL.Mappings
             CreateMap<CreateRoomRequest, Room>();
 
             CreateMap<UpdateRoomRequest, Room>();
+
+            /////
+            ///
+            CreateMap<WineRoom, GetWineRoom>();
+            CreateMap<Room, GetRoom>();
             #endregion
 
             #region IORequest
@@ -118,6 +124,15 @@ namespace WWMS.BAL.Mappings
             #region Role
             CreateMap<Role, GetRoleResponse>();
             #endregion
+
+
+
+            #region WineRoom
+            CreateMap<WineRoom,GetWineRoom>();
+            CreateMap<CreateWineRoom, WineRoom>();
+            CreateMap<UpdateWineRoom, WineRoom>();
+            #endregion
+
         }
     }
 }
