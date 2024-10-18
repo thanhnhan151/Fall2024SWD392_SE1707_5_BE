@@ -19,7 +19,7 @@ namespace WWMS.DAL.Infrastructures
         IRoleRepository Roles { get; }
 
         ICountryRepository Countries { get; }
-        
+
         ITasteRepository Tastes { get; }
 
         IClassRepository Classes { get; }
@@ -33,7 +33,7 @@ namespace WWMS.DAL.Infrastructures
         IBottleSizeRepository BottleSizes { get; }
 
         IAlcoholByVolumeRepository AlcoholByVolumes { get; }
-
+        ICodeResetPassRepository CodeResetPasses { get; }
         Task CompleteAsync();
     }
 }

@@ -33,6 +33,7 @@ public partial class WineWarehouseDbContext : DbContext
     public DbSet<Cork> Corks { get; set; }
     public DbSet<Brand> Brands { get; set; }
     public DbSet<AlcoholByVolume> AlcoholByVolumes { get; set; }
+    public DbSet<CodeResetPass> CodeResetPasses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -690,5 +691,31 @@ public partial class WineWarehouseDbContext : DbContext
                   .HasMaxLength(3)
                   .IsRequired(); // Optional: set as required if needed
         });
+
+
+        modelBuilder.Entity<CodeResetPass>(entity =>
+        {
+            // Primary key configuration
+            entity.HasKey(c => c.Id);
+
+            // Property configurations
+            entity.Property(c => c.Id)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(c => c.CodeVerified)
+                .IsRequired();
+
+            entity.Property(c => c.Username)
+                .IsRequired();
+
+            entity.Property(c => c.IsUsable)
+                .IsRequired()
+                .HasDefaultValue(true);
+
+            entity.Property(c => c.createdTime)
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+        });
+
     }
 }

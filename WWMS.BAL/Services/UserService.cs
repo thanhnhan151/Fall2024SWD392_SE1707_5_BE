@@ -27,7 +27,7 @@ namespace WWMS.BAL.Services
             _emailService = emailService;
         }
 
-        private string GenerateRandomPassword(int length = 12)
+        private string GenRandomString(int length = 12)
         {
             const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
             Random random = new();
@@ -61,14 +61,14 @@ namespace WWMS.BAL.Services
         {
             var user = await _unitOfWork.Users.GetEntityByIdAsync(updateUserRequest.Id) ?? throw new Exception($"User with id: {updateUserRequest.Id} does not exist");
 
-            _unitOfWork.Users.UpdateEntity(MappingUpdateRequest(updateUserRequest));
+            _unitOfWork.Users.UpdateEntity(MappingUpdateRequest(updateUserRequest, user));
 
             await _unitOfWork.CompleteAsync();
         }
 
         private async Task<User> MappingCreateRequest(CreateUserRequest createUserRequest)
         {
-            var password = GenerateRandomPassword();
+            var password = GenRandomString();
 
             var user = new User
             {
@@ -103,21 +103,13 @@ namespace WWMS.BAL.Services
             return user;
         }
 
-        private User MappingUpdateRequest(UpdateUserRequest updateUserRequest)
+        private User MappingUpdateRequest(UpdateUserRequest updateUserRequest, User user)
         {
-            var user = new User
-            {
-                FirstName = updateUserRequest.FirstName,
-                LastName = updateUserRequest.LastName,
-                PhoneNumber = updateUserRequest.PhoneNumber,
-                Email = updateUserRequest.Email,
-                ProfileImageUrl = updateUserRequest.ProfileImageUrl
-            };
 
-            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
-
-            if (userName != null) user.UpdatedBy = userName.Value;
-
+            user.FirstName = string.IsNullOrEmpty(updateUserRequest.FirstName) ? user.FirstName : updateUserRequest.FirstName;
+            user.LastName = string.IsNullOrEmpty(updateUserRequest.LastName) ? user.LastName : updateUserRequest.LastName;
+            user.PhoneNumber = string.IsNullOrEmpty(updateUserRequest.PhoneNumber) ? user.PhoneNumber : updateUserRequest.PhoneNumber;
+            user.Email = string.IsNullOrEmpty(updateUserRequest.Email) ? user.Email : updateUserRequest.Email;
             user.UpdatedTime = DateTime.Now;
 
             return user;
@@ -127,13 +119,53 @@ namespace WWMS.BAL.Services
         {
             var user = await _unitOfWork.Users.GetByUsernameAsync(resetPasswordRequest.Username) ?? throw new Exception($"Username: {resetPasswordRequest.Username} does not exist");
 
-            if (!BC.EnhancedVerify(resetPasswordRequest.Password, user.PasswordHash)) throw new Exception($"Invalid password");
-
-            if (!resetPasswordRequest.Password.Equals(resetPasswordRequest.ConfirmPassword)) throw new Exception($"Confirm password does not match");
-
-            user.PasswordHash = BC.EnhancedHashPassword(resetPasswordRequest.NewPassword, 13);
+            user.PasswordHash = BC.EnhancedHashPassword(resetPasswordRequest.NewPass, 13);
 
             _unitOfWork.Users.UpdateEntity(user);
+
+            await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task UpdatePasswordAsync(UpdatePasswordRequest updatePasswordRequest)
+        {
+            //TODO: get user id || username from token instead of get from the body request
+            var user = await _unitOfWork.Users.GetByUsernameAsync(updatePasswordRequest.Username);
+
+            if (!BC.EnhancedVerify(updatePasswordRequest.OldPass, user.PasswordHash))
+            {
+                throw new Exception("Wrong old password");
+            }
+            user.PasswordHash = BC.EnhancedHashPassword(updatePasswordRequest.NewPass);
+            _unitOfWork.Users.UpdateEntity(user);
+            await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task SendCodeResetPassAsync(SendCodeResetPassRequest sendCodeResetPassRequest)
+        {
+
+            var user = await _unitOfWork.Users.GetByUsernameAsync(sendCodeResetPassRequest.Username);
+            if ((user is null) || !(user.Email.Equals(sendCodeResetPassRequest.Email)))
+            {
+                throw new Exception("username or email not true");
+            }
+
+            string randomCodeReset = GenRandomString();
+            var CodeResetPass = new CodeResetPass
+            {
+                CodeVerified = randomCodeReset,
+                Username = sendCodeResetPassRequest.Email,
+            };
+            //save to db
+            await _unitOfWork.CodeResetPasses.AddEntityAsync(CodeResetPass);
+
+            var mailRequest = new MailRequest
+            {
+                ToEmail = sendCodeResetPassRequest.Username,
+                Subject = "RESET PASSWORD WINE WAREHOUSE SYSTEM",
+                Body = randomCodeReset
+            };
+
+            await _emailService.SendEmailAsync(mailRequest);
 
             await _unitOfWork.CompleteAsync();
         }
