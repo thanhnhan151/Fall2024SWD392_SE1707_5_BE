@@ -36,5 +36,6 @@ namespace WWMS.DAL.Infrastructures
 
         ICodeResetPassRepository CodeResetPasses { get; }
 
+        Task CompleteAsync();
     }
 }

@@ -48,7 +48,7 @@ namespace WWMS.BAL.Services
                         RoomId = detail.RoomId,
                         WineId = detail.WineId,
                         TotalQuantity = (int)midWine.AvailableStock,
-                        CurrQuantity = detail.Quantity
+                        CurrQuantity = (int)midRoom.CurrentOccupancy
                     };
 
                     midRoom.WineRooms.Add(wi);
