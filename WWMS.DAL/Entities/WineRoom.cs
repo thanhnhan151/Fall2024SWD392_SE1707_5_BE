@@ -2,22 +2,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WWMS.DAL.Entities
 {
-    public class WineRoom : CommonEntity
+    [Table("WineRoom")]
+    public class WineRoom
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-        public int CurrQuantity { get; set; }
         public int TotalQuantity { get; set; }
-        //FOREIGN KEY
+        public int CurrentQuantity { get; set; }
+
         public long RoomId { get; set; }
+        public virtual Room Room { get; set; } = null!;
+
         public long WineId { get; set; }
+        public virtual Wine Wine { get; set; } = null!;
 
         public ICollection<IORequestDetail> IORequestDetails { get; set; } = [];
-        public ICollection<CheckRequestDetail> CheckRequestDetails { get; set; } = [];
-
-        public Room Room { get; set; } = null!;
-
-        public Wine Wine { get; set; } = null!;
-
+        public ICollection<CheckRequestDetail> CheckRequestDetails { get; set; } = [];      
     }
 }

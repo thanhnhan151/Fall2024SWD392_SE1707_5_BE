@@ -2,23 +2,25 @@
 
 namespace WWMS.DAL.Entities;
 
-public partial class IORequest : CommonEntity
+[Table("IORequest")]
+public class IORequest : CommonEntity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
     public string RequestCode { get; set; } = null!;
-    public DateTime? StartDate { get; set; }// != createdDateTime
+    public DateTime? StartDate { get; set; }
     public DateTime? DueDate { get; set; }
-    public int? TotalQuantity { get; set; }
     public string? Comments { get; set; }
     public string IOType { get; set; } = string.Empty;
-    public string PriorityLevel { get; set; } = string.Empty;
+    public string? SupplierName { get; set; }
+    public string? CustomerName { get; set; }
+    public string? CheckerName { get; set; }
 
-    //FOREIGN KEY - FOREIGN PROPERTIES
-    public long RequesterId { get; set; }
-    public string? RequesterName { get; set; }
+    public long? RoomId { get; set; }
+    public virtual Room Room { get; set; } = null!;
+
+    public long? CheckerId { get; set; }
+    public virtual User Checker { get; set; } = null!;
 
     public ICollection<IORequestDetail> IORequestDetails { get; set; } = [];
-    
-
 }

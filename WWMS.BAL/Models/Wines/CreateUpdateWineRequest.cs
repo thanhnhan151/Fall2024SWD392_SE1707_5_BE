@@ -2,7 +2,6 @@
 {
     public class CreateUpdateWineRequest
     {
-        public long Id { get; set; }
         public string WineName { get; set; } = null!;
         public int? AvailableStock { get; set; }
         public string? Description { get; set; }

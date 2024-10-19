@@ -1,5 +1,4 @@
-﻿using WWMS.BAL.Models.IORequestDetails;
-using WWMS.DAL.Entities;
+﻿using WWMS.DAL.Entities;
 
 namespace WWMS.BAL.Models.IORequests
 {

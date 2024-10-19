@@ -41,9 +41,9 @@ namespace WWMS.BAL.Services
 
         public async Task<List<GetWineResponse>> GetWineListAsync() => _mapper.Map<List<GetWineResponse>>(await _unitOfWork.Wines.GetAllEntitiesAsync());
 
-        public async Task UpdateWineAsync(CreateUpdateWineRequest updateWineRequest)
+        public async Task UpdateWineAsync(long id, CreateUpdateWineRequest updateWineRequest)
         {
-            var wine = await _unitOfWork.Wines.GetEntityByIdAsync(updateWineRequest.Id) ?? throw new Exception($"Wine with id: {updateWineRequest.Id} does not exist");
+            var wine = await _unitOfWork.Wines.GetEntityByIdAsync(id) ?? throw new Exception($"Wine with id: {id} does not exist");
 
             _unitOfWork.Wines.UpdateEntity(MappingUpdateRequest(updateWineRequest));
 

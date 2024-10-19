@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WWMS.DAL.Entities
 {
+    [Table("CheckRequestDetail")]
     public class CheckRequestDetail : CommonEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

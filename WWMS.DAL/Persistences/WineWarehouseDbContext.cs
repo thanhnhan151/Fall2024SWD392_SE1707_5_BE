@@ -46,7 +46,7 @@ public partial class WineWarehouseDbContext : DbContext
             sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null));
+                errorNumbersToAdd: null));       
     }
 
 
@@ -109,11 +109,11 @@ public partial class WineWarehouseDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-            entity.HasMany(u => u.IORequests)
-                .WithOne() // Assuming IORequest does not have a navigation property back to User
-                .HasForeignKey(ir => ir.RequesterId) // Ensure the RequesterId exists in the IORequest entity
-                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
-            ; // Adjust delete behavior as necessary
+            //entity.HasMany(u => u.IORequests)
+            //    .WithOne() // Assuming IORequest does not have a navigation property back to User
+            //    .HasForeignKey(ir => ir.RequesterId) // Ensure the RequesterId exists in the IORequest entity
+            //     .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+            //; // Adjust delete behavior as necessary
 
             entity.HasMany(u => u.CheckRequests)
                 .WithOne() // Assuming CheckRequest does not have a navigation property back to User
@@ -232,6 +232,11 @@ public partial class WineWarehouseDbContext : DbContext
                  .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
             ; // Adjust delete behavior as necessary
 
+            entity.HasMany(w => w.IORequestDetails)
+                .WithOne(wr => wr.Wine) // Assuming WineRoom has a navigation property for Wine
+                .HasForeignKey(wr => wr.WineId) // Ensure the WineId exists in the WineRoom entity
+                 .OnDelete(DeleteBehavior.Restrict);
+
             entity.HasOne(w => w.Country)
                   .WithMany(c => c.Wines)
                   .HasForeignKey(w => w.CountryId)
@@ -310,6 +315,11 @@ public partial class WineWarehouseDbContext : DbContext
             entity.Property(u => u.DeletedBy)
                 .HasMaxLength(50); // Adjust length as necessary
 
+            entity.HasMany(r => r.IORequests)
+                .WithOne(wr => wr.Room)
+                .HasForeignKey(wr => wr.RoomId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
             // Relationships configuration
             entity.HasMany(r => r.WineRooms)
                 .WithOne(wr => wr.Room)
@@ -326,32 +336,11 @@ public partial class WineWarehouseDbContext : DbContext
             entity.HasKey(wr => wr.Id);
 
             // Properties configuration
-            entity.Property(wr => wr.CurrQuantity)
-                .IsRequired();
-
             entity.Property(wr => wr.TotalQuantity)
                 .IsRequired();
 
-            // Common fields from CommonEntity
-            entity.Property(u => u.CreatedTime)
-                .IsRequired(false); // Optional: set as required if needed
-
-            entity.Property(u => u.UpdatedTime)
-                .IsRequired(false); // Optional: set as required if needed
-
-            entity.Property(u => u.DeletedTime)
-                .IsRequired(false); // Optional: make nullable if it's not always set
-
-            entity.Property(u => u.CreatedBy)
-                .IsRequired(false)
-                .HasMaxLength(50); // Adjust length as necessary
-
-            entity.Property(u => u.UpdatedBy)
-                .IsRequired(false)
-                .HasMaxLength(50); // Adjust length as necessary
-
-            entity.Property(u => u.DeletedBy)
-                .HasMaxLength(50); // Adjust length as necessary
+            entity.Property(wr => wr.CurrentQuantity)
+                .IsRequired();
 
             // Foreign key configuration for Room
             entity.HasOne(wr => wr.Room)
@@ -367,8 +356,6 @@ public partial class WineWarehouseDbContext : DbContext
                  .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
             ;
         });
-
-
 
         // Configuring CheckRequest entity
         modelBuilder.Entity<CheckRequest>(entity =>
@@ -532,24 +519,11 @@ public partial class WineWarehouseDbContext : DbContext
             entity.Property(ir => ir.DueDate)
                 .IsRequired(false); // Nullable property
 
-            entity.Property(ir => ir.TotalQuantity)
-                .IsRequired(false); // Nullable property
-
             entity.Property(ir => ir.Comments)
                 .IsRequired(false); // Nullable property
 
             entity.Property(ir => ir.IOType)
                 .IsRequired();
-
-            entity.Property(ir => ir.PriorityLevel)
-                .IsRequired();
-
-            // Foreign key configuration for Requester
-            entity.Property(ir => ir.RequesterId)
-                .IsRequired();
-
-            entity.Property(ir => ir.RequesterName)
-                .IsRequired(false); // Nullable property
 
             // Configure one-to-many relationship with IORequestDetail
             entity.HasMany(ir => ir.IORequestDetails)
@@ -563,69 +537,36 @@ public partial class WineWarehouseDbContext : DbContext
         modelBuilder.Entity<IORequestDetail>(entity =>
         {
             entity.HasKey(ird => ird.Id);
-            // Common fields from CommonEntity
-            entity.Property(u => u.CreatedTime)
-                .IsRequired(false); // Optional: set as required if needed
-
-            entity.Property(u => u.UpdatedTime)
-                .IsRequired(false); // Optional: set as required if needed
-
-            entity.Property(u => u.DeletedTime)
-                .IsRequired(false); // Optional: make nullable if it's not always set
-
-            entity.Property(u => u.CreatedBy)
-                .IsRequired(false)
-                .HasMaxLength(50); // Adjust length as necessary
-
-            entity.Property(u => u.UpdatedBy)
-                .IsRequired(false)
-                .HasMaxLength(50); // Adjust length as necessary
-
-            entity.Property(u => u.DeletedBy)
-                .HasMaxLength(50); // Adjust length as necessary
 
             // Specific properties
             entity.Property(ird => ird.Quantity)
                 .IsRequired();
 
-            entity.Property(ird => ird.StartDate)
-                .IsRequired();
-
-            entity.Property(ird => ird.EndDate)
-                .IsRequired();
-
-            entity.Property(ird => ird.Comments)
-                .IsRequired();
             // Report fields
-            entity.Property(crd => crd.ReportCode)
-                .IsRequired();
+            //entity.Property(crd => crd.ReportCode)
+            //    .IsRequired();
 
-            entity.Property(crd => crd.ReportDescription)
-                .IsRequired(false); // Optional
+            //entity.Property(crd => crd.ReportDescription)
+            //    .IsRequired(false); // Optional
 
-            entity.Property(crd => crd.ReporterAssigned)
-                .IsRequired();
+            //entity.Property(crd => crd.ReporterAssigned)
+            //    .IsRequired();
 
-            entity.Property(crd => crd.DiscrepanciesFound)
-                .IsRequired(false); // Optional
+            //entity.Property(crd => crd.DiscrepanciesFound)
+            //    .IsRequired(false); // Optional
 
-            entity.Property(crd => crd.ActualQuantity)
-                .IsRequired();
+            //entity.Property(crd => crd.ActualQuantity)
+            //    .IsRequired();
 
-            entity.Property(crd => crd.ReportFile)
-                .IsRequired(false); // Optional
+            //entity.Property(crd => crd.ReportFile)
+            //    .IsRequired(false); // Optional
 
             // Foreign keys
             entity.Property(ird => ird.WineId)
                 .IsRequired();
 
-            entity.Property(ird => ird.RoomId)
-                .IsRequired();
 
             entity.Property(ird => ird.IORequestId)
-                .IsRequired();
-
-            entity.Property(ird => ird.IORequestCode)
                 .IsRequired();
         });
 

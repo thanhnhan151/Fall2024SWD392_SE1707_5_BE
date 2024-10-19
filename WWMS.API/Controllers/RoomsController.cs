@@ -211,43 +211,5 @@ namespace WWMS.API.Controllers
             }
         }
         #endregion
-
-
-
-        //#region Get A Room By Id
-        ///// <summary>
-        ///// Get a room in the system
-        ///// </summary>
-        ///// <param name="id">Id of the room you want to get</param>
-        ///// <returns>An Room</returns>
-        ///// <response code="200">Return ar room in the system</response>
-        ///// <response code="400">If the Room is null</response>
-        ///// <response code="401">Unauthorized</response>
-        ///// <response code="403">Forbidden</response>
-        ///// <response code="404">Not Found</response>
-        ///// <response code="500">Internal Server</response>
-        //[HttpGet("room/{id}")]
-        //public async Task<IActionResult> GetsByIdAsync(int id)
-        //{
-        //    try
-        //    {
-        //        var result = await _roomService.GetWineRoomByIdAsync(id);
-
-        //        if (result is not null)
-        //        {
-        //            return Ok(result);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-
-        //    return NotFound(new
-        //    {
-        //        ErrorMessage = $"Room with id: {id} does not exist"
-        //    });
-        //}
-        //#endregion
     }
 }
