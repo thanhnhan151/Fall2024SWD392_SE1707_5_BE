@@ -16,7 +16,6 @@ namespace WWMS.DAL.Entities
         public long WineId { get; set; }
         public virtual Wine Wine { get; set; } = null!;
 
-        public ICollection<IORequestDetail> IORequestDetails { get; set; } = [];
         public ICollection<CheckRequestDetail> CheckRequestDetails { get; set; } = [];      
     }
 }
