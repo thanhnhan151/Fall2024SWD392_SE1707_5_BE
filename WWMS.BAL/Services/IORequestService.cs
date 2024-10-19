@@ -40,28 +40,36 @@ namespace WWMS.BAL.Services
                     detail.CreatedTime = DateTime.UtcNow;
                     detail.UpdatedTime = DateTime.UtcNow;
 
-                    var midRoom = await _unitOfWork.Rooms.GetEntityByIdAsync(detail.RoomId);
+                    var midRoom = await _unitOfWork.Rooms.GetByIdNotTrack(detail.RoomId);
                     var midWine = await _unitOfWork.Wines.GetEntityByIdAsync(detail.WineId);
+                    int winequantity = (int)midWine.AvailableStock + detail.Quantity;
+                    int roomquantity =(int)midRoom.CurrentOccupancy + detail.Quantity;
 
                     var wi = new WineRoom()
                     {
                         RoomId = detail.RoomId,
                         WineId = detail.WineId,
-                        TotalQuantity = (int)midWine.AvailableStock,
-                        CurrQuantity = (int)midRoom.CurrentOccupancy
+                        TotalQuantity = detail.Quantity,
+                        CurrQuantity = (int)midWine.AvailableStock + detail.Quantity
                     };
-
+                    // update quantiy của room 
                     midRoom.WineRooms.Add(wi);
+                    midRoom.CurrentOccupancy = roomquantity;
                     _unitOfWork.Rooms.UpdateEntity(midRoom);
                     await _unitOfWork.CompleteAsync();
-
+                    // update quantiy của rượu
+                    midWine.AvailableStock = winequantity;
+                    _unitOfWork.Wines.UpdateEntity(midWine);
+                    await _unitOfWork.CompleteAsync();
                     var room = _mapper.Map<GetRoom?>(await _unitOfWork.Rooms.GetEntityByIdAsync(detail.RoomId));
+                    
 
                     // Kiểm tra nếu WineRooms không rỗng trước khi lấy phần tử cuối
                     if (room?.WineRooms != null && room.WineRooms.Any())
                     {
                         var lastWineRoom = room.WineRooms.Last();
                         detail.WineRoomId = lastWineRoom.Id;
+                  
                     }
                     else
                     {
