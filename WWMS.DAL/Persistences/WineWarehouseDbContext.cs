@@ -46,7 +46,7 @@ public partial class WineWarehouseDbContext : DbContext
             sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null));       
+                errorNumbersToAdd: null));
     }
 
 

@@ -7,6 +7,6 @@ namespace WWMS.DAL.Interfaces
     {
         Task<bool> CheckExistRoomName(string roomName);
 
-        Task<Room?> GetByIdNotTrack(long id);
+        Task<Room?> GetByIdNotTrack(long? id);
     }
 }

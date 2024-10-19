@@ -14,7 +14,7 @@ namespace WWMS.DAL.Repositories
         {
         }
 
-        public override async Task<Room?> GetEntityByIdAsync(long id)
+        public  async Task<Room?> GetEntityByIdAsync(long? id)
         {
             var result = await _dbSet.Include(w => w.WineRooms).FirstOrDefaultAsync(c => c.Id == id);
 
@@ -46,7 +46,7 @@ namespace WWMS.DAL.Repositories
 
             _dbSet.Update(checkExistRoom);
         }
-        public async Task<Room?> GetByIdNotTrack(long id)
+        public async Task<Room?> GetByIdNotTrack(long? id)
         {
             // Kiểm tra xem thực thể đã được tải vào ngữ cảnh chưa
             var localEntity = _dbSet.Local.FirstOrDefault(e => e.Id == id);
