@@ -57,10 +57,6 @@ namespace WWMS.BAL
 
             services.AddScoped<IReportIORequestService, ReportIORequestService>();
 
-            services.AddScoped<ICheckRequestService, CheckRequestService>();
-
-            services.AddScoped<ICheckRequestDetailService, CheckRequestDetailService>();
-
             return services;
         }
     }

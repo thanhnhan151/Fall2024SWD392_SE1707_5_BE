@@ -44,9 +44,6 @@ namespace WWMS.DAL.Infrastructures
 
         public ICodeResetPassRepository CodeResetPasses { get; private set; }
 
-        public ICheckRequestDetailRepository CheckRequestDetails { get; private set; }
-
-        public ICheckRequestRepository CheckRequests { get; private set; }
 
         public UnitOfWork(WineWarehouseDbContext context
             , ILoggerFactory loggerFactory
@@ -85,12 +82,7 @@ namespace WWMS.DAL.Infrastructures
             BottleSizes = new BottleSizeRepository(_context, _logger, _httpContextAccessor);
 
             AlcoholByVolumes = new AlcoholByVolumeRepository(_context, _logger, _httpContextAccessor);
-
-            CodeResetPasses = new CodeResetPassRepository(_context, _logger, _httpContextAccessor);
-
-            CheckRequests = new CheckRequestRepository(_context, _logger, _httpContextAccessor);
-            
-            CheckRequestDetails = new CheckRequestDetailRepository(_context, _logger, _httpContextAccessor);
+            CodeResetPasses = new CodeResetPassRepository (_context, _logger, _httpContextAccessor);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();
