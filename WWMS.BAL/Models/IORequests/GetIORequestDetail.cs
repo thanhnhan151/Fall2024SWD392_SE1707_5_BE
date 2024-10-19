@@ -10,10 +10,6 @@ namespace WWMS.BAL.Models.IORequests
     public class GetIORequestDetail
     {
 
-
-
-        public DateTime? CreatedTime { get; set; }
-        public DateTime? UpdatedTime { get; set; }
         public long Id { get; set; }
 
         public int Quantity { get; set; }
@@ -22,7 +18,7 @@ namespace WWMS.BAL.Models.IORequests
 
         public long IORequestId { get; set; }
 
-        public string Status { get; set; } = string.Empty;
+
 
         //REPORT INFORMATION
 

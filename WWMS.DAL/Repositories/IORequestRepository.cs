@@ -48,11 +48,6 @@ namespace WWMS.DAL.Repositories
             {
                 checkExist.Status = "InActive";
 
-
-                foreach (var detail in checkExist.IORequestDetails)
-                {
-                    //detail.Status = "Cancel";
-                }
             }
 
 

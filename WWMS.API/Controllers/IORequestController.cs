@@ -95,59 +95,44 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Create A Import/Export Request
+        #region Create An Import/Export Request
         /// <summary>
-        /// Add a room in the system
+        /// Create a new Import/Export request in the system
         /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
         ///     {
         ///       "requestCode": "REQ-001",
-        ///       "totalQuantity": 10,
-        ///       "comments": "Request for inventory adjustment.",
-        ///       "ioType": "Adjustment",
-        ///       "priorityLevel": "High",
-        ///       "requesterId": 2,
-        ///       "requesterName": "John Doe",
+        ///       "startDate": "2024-10-19T17:05:05.759Z",
+        ///       "dueDate": "2024-10-19T17:05:05.759Z",
+        ///       "comments": "Request for wine intake",
+        ///       "ioType": "In",
+        ///       "supplierName": "Supplier ABC",
+        ///       "customerName": "Customer XYZ",
+        ///       "roomId": 0,
+        ///       "checkerId": 0,
         ///       "ioRequestDetails": [
         ///         {
+        ///           "quantity": 10,
+        ///           "wineId": 0
+        ///         },
+        ///         {
         ///           "quantity": 5,
-        ///           "startDate": "2024-10-13T08:34:48.529Z",
-        ///           "endDate": "2024-10-20T08:34:48.529Z",
-        ///           "createdTime": "2024-10-13T08:34:48.529Z",
-        ///           "updatedTime": "2024-10-13T08:34:48.529Z",
-        ///           "deletedTime": null,
-        ///           "comments": "Adjusting inventory for special event.",
-        ///           "wineId": 5,
-        ///           "supplier": "Wine Supplier Co.",
-        ///           "wineName": "Chardonnay",
-        ///           "mfd": "2023-01-15T08:34:48.529Z",
-        ///           "roomId": 2,
-        ///           "roomName": "Main Storage Room",
-        ///           "ioRequestCode": "IO-REQ-001",
-        ///           "checkerId": 2,
-        ///           "checkerName": "Jane Smith",
-        ///           "wineRoomId": 5,
-        ///           "reportCode": "RPT-001",
-        ///           "reportDescription": "Inventory adjustment report.",
-        ///           "reporterAssigned": "John Doe",
-        ///           "discrepanciesFound": 0,
-        ///           "actualQuantity": 5,
-        ///           "reportFile": "path/to/report/file.pdf"
+        ///           "wineId": 0
         ///         }
         ///       ]
         ///     }
         ///         
         /// </remarks> 
-        /// <returns>Room that was created</returns>
-        /// <response code="200">Room that was created</response>
+        /// <returns>Confirmation message of the created Import/Export request</returns>
+        /// <response code="200">Request created successfully</response>
         /// <response code="400">Failed validation</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
-        /// <response code="500">Internal Server</response>
-    
+        /// <response code="500">Internal Server Error</response>
+
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateIORequest createIORequest)
         {
@@ -169,49 +154,40 @@ namespace WWMS.API.Controllers
 
         #region Update A Import/Export Request
         /// <summary>
-        /// Update a room in the system
+        /// Update an Import/Export request in the system
         /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
         ///     {
         ///       "id": 0,
-        ///       "requestCode": "string",
-        ///       "startDate": "2024-10-16T19:36:09.424Z",
-        ///       "dueDate": "2024-10-16T19:36:09.424Z",
-        ///       "comments": "string",
-        ///       "ioType": "string",
-        ///       "priorityLevel": "string",
-        ///       "requesterId": 0,
-        ///       "status": "string",
+        ///       "requestCode": "REQ-002",
+        ///       "startDate": "2024-10-19T17:13:26.774Z",
+        ///       "dueDate": "2024-10-20T17:13:26.774Z",
+        ///       "comments": "Request for wine intake",
+        ///       "ioType": "In",
+        ///       "supplierName": "Supplier XYZ",
+        ///       "customerName": "Customer ABC",
+        ///       "roomId": 0,
+        ///       "checkerId": 0,
+        ///       "status": "Pending",
         ///       "upIORequestDetails": [
         ///         {
         ///           "id": 0,
-        ///           "quantity": 0,
-        ///           "startDate": "2024-10-16T19:36:09.424Z",
-        ///           "endDate": "2024-10-16T19:36:09.424Z",
-        ///           "createdTime": "2024-10-16T19:36:09.424Z",
-        ///           "updatedTime": "2024-10-16T19:36:09.424Z",
-        ///           "comments": "string",
-        ///           "wineId": 0,
-        ///           "supplier": "string",
-        ///           "mfd": "2024-10-16T19:36:09.424Z",
-        ///           "roomId": 0,
-        ///           "checkerId": 0,
-        ///           "wineRoomId": 0,
-        ///           "status": "string"
+        ///           "quantity": 5,
+        ///           "wineId": 0
         ///         }
         ///       ]
         ///     }
         ///         
         /// </remarks> 
-        /// <response code="200">Room that was updated</response>
+        /// <response code="200">Request that was updated</response>
         /// <response code="204">No content</response>
-        /// <response code="400">Room does not exist</response>
+        /// <response code="400">Request does not exist</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
-        /// <response code="500">Internal Server</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateIORequest updateIO)
         {

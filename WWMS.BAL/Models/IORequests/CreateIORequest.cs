@@ -12,7 +12,7 @@ namespace WWMS.BAL.Models.IORequests
         public string IOType { get; set; } = string.Empty;
         public string SupplierName { get; set; }
         public string CustomerName { get; set; }
-        public string CheckerName { get; set; }
+ //       public string CheckerName { get; set; }
         public long RoomId { get; set; }
         public long CheckerId { get; set; }
         /// </summary>
