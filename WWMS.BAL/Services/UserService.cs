@@ -57,9 +57,9 @@ namespace WWMS.BAL.Services
 
         public async Task<GetUserResponse?> LoginAsync(string username, string password) => _mapper.Map<GetUserResponse?>(await _unitOfWork.Users.LoginAsync(username, password));
 
-        public async Task UpdateUserAsync(UpdateUserRequest updateUserRequest)
+        public async Task UpdateUserAsync(long id, UpdateUserRequest updateUserRequest)
         {
-            var user = await _unitOfWork.Users.GetEntityByIdAsync(updateUserRequest.Id) ?? throw new Exception($"User with id: {updateUserRequest.Id} does not exist");
+            var user = await _unitOfWork.Users.GetEntityByIdAsync(id) ?? throw new Exception($"User with id: {id} does not exist");
 
             _unitOfWork.Users.UpdateEntity(MappingUpdateRequest(updateUserRequest, user));
 

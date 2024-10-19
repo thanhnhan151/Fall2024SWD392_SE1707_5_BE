@@ -150,11 +150,12 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Update a bottle of wine in the system
         /// </summary>
+        /// <param name="id">Id of the wine you want to update</param>
+        /// <param name="updateWineRequest">Wine update request</param>
         /// <remarks>
         /// Sample request:
         /// 
         ///     {
-        ///       "id": 1,
         ///       "wineName": "More Red Majestic Wine",
         ///       "availableStock": 10,
         ///       "description": "This wine is just so good",
@@ -182,12 +183,12 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] CreateUpdateWineRequest updateWineRequest)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(long id, [FromBody] CreateUpdateWineRequest updateWineRequest)
         {
             try
             {
-                await _wineService.UpdateWineAsync(updateWineRequest);
+                await _wineService.UpdateWineAsync(id, updateWineRequest);
 
                 return Ok("Updated Successfully");
             }

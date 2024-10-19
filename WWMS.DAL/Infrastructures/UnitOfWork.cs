@@ -24,8 +24,6 @@ namespace WWMS.DAL.Infrastructures
 
         public IIORequestRepository IIORequests { get; private set; }
 
-        public IIORequestDetailRepository IIORequestsDetail { get; private set; }
-
         public IRoleRepository Roles { get; private set; }
 
         public ICountryRepository Countries { get; private set; }
@@ -43,11 +41,8 @@ namespace WWMS.DAL.Infrastructures
         public IBottleSizeRepository BottleSizes { get; private set; }
 
         public IAlcoholByVolumeRepository AlcoholByVolumes { get; private set; }
+
         public ICodeResetPassRepository CodeResetPasses { get; private set; }
-
-
-
-
 
         public UnitOfWork(WineWarehouseDbContext context
             , ILoggerFactory loggerFactory
@@ -68,8 +63,6 @@ namespace WWMS.DAL.Infrastructures
             Rooms = new RoomRepository(_context, _logger, _httpContextAccessor);
 
             IIORequests = new IORequestRepository(_context, _logger, _httpContextAccessor);
-
-            IIORequestsDetail = new IORequestDetailRepository(_context, _logger, _httpContextAccessor);
 
             Roles = new RoleRepository(_context, _logger, _httpContextAccessor);
 

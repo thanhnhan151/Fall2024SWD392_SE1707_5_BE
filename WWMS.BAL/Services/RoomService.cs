@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Rooms;
-using WWMS.BAL.Models.WineRoom;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 
@@ -60,8 +59,6 @@ namespace WWMS.BAL.Services
         }
 
         public async Task<GetRoomDetailResponse?> GetRoomByIdAsync(long id) => _mapper.Map<GetRoomDetailResponse?>(await _unitOfWork.Rooms.GetEntityByIdAsync(id));
-
-        public async Task<GetRoom?> GetWineRoomByIdAsync(long id) => _mapper.Map<GetRoom?>(await _unitOfWork.Rooms.GetEntityByIdAsync(id));
 
         public async Task<List<GetRoomResponse>> GetRoomListAsync() => _mapper.Map<List<GetRoomResponse>>(await _unitOfWork.Rooms.GetAllEntitiesAsync());
 

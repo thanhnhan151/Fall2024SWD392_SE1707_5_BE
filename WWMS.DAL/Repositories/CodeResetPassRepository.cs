@@ -16,14 +16,14 @@ namespace WWMS.DAL.Repositories
         public CodeResetPassRepository(WineWarehouseDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor) : base(context, logger, httpContextAccessor)
         {
         }
-        public async Task<bool> CheckUsable(string verifiedCode)
+        public Task<bool> CheckUsable(string verifiedCode)
         {
             throw new NotImplementedException();
         }
 
-        public async Task DisablePrevious(string username)
+        public Task DisablePrevious(string username)
         {
-            //TODO: implement in the worker service
+            throw new NotImplementedException();
         }
     }
 }

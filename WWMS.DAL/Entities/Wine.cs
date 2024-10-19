@@ -2,7 +2,8 @@
 
 namespace WWMS.DAL.Entities;
 
-public partial class Wine : CommonEntity
+[Table("Wine")]
+public class Wine : CommonEntity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
@@ -15,7 +16,6 @@ public partial class Wine : CommonEntity
     public decimal ImportPrice { get; set; }
     public decimal ExportPrice { get; set; }
 
-    //FOREIGN KEY
     public long CountryId { get; set; }
     public virtual Country Country { get; set; } = null!;
 
@@ -43,5 +43,6 @@ public partial class Wine : CommonEntity
     public long WineCategoryId { get; set; }
     public WineCategory WineCategory { get; set; } = null!;
 
+    public ICollection<IORequestDetail> IORequestDetails { get; set; } = [];
     public ICollection<WineRoom> WineRooms { get; set; } = [];
 }

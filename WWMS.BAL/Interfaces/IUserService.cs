@@ -10,7 +10,7 @@ namespace WWMS.BAL.Interfaces
 
         Task<GetUserResponse?> GetUserByIdAsync(long id);
 
-        Task UpdateUserAsync(UpdateUserRequest updateUserRequest);
+        Task UpdateUserAsync(long id, UpdateUserRequest updateUserRequest);
 
         Task DisableUserAsync(long id);
 

@@ -14,8 +14,6 @@ namespace WWMS.DAL.Infrastructures
 
         IIORequestRepository IIORequests { get; }
 
-        IIORequestDetailRepository IIORequestsDetail { get; }
-
         IRoleRepository Roles { get; }
 
         ICountryRepository Countries { get; }
@@ -36,5 +34,6 @@ namespace WWMS.DAL.Infrastructures
 
         ICodeResetPassRepository CodeResetPasses { get; }
 
+        Task CompleteAsync();
     }
 }

@@ -47,7 +47,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("ADMIN")]
+        //[PermissionAuthorize("ADMIN")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest createUserRequest)
         {
@@ -78,7 +78,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("ADMIN", "MANAGER")]
+        //[PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -113,7 +113,7 @@ namespace WWMS.API.Controllers
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync(long id)
         {
             try
             {
@@ -140,11 +140,12 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Update an user in the system
         /// </summary>
+        /// <param name="id">Id of the user you want to update</param>
+        /// <param name="updateUserRequest">User update request</param>
         /// <remarks>
         /// Sample request:
         /// 
         ///     {
-        ///       "id": "3",
         ///       "firstName": "test3",
         ///       "lastName": "test3",
         ///       "email": "test3",
@@ -160,12 +161,12 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserRequest updateUserRequest)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(long id, [FromBody] UpdateUserRequest updateUserRequest)
         {
             try
             {
-                await _userService.UpdateUserAsync(updateUserRequest);
+                await _userService.UpdateUserAsync(id, updateUserRequest);
 
                 return Ok("Updated Successfully");
             }
@@ -192,7 +193,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("ADMIN")]
+        //[PermissionAuthorize("ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {

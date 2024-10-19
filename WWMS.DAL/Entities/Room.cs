@@ -2,7 +2,8 @@
 
 namespace WWMS.DAL.Entities;
 
-public partial class Room : CommonEntity
+[Table("Room")]
+public class Room : CommonEntity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
@@ -11,5 +12,7 @@ public partial class Room : CommonEntity
     public int? Capacity { get; set; } //MAX SIZE
     public int? CurrentOccupancy { get; set; } = 0;
     public string? ManagerName { get; set; }
+
+    public ICollection<IORequest> IORequests { get; set; } = [];
     public ICollection<WineRoom> WineRooms { get; set; } = [];
 }

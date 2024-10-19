@@ -1,6 +1,4 @@
-﻿using WWMS.BAL.Models.IORequestDetails;
-
-namespace WWMS.BAL.Models.IORequests
+﻿namespace WWMS.BAL.Models.IORequests
 {
     public class UpdateIORequest
     {

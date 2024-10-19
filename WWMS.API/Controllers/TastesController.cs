@@ -42,7 +42,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("MANAGER", "ADMIN")]
+        //[PermissionAuthorize("MANAGER", "ADMIN")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateTasteRequest request)
         {
@@ -73,7 +73,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("Manager", "Admin")]
+        //[PermissionAuthorize("Manager", "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {

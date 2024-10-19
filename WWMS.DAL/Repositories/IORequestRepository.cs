@@ -51,7 +51,7 @@ namespace WWMS.DAL.Repositories
 
                 foreach (var detail in checkExist.IORequestDetails)
                 {
-                    detail.Status = "Cancel";
+                    //detail.Status = "Cancel";
                 }
             }
 

@@ -2,7 +2,8 @@
 
 namespace WWMS.DAL.Entities;
 
-public partial class CheckRequest : CommonEntity
+[Table("CheckRequest")]
+public class CheckRequest : CommonEntity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }

@@ -2,7 +2,8 @@
 
 namespace WWMS.DAL.Entities;
 
-public partial class User : CommonEntity
+[Table("User")]
+public class User : CommonEntity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }

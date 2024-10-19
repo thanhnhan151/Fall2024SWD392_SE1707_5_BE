@@ -45,12 +45,12 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var result = await _reportIORequest.GetReportIORequestListAsync();
+                //var result = await _reportIORequest.GetReportIORequestListAsync();
 
-                if (result is not null)
-                {
-                    return Ok(result);
-                }
+                //if (result is not null)
+                //{
+                //    return Ok(result);
+                //}
             }
             catch (Exception ex)
             {
@@ -78,12 +78,12 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var result = await _reportIORequest.GetReportIORequestByIdAsync(id);
+                //var result = await _reportIORequest.GetReportIORequestByIdAsync(id);
 
-                if (result is not null && result.ReportCode.IsNullOrEmpty())
-                {
-                    return Ok(result);
-                }
+                //if (result is not null && result.ReportCode.IsNullOrEmpty())
+                //{
+                //    return Ok(result);
+                //}
             }
             catch (Exception ex)
             {
@@ -117,24 +117,24 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                var rep = await _reportIORequest.GetReportIORequestByIdAsync(updateIO.Id);
+                //var rep = await _reportIORequest.GetReportIORequestByIdAsync(updateIO.Id);
 
-                if (rep == null)
-                {
-                    return NotFound(new
-                    {
-                        ErrorMessage = $"rep Import/Export with id: {updateIO.Id} does not exist"
-                    });
-                }
+                //if (rep == null)
+                //{
+                //    return NotFound(new
+                //    {
+                //        ErrorMessage = $"rep Import/Export with id: {updateIO.Id} does not exist"
+                //    });
+                //}
 
-                string file = null; 
+                //string file = null; 
 
            
-                if (doc != null)
-                {
-                    file = await _uploadFileService.UploadImage(doc);
-                }
-                await _reportIORequest.UpdateReportIORequestAsync(updateIO, file);
+                //if (doc != null)
+                //{
+                //    file = await _uploadFileService.UploadImage(doc);
+                //}
+                //await _reportIORequest.UpdateReportIORequestAsync(updateIO, file);
                 
 
                 return Ok("Create Report for Iorequest sucessfully");
@@ -167,7 +167,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                await _reportIORequest.DisableReportIORequestsAsync(id);
+                //await _reportIORequest.DisableReportIORequestsAsync(id);
 
                 return Ok("Disable Successfully!");
             }
