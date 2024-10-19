@@ -31,52 +31,96 @@ namespace WWMS.BAL.Services
             ioRequestEntity.UpdatedTime = DateTime.UtcNow;
             ioRequestEntity.Status = "Active";
 
-            if (ioRequestEntity.IORequestDetails != null)
+            if (ioRequestEntity.IOType == "In" || ioRequestEntity.IOType == "Out")
             {
-                foreach (var detail in createIORequest.IORequestDetails)
+                if (ioRequestEntity.IORequestDetails != null)
                 {
-                    quantityMid += detail.Quantity;
-                    detail.CreatedTime = DateTime.UtcNow;
-                    detail.UpdatedTime = DateTime.UtcNow;
 
-                    var midRoom = await _unitOfWork.Rooms.GetEntityByIdAsync(detail.RoomId);
-                    var midWine = await _unitOfWork.Wines.GetEntityByIdAsync(detail.WineId);
-
-                    var wi = new WineRoom()
+                    foreach (var detail in createIORequest.IORequestDetails)
                     {
-                        RoomId = detail.RoomId,
-                        WineId = detail.WineId,
-                        CurrentQuantity = detail.Quantity
-                    };
+                        quantityMid += detail.Quantity;
+                        detail.CreatedTime = DateTime.UtcNow;
+                        detail.UpdatedTime = DateTime.UtcNow;
 
-                    midRoom.WineRooms.Add(wi);
-                    _unitOfWork.Rooms.UpdateEntity(midRoom);
-                    await _unitOfWork.CompleteAsync();
+                        var midRoom = await _unitOfWork.Rooms.GetByIdNotTrack(detail.RoomId);
+                        var midWine = await _unitOfWork.Wines.GetEntityByIdAsync(detail.WineId);
 
-                    //var room = _mapper.Map<GetRoom?>(await _unitOfWork.Rooms.GetEntityByIdAsync(detail.RoomId));
+                        if (ioRequestEntity.IOType == "In")
+                        {
+                            // Xử lý khi IOType là "In"
+                            int wineQuantity = (int)midWine.AvailableStock + detail.Quantity;
+                            int roomQuantity = (int)midRoom.CurrentOccupancy + detail.Quantity;
 
-                    //// Kiểm tra nếu WineRooms không rỗng trước khi lấy phần tử cuối
-                    //if (room?.WineRooms != null && room.WineRooms.Any())
-                    //{
-                    //    var lastWineRoom = room.WineRooms.Last();
-                    //    detail.WineRoomId = lastWineRoom.Id;
-                    //}
-                    //else
-                    //{
-                    //    // Xử lý nếu không có WineRoom nào
-                    //    throw new Exception($"No WineRoom found for Room ID: {detail.RoomId}");
-                    //}
+                            var wi = new WineRoom()
+                            {
+                                RoomId = detail.RoomId,
+                                WineId = detail.WineId,
+                                TotalQuantity = detail.Quantity,
+                                CurrQuantity = (int)midWine.AvailableStock + detail.Quantity
+                            };
 
-                    detail.Status = "InProcess";
+                            // Cập nhật thông tin phòng
+                            midRoom.WineRooms.Add(wi);
+                            midRoom.CurrentOccupancy = roomQuantity;
+                            _unitOfWork.Rooms.UpdateEntity(midRoom);
+                            await _unitOfWork.CompleteAsync();
+
+                            // Cập nhật thông tin rượu
+                            midWine.AvailableStock = wineQuantity;
+                            _unitOfWork.Wines.UpdateEntity(midWine);
+                            await _unitOfWork.CompleteAsync();
+                        }
+                        else if (ioRequestEntity.IOType == "Out")
+                        {
+                            // Xử lý khi IOType là "Out"
+                            int wineQuantity = (int)midWine.AvailableStock - detail.Quantity;
+                            int roomQuantity = (int)midRoom.CurrentOccupancy - detail.Quantity;
+
+                            if (wineQuantity < 0 || roomQuantity < 0)
+                            {
+                                throw new Exception("Not enough stock in either the wine or the room.");
+                            }
+
+                            // Cập nhật thông tin rượu
+                            midWine.AvailableStock = wineQuantity;
+                            _unitOfWork.Wines.UpdateEntity(midWine);
+                            await _unitOfWork.CompleteAsync();
+
+                            // Cập nhật thông tin phòng
+                            midRoom.CurrentOccupancy = roomQuantity;
+                            _unitOfWork.Rooms.UpdateEntity(midRoom);
+                            await _unitOfWork.CompleteAsync();
+                        }
+
+                        var room = _mapper.Map<GetRoom?>(await _unitOfWork.Rooms.GetEntityByIdAsync(detail.RoomId));
+
+                        // Kiểm tra nếu WineRooms không rỗng trước khi lấy phần tử cuối
+                        if (room?.WineRooms != null && room.WineRooms.Any())
+                        {
+                            var lastWineRoom = room.WineRooms.Last();
+                            detail.WineRoomId = lastWineRoom.Id;
+                        }
+                        else
+                        {
+                            // Xử lý nếu không có WineRoom nào
+                            throw new Exception($"No WineRoom found for Room ID: {detail.RoomId}");
+                        }
+
+                        detail.Status = "InProcess";
+                    }
+
                 }
+
+
+                ioRequestEntity.TotalQuantity = quantityMid;
+                ioRequestEntity.IORequestDetails = _mapper.Map<List<IORequestDetail>>(createIORequest.IORequestDetails);
+
+
+                await _unitOfWork.IIORequests.AddEntityAsync(ioRequestEntity);
+                await _unitOfWork.CompleteAsync();
             }
-
-            //ioRequestEntity.TotalQuantity = quantityMid;
-            ioRequestEntity.IORequestDetails = _mapper.Map<List<IORequestDetail>>(createIORequest.IORequestDetails);
-
-            await _unitOfWork.IIORequests.AddEntityAsync(ioRequestEntity);
-            await _unitOfWork.CompleteAsync();
         }
+
 
 
 
@@ -125,6 +169,16 @@ namespace WWMS.BAL.Services
                         //existingDetail.Status= string.IsNullOrEmpty(newDetail.Status) ? existingDetail.Status : newDetail.Status;
                         // ko cần nhập tay
                         //existingDetail.WineRoomId =  existingDetail.WineRoomId;
+
+                        /// update room, rượu
+                        //var midRoom = await _unitOfWork.Rooms.GetByIdNotTrack(existingDetail.RoomId);
+                        //midRoom. =
+                        //_unitOfWork.Rooms.UpdateEntity(midRoom);
+                        //await _unitOfWork.CompleteAsync();
+
+                        //var midWine = await _unitOfWork.Wines.GetEntityByIdAsync(existingDetail.WineId);
+                        //_unitOfWork.Wines.UpdateEntity(midWine);
+                        //await _unitOfWork.CompleteAsync();
 
                         // Cập nhật thông tin báo cáo
                         //existingDetail.ReportCode = string.IsNullOrEmpty(newDetail.ReportCode) ? existingDetail.ReportCode : newDetail.ReportCode;
