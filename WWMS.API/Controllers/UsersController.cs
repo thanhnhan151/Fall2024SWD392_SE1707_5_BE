@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
@@ -78,7 +77,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("ADMIN", "MANAGER")]
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -193,7 +192,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("ADMIN")]
+        [PermissionAuthorize("ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
