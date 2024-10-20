@@ -23,7 +23,7 @@ namespace WWMS.BAL.Services
             IUnitOfWork unitOfWork
             , IMapper mapper
             , IHttpContextAccessor httpContextAccessor
-            , IEmailService emailService)
+             )
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;

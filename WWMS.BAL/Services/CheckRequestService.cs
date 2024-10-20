@@ -22,8 +22,7 @@ namespace WWMS.BAL.Services
         public CheckRequestService(
             IUnitOfWork unitOfWork
             , IMapper mapper
-            , IHttpContextAccessor httpContextAccessor
-            , IEmailService emailService)
+            , IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;

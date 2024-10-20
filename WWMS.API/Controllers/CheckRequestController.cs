@@ -11,22 +11,21 @@ using WWMS.BAL.Models.CheckRequests;
 namespace WWMS.API.Controllers
 {
     [ApiVersion(1)]
-    [Route("api/v{version:apiVersion}/checkrequests")]
+    [Route("api/v{version:apiVersion}/check-requests")]
     [ApiController]
     public class CheckRequestController : ControllerBase
     {
 
-        private readonly ILogger<CheckRequestController> _logger;
         #region init
         private readonly ICheckRequestService _checkRequestService;
+        private readonly ILogger<CheckRequestController> _logger;
 
         public CheckRequestController(
             ILogger<CheckRequestController> logger,
             ICheckRequestService checkRequestService)
         {
             _logger = logger;
-
-
+            _checkRequestService = checkRequestService;
         }
         #endregion
 

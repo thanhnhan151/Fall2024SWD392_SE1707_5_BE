@@ -15,11 +15,11 @@ namespace WWMS.API.Controllers
     public class CheckRequestDetailController : ControllerBase
     {
         #region  init
-        private readonly ILogger<CheckRequestController> _logger;
+        private readonly ILogger<CheckRequestDetailController> _logger;
         private readonly ICheckRequestDetailService _checkRequestDetailService;
 
         public CheckRequestDetailController(
-            ILogger<CheckRequestController> logger,
+            ILogger<CheckRequestDetailController> logger,
             ICheckRequestDetailService checkRequestDetailService)
         {
             _logger = logger;
