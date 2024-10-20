@@ -2,8 +2,6 @@
 {
     public class UpdateIORequest
     {
-
-        public long Id { get; set; }
         public string RequestCode { get; set; } = null!;
         public DateTime? StartDate { get; set; }
         public DateTime? DueDate { get; set; }

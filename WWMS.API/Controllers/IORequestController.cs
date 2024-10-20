@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
+using WWMS.BAL.Models.Rooms;
 using WWMS.BAL.Services;
 
 namespace WWMS.API.Controllers
@@ -188,19 +189,12 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateIORequest updateIO)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateIORequest updateIO, long id)
         {
             try
             {
-                var Room = await _iORequestService.GetIORequestsByIdAsync(updateIO.Id);
-
-                if (Room == null) return NotFound(new
-                {
-                    ErrorMessage = $" Import/Export with id: {updateIO.Id} does not exist"
-                });
-
-                await _iORequestService.UpdateIORequestsAsync(updateIO);
+                await _iORequestService.UpdateIORequestsAsync(updateIO,id);
 
                 return Ok("Update Successfully");
             }

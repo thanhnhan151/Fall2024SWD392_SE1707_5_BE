@@ -60,13 +60,12 @@ namespace WWMS.BAL.Services
                                 CurrentQuantity = (int)midWine.AvailableStock + detail.Quantity
                             };
 
-                            // Cập nhật thông tin phòng
                             midRoom.WineRooms.Add(wi);
                             midRoom.CurrentOccupancy = roomQuantity;
                             _unitOfWork.Rooms.UpdateEntity(midRoom);
                             await _unitOfWork.CompleteAsync();
 
-                            // Cập nhật thông tin rượu
+
                             midWine.AvailableStock = wineQuantity;
                             _unitOfWork.Wines.UpdateEntity(midWine);
                             await _unitOfWork.CompleteAsync();
@@ -82,12 +81,12 @@ namespace WWMS.BAL.Services
                                 throw new Exception("Not enough stock in either the wine or the room.");
                             }
 
-                            // Cập nhật thông tin rượu
+
                             midWine.AvailableStock = wineQuantity;
                             _unitOfWork.Wines.UpdateEntity(midWine);
                             await _unitOfWork.CompleteAsync();
 
-                            // Cập nhật thông tin phòng
+
                             midRoom.CurrentOccupancy = roomQuantity;
                             _unitOfWork.Rooms.UpdateEntity(midRoom);
                             await _unitOfWork.CompleteAsync();
@@ -118,9 +117,9 @@ namespace WWMS.BAL.Services
 
         public async Task<List<GetIORequest>> GetIORequestsListAsync() => _mapper.Map<List<GetIORequest>>(await _unitOfWork.IIORequests.GetAllEntitiesAsync());
 
-        public async Task UpdateIORequestsAsync(UpdateIORequest updateIORequest)
+        public async Task UpdateIORequestsAsync(UpdateIORequest updateIORequest, long id)
         {
-            var currentIORequest = await _unitOfWork.IIORequests.GetEntityByIdAsync(updateIORequest.Id);
+            var currentIORequest = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
 
             if (currentIORequest == null)
             {
@@ -151,7 +150,6 @@ namespace WWMS.BAL.Services
 
                     if (existingDetail != null)
                     {
-                        // Nếu không thay đổi thì sẽ lấy dữ liệu cũ điền vào 
                         existingDetail.Quantity = newDetail.Quantity != 0 ? newDetail.Quantity : existingDetail.Quantity;
                         existingDetail.WineId = newDetail.WineId != 0 ? newDetail.WineId : existingDetail.WineId;
 
