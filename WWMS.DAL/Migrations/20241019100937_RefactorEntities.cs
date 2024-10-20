@@ -666,9 +666,9 @@ namespace WWMS.DAL.Migrations
                 name: "FK_IORequestDetail_IORequest_IORequestId",
                 table: "IORequestDetail");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_IORequestDetail_WineRoom_WineRoomId",
-                table: "IORequestDetail");
+            //migrationBuilder.DropForeignKey(
+            //    name: "FK_IORequestDetail_WineRoom_WineRoomId",
+            //    table: "IORequestDetail");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_IORequestDetail_Wine_WineId",

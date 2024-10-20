@@ -42,7 +42,7 @@ public partial class WineWarehouseDbContext : DbContext
                               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         IConfigurationRoot configuration = builder.Build();
 
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), sqlOptions =>
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DeployConnection"), sqlOptions =>
             sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
