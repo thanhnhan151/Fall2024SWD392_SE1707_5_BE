@@ -29,13 +29,6 @@ namespace WWMS.BAL.Services
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
         }
-        private string GenRandomString(int length = 12)
-        {
-            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-            Random random = new();
-            return new string(Enumerable.Repeat(validChars, length)
-                                        .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
         #endregion
         public async Task<List<GetCheckRequestDetailListItemResponse>> GetAllAsync()
         => _mapper.Map<List<GetCheckRequestDetailListItemResponse>>
@@ -48,11 +41,13 @@ namespace WWMS.BAL.Services
         public async Task UpdateCheckRequestDetailAsync(UpdateCheckRequestDetailRequest updateCheckRequestDetailRequest)
         {
             CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(updateCheckRequestDetailRequest.Id);
-            if (checkRequestDetail is null || checkRequestDetail.Status.Equals("DISABLED") || checkRequestDetail.DueDate > DateTime.Now){
+            if (checkRequestDetail is null || checkRequestDetail.Status.Equals("DISABLED") || checkRequestDetail.DueDate > DateTime.Now)
+            {
                 throw new Exception("ID not found or overdue or disabled detail");
             }
-            checkRequestDetail.WineId = updateCheckRequestDetailRequest.Id;
+
             checkRequestDetail.WineRoomId = updateCheckRequestDetailRequest.WineRoomId;
+
             _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);
             _unitOfWork.CompleteAsync();
         }

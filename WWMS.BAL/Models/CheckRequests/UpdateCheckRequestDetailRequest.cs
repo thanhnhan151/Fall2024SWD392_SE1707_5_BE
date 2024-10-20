@@ -9,6 +9,5 @@ namespace WWMS.BAL.Models.CheckRequests
     {
         public long Id { get; set; }
         public long WineRoomId { get; set; }
-        public int ExpectedCurrQuantity { get; set; }
     }
 }

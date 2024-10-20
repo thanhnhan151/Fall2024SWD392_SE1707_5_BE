@@ -11,7 +11,10 @@ namespace WWMS.BAL.Models.CheckRequests
         public DateTime? StartDate { get; set; }
         public DateTime? DueDate { get; set; }
         public string Comments { get; set; } = string.Empty;
+        public long CheckRequestId { get; set; }
+
         public string CheckRequestCode { get; set; }
+
 
         //CHECKER REFERENCE
         public long CheckerId { get; set; }

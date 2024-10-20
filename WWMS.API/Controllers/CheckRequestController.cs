@@ -16,8 +16,8 @@ namespace WWMS.API.Controllers
     public class CheckRequestController : ControllerBase
     {
 
-        #region init
         private readonly ILogger<CheckRequestController> _logger;
+        #region init
         private readonly ICheckRequestService _checkRequestService;
 
         public CheckRequestController(
