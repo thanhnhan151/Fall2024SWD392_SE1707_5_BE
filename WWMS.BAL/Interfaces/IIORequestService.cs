@@ -10,7 +10,7 @@ namespace WWMS.BAL.Interfaces
 
         Task<GetIORequest?> GetIORequestsByIdAsync(long id);
 
-        Task UpdateIORequestsAsync(UpdateIORequest updateIORequest);
+        Task UpdateIORequestsAsync(UpdateIORequest updateIORequest,long id);
 
         Task DisableIORequestsAsync(long id);
     }
