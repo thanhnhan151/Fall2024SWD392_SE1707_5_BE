@@ -1,13 +1,11 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
-using WWMS.BAL.Services;
 
 namespace WWMS.API.Controllers
 {
     [ApiVersion(1)]
-    [Route("api/v{version:apiVersion}/dashboards")]
+    [Route("api/v{version:apiVersion}/dashboard")]
     [ApiController]
     public class DashboardController : ControllerBase
     {
@@ -36,11 +34,11 @@ namespace WWMS.API.Controllers
         /// <response code="500">Internal Server</response>
         //[PermissionAuthorize("Staff")]
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync(int month,int year)
+        public async Task<IActionResult> GetAllAsync(int month, int year)
         {
             try
             {
-                var result = await _dashBoardService.GetQuantityPerMonthListAsync(month,year);
+                var result = await _dashBoardService.GetQuantityPerMonthListAsync(month, year);
 
                 if (result is not null)
                 {
