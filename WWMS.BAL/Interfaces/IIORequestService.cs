@@ -1,4 +1,5 @@
 ﻿using WWMS.BAL.Models.IORequests;
+using WWMS.DAL.Entities;
 
 namespace WWMS.BAL.Interfaces
 {
@@ -13,5 +14,7 @@ namespace WWMS.BAL.Interfaces
         Task UpdateIORequestsAsync(UpdateIORequest updateIORequest,long id);
 
         Task DisableIORequestsAsync(long id);
+
+        Task<List<GetIORequest>> GetAllEntitiesByIOStyle(string ioType);
     }
 }

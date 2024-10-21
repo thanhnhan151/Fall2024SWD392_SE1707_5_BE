@@ -10,5 +10,7 @@ namespace WWMS.DAL.Interfaces
     public interface ICheckRequestDetailRepository : IGenericRepository<CheckRequestDetail>
     {
         Task<ICollection<CheckRequestDetail>> GetAllCheckRequestDetailsByReporterNameAsync(string reporterName);
+
+        Task<(int totalPositive, int totalNegative)> GetQuantityByMonthAndYearAsync(int month, int year);
     }
 }

@@ -264,6 +264,28 @@ namespace WWMS.API.Controllers
             }
         }
         #endregion
+
+
+
+        [HttpGet("style")]
+        public async Task<IActionResult> GetAllByIOStyleAsync(string io)
+        {
+            try
+            {
+                var result = await _iORequestService.GetAllEntitiesByIOStyle(io);
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return NotFound();
+        }
     }
 
 }
