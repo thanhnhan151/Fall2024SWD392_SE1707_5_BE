@@ -160,15 +160,20 @@ namespace WWMS.BAL.Services
             _unitOfWork.IIORequests.UpdateEntity(currentIORequest);
             await _unitOfWork.CompleteAsync();
         }
-    }
 
 
 
-
-
-
-
-
+        public async Task<List<GetIORequest>> GetAllEntitiesByIOStyle(string ioType) => _mapper.Map<List<GetIORequest>>(await _unitOfWork.IIORequests.GetEntitiesByIOStyleAsync(ioType));
 
     }
+
+
+
+
+
+
+
+
+
+}
 
