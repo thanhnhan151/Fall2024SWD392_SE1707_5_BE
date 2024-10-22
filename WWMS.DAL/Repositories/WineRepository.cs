@@ -44,7 +44,7 @@ namespace WWMS.DAL.Repositories
 
             if (checkExistWine.Status.Equals("Active"))
             {
-                checkExistWine.Status = "Inactive";
+                checkExistWine.Status = "InActive";
 
                 var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 

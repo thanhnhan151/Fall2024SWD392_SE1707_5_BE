@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
-using WWMS.BAL.Models.Rooms;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 
@@ -40,10 +39,10 @@ namespace WWMS.BAL.Services
                     foreach (var detail in createIORequest.IORequestDetails)
                     {
                         quantityMid += detail.Quantity;
-                      //  detail.CreatedTime = DateTime.UtcNow;
-                      //  detail.UpdatedTime = DateTime.UtcNow;
+                        //  detail.CreatedTime = DateTime.UtcNow;
+                        //  detail.UpdatedTime = DateTime.UtcNow;
 
-                       
+
                         var midWine = await _unitOfWork.Wines.GetEntityByIdAsync(detail.WineId);
 
                         if (ioRequestEntity.IOType == "In")
@@ -72,7 +71,7 @@ namespace WWMS.BAL.Services
                         }
                         else if (ioRequestEntity.IOType == "Out")
                         {
-                    
+
                             int wineQuantity = (int)midWine.AvailableStock - detail.Quantity;
                             int roomQuantity = (int)midRoom.CurrentOccupancy - detail.Quantity;
 
@@ -93,7 +92,7 @@ namespace WWMS.BAL.Services
                         }
 
 
-        
+
                     }
                 }
 
@@ -161,19 +160,8 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-
-
         public async Task<List<GetIORequest>> GetAllEntitiesByIOStyle(string ioType) => _mapper.Map<List<GetIORequest>>(await _unitOfWork.IIORequests.GetEntitiesByIOStyleAsync(ioType));
 
     }
-
-
-
-
-
-
-
-
-
 }
 

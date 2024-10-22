@@ -81,7 +81,7 @@ namespace WWMS.DAL.Repositories
 
             if (checkExistUser.Status.Equals("Active"))
             {
-                checkExistUser.Status = "Inactive";
+                checkExistUser.Status = "InActive";
 
                 var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 

@@ -51,7 +51,8 @@ namespace WWMS.BAL.Mappings
             #endregion
 
             #region Room
-            CreateMap<WineRoom, RoomItem>();
+            CreateMap<WineRoom, RoomItem>()
+                .ForMember(w => w.WineName, w => w.MapFrom(w => w.Wine.WineName));
 
             CreateMap<Room, GetRoomResponse>();
 

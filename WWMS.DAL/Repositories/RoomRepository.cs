@@ -14,9 +14,12 @@ namespace WWMS.DAL.Repositories
         {
         }
 
-        public  async Task<Room?> GetEntityByIdAsync(long? id)
+        public async Task<Room?> GetEntityByIdAsync(long? id)
         {
-            var result = await _dbSet.Include(w => w.WineRooms).FirstOrDefaultAsync(c => c.Id == id);
+            var result = await _dbSet
+                .Include(w => w.WineRooms)
+                        .ThenInclude(w => w.Wine)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (result != null) return result;
 
@@ -31,7 +34,7 @@ namespace WWMS.DAL.Repositories
 
             if (checkExistRoom.Status.Equals("Active"))
             {
-                checkExistRoom.Status = "Inactive";
+                checkExistRoom.Status = "InActive";
 
                 var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 
@@ -46,6 +49,7 @@ namespace WWMS.DAL.Repositories
 
             _dbSet.Update(checkExistRoom);
         }
+
         public async Task<Room?> GetByIdNotTrack(long? id)
         {
             // Kiểm tra xem thực thể đã được tải vào ngữ cảnh chưa
@@ -73,7 +77,5 @@ namespace WWMS.DAL.Repositories
 
             return true;
         }
-
-
     }
 }
