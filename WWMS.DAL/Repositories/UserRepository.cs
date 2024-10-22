@@ -22,17 +22,22 @@ namespace WWMS.DAL.Repositories
 
             var lowerRole = role.Value.ToString().ToLower();
 
-            if (lowerRole == "manager")
-            {
-                var usersManager = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 3)
-                           .Include(u => u.Role)
-                           .OrderByDescending(u => u.Id)
-                           .ToListAsync();
+            //if (lowerRole == "manager")
+            //{
+            //    var usersManager = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 3)
+            //               .Include(u => u.Role)
+            //               .OrderByDescending(u => u.Id)
+            //               .ToListAsync();
 
-                return usersManager;
-            }
+            //    return usersManager;
+            //}
 
-            var usersAdmin = await _dbSet.Where(u => u.Id != GetLoggedUserId())
+            //var usersAdmin = await _dbSet.Where(u => u.Id != GetLoggedUserId())
+            //               .Include(u => u.Role)
+            //               .OrderByDescending(u => u.Id)
+            //               .ToListAsync();
+
+            var usersAdmin = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 3)
                            .Include(u => u.Role)
                            .OrderByDescending(u => u.Id)
                            .ToListAsync();
