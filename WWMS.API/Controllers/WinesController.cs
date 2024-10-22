@@ -1,7 +1,5 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Wines;
 
@@ -39,7 +37,7 @@ namespace WWMS.API.Controllers
         ///       "mfd": "2024-09-25T09:00:27.824Z",
         ///       "importPrice": 10000000,
         ///       "exportPrice": 11000000,
-        ///       "categoryId": 1,
+        ///       "wineCategoryId": 1,
         ///       "countryId": 1,
         ///       "tasteId": 1,
         ///       "classId": 1,
@@ -164,7 +162,7 @@ namespace WWMS.API.Controllers
         ///       "mfd": "2024-09-25T09:00:27.824Z",
         ///       "importPrice": 10000000,
         ///       "exportPrice": 11000000,
-        ///       "categoryId": 2,
+        ///       "wineCategoryId": 2,
         ///       "countryId": 2,
         ///       "tasteId": 2,
         ///       "classId": 2,
