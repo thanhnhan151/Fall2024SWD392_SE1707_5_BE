@@ -19,9 +19,6 @@ namespace WWMS.BAL.Services
             _unitOfWork = unitOfWork;
         }
 
-
-
-
         public async Task CreateIORequestsAsync(CreateIORequest createIORequest)
         {
             var ioRequestEntity = _mapper.Map<IORequest>(createIORequest);
@@ -103,8 +100,6 @@ namespace WWMS.BAL.Services
                 await _unitOfWork.CompleteAsync();
             }
         }
-
-
 
         public async Task DisableIORequestsAsync(long id)
         {
