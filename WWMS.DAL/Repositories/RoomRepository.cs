@@ -48,19 +48,19 @@ namespace WWMS.DAL.Repositories
         }
         public async Task<Room?> GetByIdNotTrack(long? id)
         {
-            // Kiểm tra xem thực thể đã được tải vào ngữ cảnh chưa
+
             var localEntity = _dbSet.Local.FirstOrDefault(e => e.Id == id);
 
-            // Nếu không tìm thấy trong ngữ cảnh, tải từ cơ sở dữ liệu
+
             if (localEntity == null)
             {
                 localEntity = await _dbSet
-                    .AsNoTracking() // Ngăn chặn theo dõi
-                    .Include(w => w.WineRooms) // Bao gồm các thực thể liên quan
+                    .AsNoTracking() 
+                    .Include(w => w.WineRooms) 
                     .FirstOrDefaultAsync(e => e.Id == id);
             }
 
-            return localEntity; // Trả về thực thể, có thể là null nếu không tìm thấy
+            return localEntity; 
         }
 
         public async Task<bool> CheckExistRoomName(string roomName)
