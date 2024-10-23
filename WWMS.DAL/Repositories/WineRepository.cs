@@ -43,7 +43,7 @@ namespace WWMS.DAL.Repositories
             if (checkExistWine.Status == null) throw new Exception($"Bottle of wine with {id}'s status is null");
 
             if (checkExistWine.Status.Equals("Active"))
-            {
+            { 
                 checkExistWine.Status = "Inactive";
 
                 var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));

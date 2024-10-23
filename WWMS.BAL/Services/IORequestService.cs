@@ -22,88 +22,124 @@ namespace WWMS.BAL.Services
 
 
 
-
+        //TODO : get the requester infor from jwt token
         public async Task CreateIORequestsAsync(CreateIORequest createIORequest)
         {
             var ioRequestEntity = _mapper.Map<IORequest>(createIORequest);
             var midRoom = await _unitOfWork.Rooms.GetByIdNotTrack(ioRequestEntity.RoomId);
             var user = await _unitOfWork.Users.GetEntityByIdAsync(createIORequest.CheckerId);
-            int quantityMid = 0;
             ioRequestEntity.CreatedTime = DateTime.UtcNow;
             ioRequestEntity.UpdatedTime = DateTime.UtcNow;
             ioRequestEntity.Status = "Active";
             ioRequestEntity.CheckerName = user.Username;
+
             if (ioRequestEntity.IOType == "In" || ioRequestEntity.IOType == "Out")
             {
                 if (ioRequestEntity.IORequestDetails != null)
                 {
                     foreach (var detail in createIORequest.IORequestDetails)
                     {
-                        quantityMid += detail.Quantity;
-                      //  detail.CreatedTime = DateTime.UtcNow;
-                      //  detail.UpdatedTime = DateTime.UtcNow;
-
-                       
                         var midWine = await _unitOfWork.Wines.GetEntityByIdAsync(detail.WineId);
 
                         if (ioRequestEntity.IOType == "In")
                         {
-                            // Xử lý khi IOType là "In"
-                            int wineQuantity = (int)midWine.AvailableStock + detail.Quantity;
-                            int roomQuantity = (int)midRoom.CurrentOccupancy + detail.Quantity;
-
-                            var wi = new WineRoom()
-                            {
-                                RoomId = midRoom.Id,
-                                WineId = detail.WineId,
-                                TotalQuantity = detail.Quantity,
-                                CurrentQuantity = (int)midWine.AvailableStock + detail.Quantity
-                            };
-
-                            midRoom.WineRooms.Add(wi);
-                            midRoom.CurrentOccupancy = roomQuantity;
-                            _unitOfWork.Rooms.UpdateEntity(midRoom);
-                            await _unitOfWork.CompleteAsync();
-
-
-                            midWine.AvailableStock = wineQuantity;
-                            _unitOfWork.Wines.UpdateEntity(midWine);
-                            await _unitOfWork.CompleteAsync();
+                            await UpdateOrCreateWineRoom(midRoom, midWine, detail);
                         }
                         else if (ioRequestEntity.IOType == "Out")
                         {
-                    
-                            int wineQuantity = (int)midWine.AvailableStock - detail.Quantity;
-                            int roomQuantity = (int)midRoom.CurrentOccupancy - detail.Quantity;
-
-                            if (wineQuantity < 0 || roomQuantity < 0)
-                            {
-                                throw new Exception("Not enough stock in either the wine or the room.");
-                            }
-
-
-                            midWine.AvailableStock = wineQuantity;
-                            _unitOfWork.Wines.UpdateEntity(midWine);
-                            await _unitOfWork.CompleteAsync();
-
-
-                            midRoom.CurrentOccupancy = roomQuantity;
-                            _unitOfWork.Rooms.UpdateEntity(midRoom);
-                            await _unitOfWork.CompleteAsync();
+                            await UpdateWhenOutPutWineRoom(midRoom, midWine, detail);
                         }
-
-
-        
                     }
                 }
 
-
                 ioRequestEntity.IORequestDetails = _mapper.Map<List<IORequestDetail>>(createIORequest.IORequestDetails);
-
                 await _unitOfWork.IIORequests.AddEntityAsync(ioRequestEntity);
                 await _unitOfWork.CompleteAsync();
             }
         }
+
+
+
+        private async Task UpdateOrCreateWineRoom(Room midRoom, Wine midWine, CreateIORequestDetail detail)
+        {
+            var existingWineRoom = midRoom.WineRooms.FirstOrDefault(wr => wr.WineId == detail.WineId && wr.RoomId == midRoom.Id);
+
+            if (existingWineRoom != null)
+            {
+                // existingWineRoom.TotalQuantity += detail.Quantity;
+                existingWineRoom.TotalQuantity = 0;
+                existingWineRoom.CurrentQuantity += detail.Quantity;
+
+                if (existingWineRoom.CurrentQuantity > midRoom.Capacity)
+                {
+                    throw new Exception($"Overstock in room {midRoom.RoomName}, current total: {existingWineRoom.TotalQuantity}, capacity: {midRoom.Capacity}");
+                }
+            }
+            else
+            {
+                var newWineRoom = new WineRoom
+                {
+                    RoomId = midRoom.Id,
+                    WineId = detail.WineId,
+                    // TotalQuantity = detail.Quantity,
+                    TotalQuantity = 0,
+                    CurrentQuantity = (int)midWine.AvailableStock + detail.Quantity
+                };
+                midRoom.WineRooms ??= new List<WineRoom>();
+                midRoom.WineRooms.Add(newWineRoom);
+            }
+
+            midRoom.CurrentOccupancy += detail.Quantity;
+            if (midRoom.CurrentOccupancy > midRoom.Capacity)
+            {
+                throw new Exception($"Room over capacity. Current: {midRoom.CurrentOccupancy}, Capacity: {midRoom.Capacity}");
+            }
+
+            midWine.AvailableStock += detail.Quantity;
+
+            _unitOfWork.Rooms.UpdateEntity(midRoom);
+            _unitOfWork.Wines.UpdateEntity(midWine);
+            await _unitOfWork.CompleteAsync();
+        }
+
+        private async Task UpdateWhenOutPutWineRoom(Room midRoom, Wine midWine, CreateIORequestDetail detail)
+        {
+            var existingWineRoom = midRoom.WineRooms.FirstOrDefault(wr => wr.WineId == detail.WineId && wr.RoomId == midRoom.Id);
+
+            if (existingWineRoom != null)
+            {
+                if (existingWineRoom.CurrentQuantity < detail.Quantity)
+                {
+                    throw new Exception("Not enough stock to fulfill the request.");
+                }
+
+                // existingWineRoom.TotalQuantity -= detail.Quantity;
+                existingWineRoom.TotalQuantity = 0;
+                existingWineRoom.CurrentQuantity -= detail.Quantity;
+            }
+            else
+            {
+                throw new Exception("WineRoom entry not found for this wine and room.");
+            }
+
+            midRoom.CurrentOccupancy -= detail.Quantity;
+            if (midRoom.CurrentOccupancy < 0)
+            {
+                throw new Exception("Not enough stock in the room.");
+            }
+
+            if (midWine.AvailableStock < detail.Quantity)
+            {
+                throw new Exception("Not enough wine stock.");
+            }
+
+            midWine.AvailableStock -= detail.Quantity;
+
+            _unitOfWork.Rooms.UpdateEntity(midRoom);
+            _unitOfWork.Wines.UpdateEntity(midWine);
+            await _unitOfWork.CompleteAsync();
+        }
+
 
 
 
@@ -162,8 +198,15 @@ namespace WWMS.BAL.Services
         }
 
 
-
         public async Task<List<GetIORequest>> GetAllEntitiesByIOStyle(string ioType) => _mapper.Map<List<GetIORequest>>(await _unitOfWork.IIORequests.GetEntitiesByIOStyleAsync(ioType));
+
+
+
+
+
+
+
+
 
     }
 

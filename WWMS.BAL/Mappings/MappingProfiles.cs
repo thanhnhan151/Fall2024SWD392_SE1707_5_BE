@@ -61,6 +61,8 @@ namespace WWMS.BAL.Mappings
 
             CreateMap<UpdateRoomRequest, Room>();
 
+
+        
             CreateMap<Room, GetRoom>();
 
             CreateMap<WineRoom, GetRoomItemDetails>();
