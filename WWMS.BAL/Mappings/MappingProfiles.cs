@@ -30,16 +30,7 @@ namespace WWMS.BAL.Mappings
             #region Wine
             CreateMap<Wine, GetWineResponse>();
 
-            CreateMap<Wine, GetWineDetailResponse>()
-                .ForMember(w => w.Category, w => w.MapFrom(w => w.WineCategory.CategoryName))
-                .ForMember(w => w.Country, w => w.MapFrom(w => w.Country.CountryName))
-                .ForMember(w => w.Taste, w => w.MapFrom(w => w.Taste.TasteType))
-                .ForMember(w => w.Class, w => w.MapFrom(w => w.Class.ClassType))
-                .ForMember(w => w.Qualification, w => w.MapFrom(w => w.Qualification.QualificationType))
-                .ForMember(w => w.Cork, w => w.MapFrom(w => w.Cork.CorkType))
-                .ForMember(w => w.Brand, w => w.MapFrom(w => w.Brand.BrandName))
-                .ForMember(w => w.BottleSize, w => w.MapFrom(w => w.BottleSize.BottleSizeType))
-                .ForMember(w => w.AlcoholByVolume, w => w.MapFrom(w => w.AlcoholByVolume.AlcoholByVolumeType));
+            CreateMap<Wine, GetWineDetailResponse>();
             #endregion
 
             #region Wine Category
@@ -51,7 +42,8 @@ namespace WWMS.BAL.Mappings
             #endregion
 
             #region Room
-            CreateMap<WineRoom, RoomItem>();
+            CreateMap<WineRoom, RoomItem>()
+                .ForMember(w => w.WineName, w => w.MapFrom(w => w.Wine.WineName));
 
             CreateMap<Room, GetRoomResponse>();
 

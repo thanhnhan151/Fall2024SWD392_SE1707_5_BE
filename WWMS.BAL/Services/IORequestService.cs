@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
-using WWMS.BAL.Models.Rooms;
 using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 
@@ -22,7 +21,9 @@ namespace WWMS.BAL.Services
 
 
 
+
         //TODO : get the requester infor from jwt token
+
         public async Task CreateIORequestsAsync(CreateIORequest createIORequest)
         {
             var ioRequestEntity = _mapper.Map<IORequest>(createIORequest);
@@ -39,6 +40,8 @@ namespace WWMS.BAL.Services
                 {
                     foreach (var detail in createIORequest.IORequestDetails)
                     {
+
+
                         var midWine = await _unitOfWork.Wines.GetEntityByIdAsync(detail.WineId);
 
                         if (ioRequestEntity.IOType == "In")
@@ -47,6 +50,7 @@ namespace WWMS.BAL.Services
                         }
                         else if (ioRequestEntity.IOType == "Out")
                         {
+
                             await UpdateWhenOutPutWineRoom(midRoom, midWine, detail);
                         }
                     }
@@ -88,6 +92,7 @@ namespace WWMS.BAL.Services
                 midRoom.WineRooms ??= new List<WineRoom>();
                 midRoom.WineRooms.Add(newWineRoom);
             }
+
 
             midRoom.CurrentOccupancy += detail.Quantity;
             if (midRoom.CurrentOccupancy > midRoom.Capacity)
@@ -139,8 +144,6 @@ namespace WWMS.BAL.Services
             _unitOfWork.Wines.UpdateEntity(midWine);
             await _unitOfWork.CompleteAsync();
         }
-
-
 
 
         public async Task DisableIORequestsAsync(long id)
@@ -209,14 +212,5 @@ namespace WWMS.BAL.Services
 
 
     }
-
-
-
-
-
-
-
-
-
 }
 

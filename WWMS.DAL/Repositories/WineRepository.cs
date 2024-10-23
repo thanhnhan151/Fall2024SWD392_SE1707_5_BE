@@ -15,7 +15,22 @@ namespace WWMS.DAL.Repositories
         }
 
         public override async Task<ICollection<Wine>> GetAllEntitiesAsync()
-            => await _dbSet.OrderByDescending(w => w.Id).ToListAsync();
+            => await _dbSet.Select(w =>
+            new Wine
+            {
+                Id = w.Id,
+                WineName = w.WineName,
+                AvailableStock = w.AvailableStock,
+                Description = w.Description,
+                ImageUrl = w.ImageUrl,
+                Supplier = w.Supplier,
+                MFD = w.MFD,
+                ImportPrice = w.ImportPrice,
+                ExportPrice = w.ExportPrice,
+                Status = w.Status
+            })
+            .OrderByDescending(w => w.Id)
+            .ToListAsync();
 
         public async Task<Wine?> GetByIdWithIncludeAsync(long id)
         {
@@ -29,6 +44,28 @@ namespace WWMS.DAL.Repositories
                 .Include(c => c.Brand)
                 .Include(c => c.BottleSize)
                 .Include(c => c.AlcoholByVolume)
+                .Select(w =>
+                        new Wine
+                        {
+                            Id = w.Id,
+                            WineName = w.WineName,
+                            AvailableStock = w.AvailableStock,
+                            Description = w.Description,
+                            ImageUrl = w.ImageUrl,
+                            Supplier = w.Supplier,
+                            MFD = w.MFD,
+                            ImportPrice = w.ImportPrice,
+                            ExportPrice = w.ExportPrice,
+                            Country = w.Country,
+                            WineCategory = new WineCategory { Id = w.WineCategory.Id, CategoryName = w.WineCategory.CategoryName },
+                            Taste = w.Taste,
+                            Class = w.Class,
+                            Qualification = w.Qualification,
+                            Cork = w.Cork,
+                            Brand = w.Brand,
+                            BottleSize = w.BottleSize,
+                            AlcoholByVolume = w.AlcoholByVolume
+                        })
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (result != null) return result;
@@ -43,8 +80,9 @@ namespace WWMS.DAL.Repositories
             if (checkExistWine.Status == null) throw new Exception($"Bottle of wine with {id}'s status is null");
 
             if (checkExistWine.Status.Equals("Active"))
-            { 
-                checkExistWine.Status = "Inactive";
+
+            {
+                checkExistWine.Status = "InActive";
 
                 var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 

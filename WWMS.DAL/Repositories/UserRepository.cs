@@ -16,11 +16,11 @@ namespace WWMS.DAL.Repositories
 
         public override async Task<ICollection<User>> GetAllEntitiesAsync()
         {
-            var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase));
+            //var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase));
 
-            if (role == null) return new List<User>();
+            //if (role == null) return new List<User>();
 
-            var lowerRole = role.Value.ToString().ToLower();
+            //var lowerRole = role.Value.ToString().ToLower();
 
             //if (lowerRole == "manager")
             //{
@@ -81,7 +81,7 @@ namespace WWMS.DAL.Repositories
 
             if (checkExistUser.Status.Equals("Active"))
             {
-                checkExistUser.Status = "Inactive";
+                checkExistUser.Status = "InActive";
 
                 var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 
