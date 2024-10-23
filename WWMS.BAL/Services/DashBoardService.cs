@@ -24,39 +24,7 @@ namespace WWMS.BAL.Services
             _unitOfWork = unitOfWork;
         }
 
-        //public async Task<List<GettMonthQuantity>> GetQuantityPerMonthListAsync()
-        //{
 
-        //    // 1 -> 12 moth
-        //    var monthlyQuantities = new List<GettMonthQuantity>();
-
-
-        //    for (int month = 1; month <= 12; month++)
-        //    {
-        //        var importByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleAndMonthAsync("In",month);
-        //        var exportByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleAndMonthAsync("Out", month);
-        //        // must get lack of product and over producr
-        //        var checkRequest = await _unitOfWork.CheckRequestDetails.GetQuantityByMonthAsync(month);
-        //        int importCount = importByMonth.Count;
-        //        int exportCount = exportByMonth.Count;
-
-        //        monthlyQuantities.Add(new GettMonthQuantity
-        //        {
-        //            Month = month,
-        //            ImportRequestQuantity = importCount,
-        //            ExportRequestQuantity = exportCount,
-        //            overstock = checkRequest.totalPositive,
-        //            insufficientStock = checkRequest.totalNegative
-        //        });
-        //    }
-
-
-
-        //    return monthlyQuantities;
-
-
-
-        //}
 
         public async Task<List<GettMonthQuantity>> GetQuantityPerMonthListAsync(int month,int year)
         {
@@ -69,7 +37,7 @@ namespace WWMS.BAL.Services
                 var checkRequest = await _unitOfWork.CheckRequestDetails.GetQuantityByMonthAndYearAsync(month, year);
 
                 int importCount = importByMonth.Count;
-                int exportCount = exportByMonth.Count;
+                int exportCount = exportByMonth.Count; 
 
                 monthlyQuantities.Add(new GettMonthQuantity
                 {
