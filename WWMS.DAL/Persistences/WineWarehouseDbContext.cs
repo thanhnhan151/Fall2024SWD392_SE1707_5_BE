@@ -133,26 +133,6 @@ public partial class WineWarehouseDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(25); // Adjust length as necessary
 
-            // Common fields from CommonEntity
-            entity.Property(u => u.CreatedTime)
-                .IsRequired(false); // Optional: set as required if needed
-
-            entity.Property(u => u.UpdatedTime)
-                .IsRequired(false); // Optional: set as required if needed
-
-            entity.Property(u => u.DeletedTime)
-                .IsRequired(false); // Optional: make nullable if it's not always set
-
-            entity.Property(u => u.CreatedBy)
-                .IsRequired(false)
-                .HasMaxLength(50); // Adjust length as necessary
-
-            entity.Property(u => u.UpdatedBy)
-                .IsRequired(false)
-                .HasMaxLength(50); // Adjust length as necessary
-
-            entity.Property(u => u.DeletedBy)
-                .HasMaxLength(50); // Adjust length as necessary
             // Relationships
             entity.HasMany(wc => wc.Wines)
                 .WithOne(w => w.WineCategory) // Assuming Wine has a navigation property for WineCategory
@@ -336,7 +316,13 @@ public partial class WineWarehouseDbContext : DbContext
             entity.HasKey(wr => wr.Id);
 
             // Properties configuration
-            entity.Property(wr => wr.TotalQuantity)
+            entity.Property(wr => wr.InitialQuantity)
+                .IsRequired();
+
+            entity.Property(wr => wr.Import)
+                .IsRequired();
+
+            entity.Property(wr => wr.Export)
                 .IsRequired();
 
             entity.Property(wr => wr.CurrentQuantity)

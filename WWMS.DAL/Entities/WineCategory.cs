@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WWMS.DAL.Entities
 {
     [Table("WineCategory")]
-    public class WineCategory : CommonEntity
+    public class WineCategory
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }

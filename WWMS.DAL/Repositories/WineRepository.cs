@@ -57,7 +57,7 @@ namespace WWMS.DAL.Repositories
                             ImportPrice = w.ImportPrice,
                             ExportPrice = w.ExportPrice,
                             Country = w.Country,
-                            WineCategory = new WineCategory { Id = w.WineCategory.Id, CategoryName = w.WineCategory.CategoryName },
+                            WineCategory = w.WineCategory,
                             Taste = w.Taste,
                             Class = w.Class,
                             Qualification = w.Qualification,

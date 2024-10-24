@@ -70,13 +70,13 @@ namespace WWMS.BAL.Services
 
             if (existingWineRoom != null)
             {
-                // existingWineRoom.TotalQuantity += detail.Quantity;
-                existingWineRoom.TotalQuantity = 0;
+                // existingWineRoom.InitialQuantity += detail.Quantity;
+                existingWineRoom.InitialQuantity = 0;
                 existingWineRoom.CurrentQuantity += detail.Quantity;
 
                 if (existingWineRoom.CurrentQuantity > midRoom.Capacity)
                 {
-                    throw new Exception($"Overstock in room {midRoom.RoomName}, current total: {existingWineRoom.TotalQuantity}, capacity: {midRoom.Capacity}");
+                    throw new Exception($"Overstock in room {midRoom.RoomName}, current total: {existingWineRoom.InitialQuantity}, capacity: {midRoom.Capacity}");
                 }
             }
             else
@@ -85,8 +85,8 @@ namespace WWMS.BAL.Services
                 {
                     RoomId = midRoom.Id,
                     WineId = detail.WineId,
-                    // TotalQuantity = detail.Quantity,
-                    TotalQuantity = 0,
+                    // InitialQuantity = detail.Quantity,
+                    InitialQuantity = 0,
                     CurrentQuantity = (int)midWine.AvailableStock + detail.Quantity
                 };
                 midRoom.WineRooms ??= new List<WineRoom>();
@@ -118,8 +118,8 @@ namespace WWMS.BAL.Services
                     throw new Exception("Not enough stock to fulfill the request.");
                 }
 
-                // existingWineRoom.TotalQuantity -= detail.Quantity;
-                existingWineRoom.TotalQuantity = 0;
+                // existingWineRoom.InitialQuantity -= detail.Quantity;
+                existingWineRoom.InitialQuantity = 0;
                 existingWineRoom.CurrentQuantity -= detail.Quantity;
             }
             else
