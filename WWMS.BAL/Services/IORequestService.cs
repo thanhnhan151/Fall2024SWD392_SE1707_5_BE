@@ -71,7 +71,7 @@ namespace WWMS.BAL.Services
                 throw new Exception("IORequest not found.");
             }
 
-            // Cập nhật các trường trong currentIORequest
+
             currentIORequest.RequestCode = updateIORequest.RequestCode ?? currentIORequest.RequestCode;
             currentIORequest.StartDate = updateIORequest.StartDate ?? currentIORequest.StartDate;
             currentIORequest.DueDate = updateIORequest.DueDate ?? currentIORequest.DueDate;
@@ -86,10 +86,7 @@ namespace WWMS.BAL.Services
             var user = await _unitOfWork.Users.GetEntityByIdAsync((long)currentIORequest.CheckerId);
             currentIORequest.CheckerName = user.Username;
             currentIORequest.Status = "Done";
-       //     currentIORequest.UpdatedTime = DateTime.Now;
 
-            // Kiểm tra xem có dữ liệu chi tiết yêu cầu không
-            // cía này thì ok
             if (updateIORequest.UpIORequestDetails != null && updateIORequest.UpIORequestDetails.Any())
             {
                 foreach (var newDetail in updateIORequest.UpIORequestDetails)
@@ -98,7 +95,7 @@ namespace WWMS.BAL.Services
 
                     if (existingDetail != null)
                     {
-                        // Cập nhật số lượng và ID rượu
+                
                         existingDetail.Quantity = newDetail.Quantity != 0 ? newDetail.Quantity : existingDetail.Quantity;
                         existingDetail.WineId = newDetail.WineId != 0 ? newDetail.WineId : existingDetail.WineId;
 
@@ -159,7 +156,7 @@ namespace WWMS.BAL.Services
             }
             else
             {
-                //
+                
                 var newWineRoom = new WineRoom
                 {
                     RoomId = midRoom.Id,
