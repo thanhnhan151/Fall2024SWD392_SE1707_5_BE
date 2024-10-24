@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Wines;
@@ -12,19 +13,26 @@ namespace WWMS.BAL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IValidator<CreateUpdateWineRequest> _createUpdateWineRequestValidator;
 
         public WineService(
             IUnitOfWork unitOfWork
             , IMapper mapper
-            , IHttpContextAccessor httpContextAccessor)
+            , IHttpContextAccessor httpContextAccessor
+            , IValidator<CreateUpdateWineRequest> createUpdateWineRequestValidator)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
+            _createUpdateWineRequestValidator = createUpdateWineRequestValidator;
         }
 
         public async Task CreateWineAsync(CreateUpdateWineRequest createWineRequest)
         {
+            var validationResult = await _createUpdateWineRequestValidator.ValidateAsync(createWineRequest);
+
+            if (!validationResult.IsValid) throw new ValidationException(validationResult.Errors);
+
             await _unitOfWork.Wines.AddEntityAsync(MappingCreateRequest(createWineRequest));
 
             await _unitOfWork.CompleteAsync();
@@ -44,6 +52,10 @@ namespace WWMS.BAL.Services
         public async Task UpdateWineAsync(long id, CreateUpdateWineRequest updateWineRequest)
         {
             var wine = await _unitOfWork.Wines.GetEntityByIdAsync(id) ?? throw new Exception($"Wine with id: {id} does not exist");
+
+            var validationResult = await _createUpdateWineRequestValidator.ValidateAsync(updateWineRequest);
+
+            if (!validationResult.IsValid) throw new ValidationException(validationResult.Errors);
 
             _unitOfWork.Wines.UpdateEntity(MappingUpdateRequest(updateWineRequest));
 
