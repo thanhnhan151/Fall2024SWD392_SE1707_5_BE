@@ -1,8 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Mappings;
+using WWMS.BAL.Models.Users;
+using WWMS.BAL.Models.Wines;
 using WWMS.BAL.Services;
+using WWMS.BAL.Validators.Users;
+using WWMS.BAL.Validators.Wines;
 using WWMS.DAL.Infrastructures;
 using WWMS.DAL.Persistences;
 
@@ -12,14 +17,19 @@ namespace WWMS.BAL
     {
         public static IServiceCollection ConfigureBALServices(this IServiceCollection services)
         {
+            #region DbContext
             services.AddDbContext<WineWarehouseDbContext>(options =>
             {
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
+            #endregion
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+            #region AutoMapper
             services.AddAutoMapper(typeof(MappingProfiles));
+            #endregion
+
+            #region Services
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IUserService, UserService>();
 
@@ -64,6 +74,13 @@ namespace WWMS.BAL
             services.AddScoped<IReportCheckRequestService, ReportCheckRequestService>();
 
             services.AddScoped<IDashBoardService, DashBoardService>();
+            #endregion
+
+            #region Validators
+            services.AddScoped<IValidator<CreateUserRequest>, CreateUserRequestValidator>();
+            services.AddScoped<IValidator<CreateUpdateWineRequest>, CreateUpdateWineRequestValidator>();
+            #endregion
+
             return services;
         }
     }

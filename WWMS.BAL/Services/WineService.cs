@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Wines;
@@ -12,19 +13,26 @@ namespace WWMS.BAL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IValidator<CreateUpdateWineRequest> _createUpdateWineRequestValidator;
 
         public WineService(
             IUnitOfWork unitOfWork
             , IMapper mapper
-            , IHttpContextAccessor httpContextAccessor)
+            , IHttpContextAccessor httpContextAccessor
+            , IValidator<CreateUpdateWineRequest> createUpdateWineRequestValidator)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
+            _createUpdateWineRequestValidator = createUpdateWineRequestValidator;
         }
 
         public async Task CreateWineAsync(CreateUpdateWineRequest createWineRequest)
         {
+            var validationResult = await _createUpdateWineRequestValidator.ValidateAsync(createWineRequest);
+
+            if (!validationResult.IsValid) throw new ValidationException(validationResult.Errors);
+
             await _unitOfWork.Wines.AddEntityAsync(MappingCreateRequest(createWineRequest));
 
             await _unitOfWork.CompleteAsync();
@@ -45,7 +53,11 @@ namespace WWMS.BAL.Services
         {
             var wine = await _unitOfWork.Wines.GetEntityByIdAsync(id) ?? throw new Exception($"Wine with id: {id} does not exist");
 
-            _unitOfWork.Wines.UpdateEntity(MappingUpdateRequest(updateWineRequest));
+            var validationResult = await _createUpdateWineRequestValidator.ValidateAsync(updateWineRequest);
+
+            if (!validationResult.IsValid) throw new ValidationException(validationResult.Errors);
+
+            _unitOfWork.Wines.UpdateEntity(MappingUpdateRequest(wine, updateWineRequest));
 
             await _unitOfWork.CompleteAsync();
         }
@@ -84,28 +96,25 @@ namespace WWMS.BAL.Services
             return wine;
         }
 
-        private Wine MappingUpdateRequest(CreateUpdateWineRequest updateWineRequest)
+        private Wine MappingUpdateRequest(Wine wine, CreateUpdateWineRequest updateWineRequest)
         {
-            var wine = new Wine
-            {
-                WineName = updateWineRequest.WineName,
-                AvailableStock = updateWineRequest.AvailableStock,
-                Description = updateWineRequest.Description,
-                ImageUrl = updateWineRequest.ImageUrl,
-                Supplier = updateWineRequest.Supplier,
-                MFD = updateWineRequest.MFD,
-                ImportPrice = updateWineRequest.ImportPrice,
-                ExportPrice = updateWineRequest.ExportPrice,
-                WineCategoryId = updateWineRequest.WineCategoryId,
-                CountryId = updateWineRequest.CountryId,
-                TasteId = updateWineRequest.TasteId,
-                ClassId = updateWineRequest.ClassId,
-                QualificationId = updateWineRequest.QualificationId,
-                CorkId = updateWineRequest.CorkId,
-                BrandId = updateWineRequest.BrandId,
-                BottleSizeId = updateWineRequest.BottleSizeId,
-                AlcoholByVolumeId = updateWineRequest.AlcoholByVolumeId
-            };
+            wine.WineName = updateWineRequest.WineName;
+            wine.AvailableStock = updateWineRequest.AvailableStock;
+            wine.Description = updateWineRequest.Description;
+            wine.ImageUrl = updateWineRequest.ImageUrl;
+            wine.Supplier = updateWineRequest.Supplier;
+            wine.MFD = updateWineRequest.MFD;
+            wine.ImportPrice = updateWineRequest.ImportPrice;
+            wine.ExportPrice = updateWineRequest.ExportPrice;
+            wine.WineCategoryId = updateWineRequest.WineCategoryId;
+            wine.CountryId = updateWineRequest.CountryId;
+            wine.TasteId = updateWineRequest.TasteId;
+            wine.ClassId = updateWineRequest.ClassId;
+            wine.QualificationId = updateWineRequest.QualificationId;
+            wine.CorkId = updateWineRequest.CorkId;
+            wine.BrandId = updateWineRequest.BrandId;
+            wine.BottleSizeId = updateWineRequest.BottleSizeId;
+            wine.AlcoholByVolumeId = updateWineRequest.AlcoholByVolumeId;
 
             var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 

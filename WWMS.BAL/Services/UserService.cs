@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using WWMS.BAL.Helpers;
 using WWMS.BAL.Interfaces;
@@ -14,17 +15,20 @@ namespace WWMS.BAL.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
+        private readonly IValidator<CreateUserRequest> _createUserRequestValidator;
 
         public UserService(
             IUnitOfWork unitOfWork
             , IMapper mapper
             , IHttpContextAccessor httpContextAccessor
-            , IEmailService emailService)
+            , IEmailService emailService
+            , IValidator<CreateUserRequest> createUserRequestValidator)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
+            _createUserRequestValidator = createUserRequestValidator;
         }
 
         private string GenRandomString(int length = 12)
@@ -38,6 +42,10 @@ namespace WWMS.BAL.Services
         public async Task CreateUserAsync(CreateUserRequest createUserRequest)
         {
             if (await _unitOfWork.Users.CheckExistUsernameAsync(createUserRequest.Username)) throw new Exception($"User with username: {createUserRequest.Username} has already existed");
+
+            var validationResult = await _createUserRequestValidator.ValidateAsync(createUserRequest);
+
+            if (!validationResult.IsValid) throw new ValidationException(validationResult.Errors);
 
             await _unitOfWork.Users.AddEntityAsync(await MappingCreateRequest(createUserRequest));
 
