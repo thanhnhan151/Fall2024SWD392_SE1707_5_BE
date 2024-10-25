@@ -63,6 +63,10 @@ namespace WWMS.BAL
 
             services.AddScoped<IAlcoholByVolumeService, AlcoholByVolumeService>();
 
+            services.AddScoped<ISuplierService, SuplierService>();
+
+            services.AddScoped<ICustomerService, CustomerService>();
+
             services.AddScoped<IRoleService, RoleService>();
 
             services.AddScoped<IReportIORequestService, ReportIORequestService>();

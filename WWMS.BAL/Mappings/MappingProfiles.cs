@@ -5,11 +5,13 @@ using WWMS.BAL.Models.Brands;
 using WWMS.BAL.Models.Classes;
 using WWMS.BAL.Models.Corks;
 using WWMS.BAL.Models.Countries;
+using WWMS.BAL.Models.Customers;
 using WWMS.BAL.Models.IORequests;
 using WWMS.BAL.Models.Qualifications;
 using WWMS.BAL.Models.ReportIORequest;
 using WWMS.BAL.Models.Roles;
 using WWMS.BAL.Models.Rooms;
+using WWMS.BAL.Models.Supliers;
 using WWMS.BAL.Models.Tastes;
 using WWMS.BAL.Models.Users;
 using WWMS.BAL.Models.WineCategories;
@@ -54,7 +56,7 @@ namespace WWMS.BAL.Mappings
             CreateMap<UpdateRoomRequest, Room>();
 
 
-        
+
             CreateMap<Room, GetRoom>();
 
             CreateMap<WineRoom, GetRoomItemDetails>();
@@ -65,7 +67,7 @@ namespace WWMS.BAL.Mappings
 
             CreateMap<IORequest, GetIORequest>();
             CreateMap<GetIORequest, IORequest>();
-       
+
             CreateMap<CreateIORequest, IORequest>();
 
             CreateMap<IORequestDetail, GetIORequestDetail>();
@@ -117,6 +119,14 @@ namespace WWMS.BAL.Mappings
 
             #region Role
             CreateMap<Role, GetRoleResponse>();
+            #endregion
+
+            #region Suplier
+            CreateMap<Suplier, GetSuplierResponse>();
+            #endregion
+
+            #region Customer
+            CreateMap<Customer, GetCustomerResponse>();
             #endregion
         }
     }

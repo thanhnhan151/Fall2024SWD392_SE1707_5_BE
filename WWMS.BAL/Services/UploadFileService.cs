@@ -2,11 +2,6 @@
 using Firebase.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WWMS.BAL.Interfaces;
 using WWMS.DAL.Infrastructures;
 

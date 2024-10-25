@@ -35,13 +35,13 @@ namespace WWMS.BAL.Services
             ioRequestEntity.Status = "Pending";
             ioRequestEntity.CheckerName = user.Username;
 
- 
+
             if (createIORequest.IORequestDetails == null || !createIORequest.IORequestDetails.Any())
             {
                 throw new Exception("You forgot to add wine in the IO request part.");
             }
 
-           
+
             ioRequestEntity.IORequestDetails = _mapper.Map<List<IORequestDetail>>(createIORequest.IORequestDetails);
 
 
@@ -64,7 +64,7 @@ namespace WWMS.BAL.Services
         public async Task UpdateIORequestsAsync(UpdateIORequest updateIORequest, long id)
         {
             var currentIORequest = _mapper.Map<GetIORequest?>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
-           // var currentIORequest = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
+            // var currentIORequest = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
 
             if (currentIORequest == null)
             {
@@ -95,7 +95,7 @@ namespace WWMS.BAL.Services
 
                     if (existingDetail != null)
                     {
-                
+
                         existingDetail.Quantity = newDetail.Quantity != 0 ? newDetail.Quantity : existingDetail.Quantity;
                         existingDetail.WineId = newDetail.WineId != 0 ? newDetail.WineId : existingDetail.WineId;
 
@@ -114,7 +114,7 @@ namespace WWMS.BAL.Services
                     }
                 }
             }
-            else 
+            else
             {
                 foreach (var existingDetail in currentIORequest.IORequestDetails)
                 {
@@ -156,7 +156,7 @@ namespace WWMS.BAL.Services
             }
             else
             {
-                
+
                 var newWineRoom = new WineRoom
                 {
                     RoomId = midRoom.Id,
@@ -176,7 +176,7 @@ namespace WWMS.BAL.Services
                 throw new Exception($"Room over capacity. Current: {midRoom.CurrentOccupancy}, Capacity: {midRoom.Capacity}");
             }
 
-            midWine.AvailableStock += detail.Quantity;
+            //midWine.AvailableStock += detail.Quantity;
 
             _unitOfWork.Rooms.UpdateEntity(midRoom);
             _unitOfWork.Wines.UpdateEntity(midWine);
@@ -208,12 +208,12 @@ namespace WWMS.BAL.Services
                 throw new Exception("Not enough stock in the room.");
             }
 
-            if (midWine.AvailableStock < detail.Quantity)
-            {
-                throw new Exception("Not enough wine stock.");
-            }
+            //if (midWine.AvailableStock < detail.Quantity)
+            //{
+            //    throw new Exception("Not enough wine stock.");
+            //}
 
-            midWine.AvailableStock -= detail.Quantity;
+            //midWine.AvailableStock -= detail.Quantity;
             _unitOfWork.Rooms.UpdateEntity(midRoom);
             _unitOfWork.Wines.UpdateEntity(midWine);
             await _unitOfWork.CompleteAsync();
@@ -256,7 +256,7 @@ namespace WWMS.BAL.Services
                 throw new Exception($"Room over capacity. Current: {midRoom.CurrentOccupancy}, Capacity: {midRoom.Capacity}");
             }
 
-            midWine.AvailableStock += existingDetail.Quantity;
+            //midWine.AvailableStock += existingDetail.Quantity;
 
             _unitOfWork.Rooms.UpdateEntity(midRoom);
             _unitOfWork.Wines.UpdateEntity(midWine);
@@ -289,12 +289,12 @@ namespace WWMS.BAL.Services
                 throw new Exception("Not enough stock in the room.");
             }
 
-            if (midWine.AvailableStock < existingDetail.Quantity)
-            {
-                throw new Exception("Not enough wine stock.");
-            }
+            //if (midWine.AvailableStock < existingDetail.Quantity)
+            //{
+            //    throw new Exception("Not enough wine stock.");
+            //}
 
-            midWine.AvailableStock -= existingDetail.Quantity;
+            //midWine.AvailableStock -= existingDetail.Quantity;
             _unitOfWork.Rooms.UpdateEntity(midRoom);
             _unitOfWork.Wines.UpdateEntity(midWine);
             await _unitOfWork.CompleteAsync();

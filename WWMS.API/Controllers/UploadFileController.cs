@@ -1,8 +1,6 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
-using WWMS.BAL.Services;
 
 namespace WWMS.API.Controllers
 {
@@ -23,7 +21,7 @@ namespace WWMS.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImage( IFormFile file)
+        public async Task<IActionResult> UploadImage(IFormFile file)
         {
             if (file == null || file.Length == 0)
             {

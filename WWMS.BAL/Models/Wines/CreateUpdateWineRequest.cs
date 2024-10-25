@@ -3,10 +3,8 @@
     public class CreateUpdateWineRequest
     {
         public string WineName { get; set; } = null!;
-        public int? AvailableStock { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
-        public string Supplier { get; set; } = string.Empty;
         public DateTime? MFD { get; set; }
         public decimal ImportPrice { get; set; }
         public decimal ExportPrice { get; set; }

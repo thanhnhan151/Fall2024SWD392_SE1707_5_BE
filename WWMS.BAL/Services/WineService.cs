@@ -67,10 +67,8 @@ namespace WWMS.BAL.Services
             var wine = new Wine
             {
                 WineName = createWineRequest.WineName,
-                AvailableStock = createWineRequest.AvailableStock,
                 Description = createWineRequest.Description,
                 ImageUrl = createWineRequest.ImageUrl,
-                Supplier = createWineRequest.Supplier,
                 MFD = createWineRequest.MFD,
                 ImportPrice = createWineRequest.ImportPrice,
                 ExportPrice = createWineRequest.ExportPrice,
@@ -99,10 +97,8 @@ namespace WWMS.BAL.Services
         private Wine MappingUpdateRequest(Wine wine, CreateUpdateWineRequest updateWineRequest)
         {
             wine.WineName = updateWineRequest.WineName;
-            wine.AvailableStock = updateWineRequest.AvailableStock;
             wine.Description = updateWineRequest.Description;
             wine.ImageUrl = updateWineRequest.ImageUrl;
-            wine.Supplier = updateWineRequest.Supplier;
             wine.MFD = updateWineRequest.MFD;
             wine.ImportPrice = updateWineRequest.ImportPrice;
             wine.ExportPrice = updateWineRequest.ExportPrice;

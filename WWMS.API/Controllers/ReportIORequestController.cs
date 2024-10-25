@@ -1,11 +1,7 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using WWMS.BAL.Interfaces;
-using WWMS.BAL.Models.IORequests;
 using WWMS.BAL.Models.ReportIORequest;
-using WWMS.BAL.Services;
 
 namespace WWMS.API.Controllers
 {
@@ -129,13 +125,13 @@ namespace WWMS.API.Controllers
 
                 //string file = null; 
 
-           
+
                 //if (doc != null)
                 //{
                 //    file = await _uploadFileService.UploadImage(doc);
                 //}
                 //await _reportIORequest.UpdateReportIORequestAsync(updateIO, file);
-                
+
 
                 return Ok("Create Report for Iorequest sucessfully");
             }
