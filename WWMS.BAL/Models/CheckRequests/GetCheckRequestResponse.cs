@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace WWMS.BAL.Models.CheckRequests
 {
     public class GetCheckRequestResponse
@@ -25,7 +20,7 @@ namespace WWMS.BAL.Models.CheckRequests
         public string? RequesterName { get; set; }
         public int NoOfDetails { get; set; }
         public string Status
-         { get; set; }
+        { get; set; }
 
     }
 }

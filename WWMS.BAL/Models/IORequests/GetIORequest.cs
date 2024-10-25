@@ -1,6 +1,4 @@
-﻿using WWMS.DAL.Entities;
-
-namespace WWMS.BAL.Models.IORequests
+﻿namespace WWMS.BAL.Models.IORequests
 {
     public class GetIORequest
     {

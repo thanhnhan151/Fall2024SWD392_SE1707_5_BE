@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WWMS.BAL.Models.CheckRequests;
 
 namespace WWMS.BAL.Interfaces
@@ -14,8 +10,8 @@ namespace WWMS.BAL.Interfaces
 
         Task<GetCheckRequestWithDetailsResponse?> GetCheckRequestByIdAsync(long id);
 
-        Task UpdateCheckRequestAsync (UpdateCheckRequestRequest updateCheckRequestRequest);
+        Task UpdateCheckRequestAsync(UpdateCheckRequestRequest updateCheckRequestRequest);
 
-        Task DisableAsync (long id, DisableCheckRequestRequest request);
+        Task DisableAsync(long id, DisableCheckRequestRequest request);
     }
 }

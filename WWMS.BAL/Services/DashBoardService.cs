@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Dashboard;
-using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
 
 namespace WWMS.BAL.Services
@@ -26,28 +20,28 @@ namespace WWMS.BAL.Services
 
 
 
-        public async Task<List<GettMonthQuantity>> GetQuantityPerMonthListAsync(int month,int year)
+        public async Task<List<GettMonthQuantity>> GetQuantityPerMonthListAsync(int month, int year)
         {
-         
+
             var monthlyQuantities = new List<GettMonthQuantity>();
 
 
-                var importByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleMonthAndYearAsync("In", month, year);
-                var exportByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleMonthAndYearAsync("Out", month, year);
-                var checkRequest = await _unitOfWork.CheckRequestDetails.GetQuantityByMonthAndYearAsync(month, year);
+            var importByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleMonthAndYearAsync("In", month, year);
+            var exportByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleMonthAndYearAsync("Out", month, year);
+            var checkRequest = await _unitOfWork.CheckRequestDetails.GetQuantityByMonthAndYearAsync(month, year);
 
-                int importCount = importByMonth.Count;
-                int exportCount = exportByMonth.Count; 
+            int importCount = importByMonth.Count;
+            int exportCount = exportByMonth.Count;
 
-                monthlyQuantities.Add(new GettMonthQuantity
-                {
-                    Month = month,
-                    ImportRequestQuantity = importCount,
-                    ExportRequestQuantity = exportCount,
-                    overstock = checkRequest.totalPositive,
-                    insufficientStock = checkRequest.totalNegative
-                });
-            
+            monthlyQuantities.Add(new GettMonthQuantity
+            {
+                Month = month,
+                ImportRequestQuantity = importCount,
+                ExportRequestQuantity = exportCount,
+                overstock = checkRequest.totalPositive,
+                insufficientStock = checkRequest.totalNegative
+            });
+
 
             return monthlyQuantities;
         }

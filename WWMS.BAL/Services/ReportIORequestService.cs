@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using WWMS.BAL.Interfaces;
-using WWMS.BAL.Models.ReportIORequest;
 using WWMS.DAL.Infrastructures;
 
 namespace WWMS.BAL.Services

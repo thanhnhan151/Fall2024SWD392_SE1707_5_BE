@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WWMS.BAL.Models.CheckRequestReports;
 
 namespace WWMS.BAL.Interfaces
