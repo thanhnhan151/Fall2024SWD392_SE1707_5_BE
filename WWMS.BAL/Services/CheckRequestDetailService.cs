@@ -48,7 +48,7 @@ namespace WWMS.BAL.Services
             _unitOfWork.CompleteAsync();
         }
 
-        public async Task CreateCheckRequestDetailAsync(CreateCheckRequestDetailRequest createCheckRequestDetailRequest)
+        public async Task CreateCheckRequestDetailAsync(CreateAdditionalCheckRequestDetailRequest createCheckRequestDetailRequest)
         {
             await _unitOfWork.CheckRequestDetails.AddEntityAsync(_mapper.Map<CheckRequestDetail>(createCheckRequestDetailRequest));
             await _unitOfWork.CompleteAsync();

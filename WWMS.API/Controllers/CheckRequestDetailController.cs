@@ -79,7 +79,7 @@ namespace WWMS.API.Controllers
         /// Manager create an additional check request detail with existed check request
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateCheckRequestDetailRequest request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateAdditionalCheckRequestDetailRequest request)
         {
             try
             {

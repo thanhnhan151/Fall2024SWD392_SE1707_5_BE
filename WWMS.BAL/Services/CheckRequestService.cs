@@ -36,19 +36,22 @@ namespace WWMS.BAL.Services
 
         public async Task CreateRequestAsync(CreateCheckRequestRequest createCheckRequestRequest)
         {
-            //TODO: get the requester info from jwt token
-            //? Whether other relation fulfilled 
-            CheckRequest newCheckRequest = _mapper.Map<CheckRequest>(createCheckRequestRequest);
-            newCheckRequest.RequestCode = GenRandomString();
-            newCheckRequest.Status = "ACTIVE";
-            newCheckRequest.CreatedTime = DateTime.Now;
-
-            newCheckRequest.CheckRequestDetails = _mapper.Map<List<CheckRequestDetail>>(createCheckRequestRequest.CreateCheckRequestDetailRequests);
-
-            await _unitOfWork.CheckRequests.AddEntityAsync(newCheckRequest);
+            await _unitOfWork.CheckRequests.AddEntityAsync(MapCreateModelToCheckRequest(createCheckRequestRequest));
             await _unitOfWork.CompleteAsync();
         }
+        private CheckRequest MapCreateModelToCheckRequest(CreateCheckRequestRequest createCheckRequestRequest)
+        {
+            //TODO: get the requester info from jwt token
+            CheckRequest checkRequest = _mapper.Map<CheckRequest>(createCheckRequestRequest);
+            checkRequest.RequestCode = GenRandomString();
+            checkRequest.Status = "ACTIVE";
+            checkRequest.CreatedTime = DateTime.Now;
+            checkRequest.CreatedBy = createCheckRequestRequest.RequesterName;
 
+            checkRequest.CheckRequestDetails = _mapper.Map<List<CheckRequestDetail>>(createCheckRequestRequest.CreateCheckRequestDetailRequests);
+            return checkRequest;
+
+        }
 
         public async Task DisableAsync(long id, DisableCheckRequestRequest request)
         {

@@ -177,5 +177,8 @@ namespace WWMS.BAL.Services
 
             await _unitOfWork.CompleteAsync();
         }
+
+        public async Task<List<GetStaffResponse>> GetStaffAsync()
+        => _mapper.Map<List<GetStaffResponse>>(await _unitOfWork.Users.GetAllStaffAsync());
     }
 }

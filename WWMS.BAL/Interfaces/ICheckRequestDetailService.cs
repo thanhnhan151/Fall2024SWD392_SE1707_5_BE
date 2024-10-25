@@ -11,7 +11,7 @@ namespace WWMS.BAL.Interfaces
         //update the detail
         Task UpdateCheckRequestDetailAsync(UpdateCheckRequestDetailRequest updateCheckRequestDetailRequest);
         //create detail
-        Task CreateCheckRequestDetailAsync(CreateCheckRequestDetailRequest createCheckRequestDetailRequest);
+        Task CreateCheckRequestDetailAsync(CreateAdditionalCheckRequestDetailRequest createCheckRequestDetailRequest);
         //delete the detail
         Task DisableCheckRequestDetailAsync(long id);
 
