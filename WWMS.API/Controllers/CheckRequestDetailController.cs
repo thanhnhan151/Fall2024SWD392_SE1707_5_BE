@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.CheckRequests;
+using WWMS.BAL.Models.CheckRequests.Report;
 
 namespace WWMS.API.Controllers
 {
@@ -129,6 +130,79 @@ namespace WWMS.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        #endregion
+
+
+        #region Disable the check request detail
+        /// <summary>
+        /// MANAGER OR STAFF CAN VIEW DETAIL OF CHECK_REQUEST_DETAIL
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            try
+            {
+                var result = await _checkRequestDetailService.GetByIdAsync(id);
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+
+            }
+            return NotFound();
+        }
+        #endregion
+
+
+
+        #region REPORT
+
+        #region Create/Update REPORT FIELDS
+        /// <summary>
+        ///STAFF create/update report fields
+        /// </summary>
+        [HttpPost]
+        [Route("/report/{detailId}")]
+        public async Task<IActionResult> CreateOrUpdateReportAsync([FromBody] CreateOrUpdateCheckRequestDetailReportRequest request, int detailId)
+        {
+            try
+            {
+                await _checkRequestDetailService.CreateOrUpdateReportAsync(request, detailId);
+                return Ok("Created/Updated check request detail report ok!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        #endregion
+
+        #region Delete REPORT FIELDS
+        /// <summary>
+        ///STAFF delete report fields
+        /// </summary>
+
+        [HttpDelete]
+        [Route("/report/{detailId}")]
+        public async Task<IActionResult> DeleteReportAsync(int detailId)
+        {
+            try
+            {
+                await _checkRequestDetailService.DeleteReportAsync(detailId);
+                return Ok("Delete ok!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        #endregion
+
         #endregion
 
     }

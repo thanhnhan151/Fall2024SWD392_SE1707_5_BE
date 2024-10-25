@@ -181,9 +181,35 @@ namespace WWMS.BAL.Mappings
             #endregion
 
             #region CheckRequest Detail
-            CreateMap<CheckRequestDetail, CreateAdditionalCheckRequestDetailRequest>();
+            CreateMap<CreateAdditionalCheckRequestDetailRequest, CheckRequestDetail>()
+                .ForMember(dest => dest.Purpose, opt => opt.MapFrom(src => src.Purpose))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
+                .ForMember(dest => dest.CheckRequestId, opt => opt.MapFrom(src => src.CheckRequestId))
+                .ForMember(dest => dest.CheckRequestCode, opt => opt.MapFrom(src => src.CheckRequestCode))
+                .ForMember(dest => dest.CheckerId, opt => opt.MapFrom(src => src.CheckerId))
+                .ForMember(dest => dest.WineRoomId, opt => opt.MapFrom(src => src.WineRoomId))
 
+                // Set defaults for other entity fields that aren't part of the request
+                .ForMember(dest => dest.Id, opt => opt.Ignore()) // Ignore Id (auto-generated)
+                .ForMember(dest => dest.WineId, opt => opt.Ignore())
+                .ForMember(dest => dest.Supplier, opt => opt.Ignore())
+                .ForMember(dest => dest.WineName, opt => opt.Ignore())
+                .ForMember(dest => dest.MFD, opt => opt.Ignore())
+                .ForMember(dest => dest.RoomId, opt => opt.Ignore())
+                .ForMember(dest => dest.RoomName, opt => opt.Ignore())
+                .ForMember(dest => dest.RoomCapacity, opt => opt.Ignore())
+                .ForMember(dest => dest.ExpectedCurrQuantity, opt => opt.Ignore())
+                .ForMember(dest => dest.CheckRequest, opt => opt.Ignore())
+                .ForMember(dest => dest.ReportCode, opt => opt.Ignore())
+                .ForMember(dest => dest.ReportDescription, opt => opt.Ignore())
+                .ForMember(dest => dest.ReporterAssigned, opt => opt.Ignore())
+                .ForMember(dest => dest.DiscrepanciesFound, opt => opt.Ignore())
+                .ForMember(dest => dest.ActualQuantity, opt => opt.Ignore())
+                .ForMember(dest => dest.ReportFile, opt => opt.Ignore());
             #endregion
+
 
         }
     }

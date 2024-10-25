@@ -1,4 +1,5 @@
 using WWMS.BAL.Models.CheckRequests;
+using WWMS.BAL.Models.CheckRequests.Report;
 
 namespace WWMS.BAL.Interfaces
 {
@@ -14,6 +15,9 @@ namespace WWMS.BAL.Interfaces
         Task CreateCheckRequestDetailAsync(CreateAdditionalCheckRequestDetailRequest createCheckRequestDetailRequest);
         //delete the detail
         Task DisableCheckRequestDetailAsync(long id);
+        Task<GetCheckRequestDetailViewDetailResponse> GetByIdAsync(long id);
+        Task DeleteReportAsync(int detailId);
+        Task CreateOrUpdateReportAsync(CreateOrUpdateCheckRequestDetailReportRequest request, long detailId);
 
 
         #region report for the check request detail
