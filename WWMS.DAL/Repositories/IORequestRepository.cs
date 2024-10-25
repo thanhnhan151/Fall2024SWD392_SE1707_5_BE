@@ -65,10 +65,14 @@ namespace WWMS.DAL.Repositories
                 throw new Exception($"Import/Export with {id}'s status is null");
 
 
-            if (checkExist.Status.Equals("Active", StringComparison.OrdinalIgnoreCase))
+            if (checkExist.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
             {
-                checkExist.Status = "InActive";
+                checkExist.Status = "Cancel";
 
+            }
+            else
+            {
+                throw new Exception($"Import/Export {id} does not exist");
             }
 
 
