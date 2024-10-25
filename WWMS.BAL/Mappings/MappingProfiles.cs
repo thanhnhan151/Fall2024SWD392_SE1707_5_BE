@@ -64,10 +64,13 @@ namespace WWMS.BAL.Mappings
 
 
             CreateMap<IORequest, GetIORequest>();
-            CreateMap<IORequest, GetIORequest>();
+            CreateMap<GetIORequest, IORequest>();
+       
             CreateMap<CreateIORequest, IORequest>();
 
             CreateMap<IORequestDetail, GetIORequestDetail>();
+            CreateMap<GetIORequestDetail, IORequestDetail>();
+
             CreateMap<CreateIORequestDetail, IORequestDetail>();
             CreateMap<UpdateIORequestDetail, IORequestDetail>();
 

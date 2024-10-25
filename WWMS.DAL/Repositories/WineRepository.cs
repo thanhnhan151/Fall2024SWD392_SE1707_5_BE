@@ -97,5 +97,22 @@ namespace WWMS.DAL.Repositories
 
             _dbSet.Update(checkExistWine);
         }
+
+
+        public async Task<Wine?> GetByIdNotTrack(long? id)
+        {
+
+            var localEntity = _dbSet.Local.FirstOrDefault(e => e.Id == id);
+
+
+            if (localEntity == null)
+            {
+                localEntity = await _dbSet
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(e => e.Id == id);
+            }
+
+            return localEntity;
+        }
     }
 }

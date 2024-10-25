@@ -11,7 +11,6 @@
         public string? CustomerName { get; set; }
         public long? RoomId { get; set; }
         public long? CheckerId { get; set; }
-        public string Status { get; set; } = string.Empty;
         public ICollection<UpdateIORequestDetail> UpIORequestDetails { get; set; } = [];
 
     }
