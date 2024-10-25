@@ -54,7 +54,7 @@ namespace WWMS.API.Controllers
         /// <summary>
         ///Staff get all their check request details as their tasks
         /// </summary>
-        [HttpGet("{reporterName}")]
+        [HttpGet("/staff/{reporterName}")]
         public async Task<IActionResult> GetAllByReporterNameAsync(string reporterName)
         {
             try
