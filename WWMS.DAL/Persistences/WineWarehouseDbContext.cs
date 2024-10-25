@@ -160,19 +160,11 @@ public partial class WineWarehouseDbContext : DbContext
             entity.Property(w => w.ExportPrice)
                 .HasColumnType("decimal(15, 2)");
 
-            entity.Property(w => w.AvailableStock)
-                .IsRequired()
-                .HasDefaultValue(0); // Default value if needed
-
             entity.Property(w => w.Description)
                 .HasMaxLength(500); // Adjust length as necessary
 
             entity.Property(w => w.ImageUrl)
                 .HasMaxLength(200); // Adjust length as necessary
-
-            entity.Property(w => w.Supplier)
-                .IsRequired()
-                .HasMaxLength(100); // Adjust length as necessary
 
             entity.Property(w => w.MFD)
                 .IsRequired(); // Ensure this property is required
@@ -511,6 +503,16 @@ public partial class WineWarehouseDbContext : DbContext
             entity.Property(ir => ir.IOType)
                 .IsRequired();
 
+            entity.HasOne(w => w.Suplier)
+                  .WithMany(c => c.IORequests)
+                  .HasForeignKey(w => w.SuplierId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(w => w.Customer)
+                  .WithMany(c => c.IORequests)
+                  .HasForeignKey(w => w.CustomerId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
             // Configure one-to-many relationship with IORequestDetail
             entity.HasMany(ir => ir.IORequestDetails)
                 .WithOne(ird => ird.IORequest)
@@ -616,6 +618,20 @@ public partial class WineWarehouseDbContext : DbContext
         {
             entity.Property(r => r.AlcoholByVolumeType)
                   .HasMaxLength(3)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<Suplier>(entity =>
+        {
+            entity.Property(r => r.SuplierName)
+                  .HasMaxLength(50)
+                  .IsRequired(); // Optional: set as required if needed
+        });
+
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.Property(r => r.CustomerName)
+                  .HasMaxLength(50)
                   .IsRequired(); // Optional: set as required if needed
         });
 

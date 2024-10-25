@@ -32,9 +32,16 @@ namespace WWMS.DAL.Infrastructures
 
         IAlcoholByVolumeRepository AlcoholByVolumes { get; }
 
+        ISuplierRepository Supliers { get; }
+
+        ICustomerRepository Customers { get; }
+
         ICodeResetPassRepository CodeResetPasses { get; }
+
         ICheckRequestDetailRepository CheckRequestDetails { get; }
+
         ICheckRequestRepository CheckRequests { get; }
+
         Task CompleteAsync();
     }
 }

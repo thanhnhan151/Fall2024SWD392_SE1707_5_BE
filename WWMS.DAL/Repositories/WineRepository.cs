@@ -20,10 +20,8 @@ namespace WWMS.DAL.Repositories
             {
                 Id = w.Id,
                 WineName = w.WineName,
-                AvailableStock = w.AvailableStock,
                 Description = w.Description,
                 ImageUrl = w.ImageUrl,
-                Supplier = w.Supplier,
                 MFD = w.MFD,
                 ImportPrice = w.ImportPrice,
                 ExportPrice = w.ExportPrice,
@@ -49,10 +47,8 @@ namespace WWMS.DAL.Repositories
                         {
                             Id = w.Id,
                             WineName = w.WineName,
-                            AvailableStock = w.AvailableStock,
                             Description = w.Description,
                             ImageUrl = w.ImageUrl,
-                            Supplier = w.Supplier,
                             MFD = w.MFD,
                             ImportPrice = w.ImportPrice,
                             ExportPrice = w.ExportPrice,

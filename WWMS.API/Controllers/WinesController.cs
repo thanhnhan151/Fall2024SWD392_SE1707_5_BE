@@ -30,10 +30,8 @@ namespace WWMS.API.Controllers
         /// 
         ///     {
         ///       "wineName": "Red Majestic Wine",
-        ///       "availableStock": 10,
         ///       "description": "This wine is just so good",
         ///       "imageUrl": "testImage",
-        ///       "supplier": "Downtown store in the corner",
         ///       "mfd": "2024-09-25T09:00:27.824Z",
         ///       "importPrice": 10000000,
         ///       "exportPrice": 11000000,
@@ -155,10 +153,8 @@ namespace WWMS.API.Controllers
         /// 
         ///     {
         ///       "wineName": "More Red Majestic Wine",
-        ///       "availableStock": 10,
         ///       "description": "This wine is just so good",
         ///       "imageUrl": "testImage",
-        ///       "supplier": "Downtown store in the corner",
         ///       "mfd": "2024-09-25T09:00:27.824Z",
         ///       "importPrice": 10000000,
         ///       "exportPrice": 11000000,

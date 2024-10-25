@@ -42,6 +42,10 @@ namespace WWMS.DAL.Infrastructures
 
         public IAlcoholByVolumeRepository AlcoholByVolumes { get; private set; }
 
+        public ISuplierRepository Supliers { get; private set; }
+
+        public ICustomerRepository Customers { get; private set; }
+
         public ICodeResetPassRepository CodeResetPasses { get; private set; }
 
         public ICheckRequestDetailRepository CheckRequestDetails { get; private set; }
@@ -86,10 +90,14 @@ namespace WWMS.DAL.Infrastructures
 
             AlcoholByVolumes = new AlcoholByVolumeRepository(_context, _logger, _httpContextAccessor);
 
+            Supliers = new SuplierRepository(_context, _logger, _httpContextAccessor);
+
+            Customers = new CustomerRepository(_context, _logger, _httpContextAccessor);
+
             CodeResetPasses = new CodeResetPassRepository(_context, _logger, _httpContextAccessor);
 
             CheckRequests = new CheckRequestRepository(_context, _logger, _httpContextAccessor);
-            
+
             CheckRequestDetails = new CheckRequestDetailRepository(_context, _logger, _httpContextAccessor);
         }
 

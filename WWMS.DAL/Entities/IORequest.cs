@@ -22,5 +22,11 @@ public class IORequest : CommonEntity
     public long? CheckerId { get; set; }
     public virtual User Checker { get; set; } = null!;
 
+    public long? SuplierId { get; set; }
+    public virtual Suplier Suplier { get; set; } = null!;
+
+    public long? CustomerId { get; set; }
+    public virtual Customer Customer { get; set; } = null!;
+
     public ICollection<IORequestDetail> IORequestDetails { get; set; } = [];
 }
