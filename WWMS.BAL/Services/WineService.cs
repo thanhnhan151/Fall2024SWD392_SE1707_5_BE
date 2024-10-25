@@ -57,7 +57,7 @@ namespace WWMS.BAL.Services
 
             if (!validationResult.IsValid) throw new ValidationException(validationResult.Errors);
 
-            _unitOfWork.Wines.UpdateEntity(MappingUpdateRequest(updateWineRequest));
+            _unitOfWork.Wines.UpdateEntity(MappingUpdateRequest(wine, updateWineRequest));
 
             await _unitOfWork.CompleteAsync();
         }
@@ -96,28 +96,25 @@ namespace WWMS.BAL.Services
             return wine;
         }
 
-        private Wine MappingUpdateRequest(CreateUpdateWineRequest updateWineRequest)
+        private Wine MappingUpdateRequest(Wine wine, CreateUpdateWineRequest updateWineRequest)
         {
-            var wine = new Wine
-            {
-                WineName = updateWineRequest.WineName,
-                AvailableStock = updateWineRequest.AvailableStock,
-                Description = updateWineRequest.Description,
-                ImageUrl = updateWineRequest.ImageUrl,
-                Supplier = updateWineRequest.Supplier,
-                MFD = updateWineRequest.MFD,
-                ImportPrice = updateWineRequest.ImportPrice,
-                ExportPrice = updateWineRequest.ExportPrice,
-                WineCategoryId = updateWineRequest.WineCategoryId,
-                CountryId = updateWineRequest.CountryId,
-                TasteId = updateWineRequest.TasteId,
-                ClassId = updateWineRequest.ClassId,
-                QualificationId = updateWineRequest.QualificationId,
-                CorkId = updateWineRequest.CorkId,
-                BrandId = updateWineRequest.BrandId,
-                BottleSizeId = updateWineRequest.BottleSizeId,
-                AlcoholByVolumeId = updateWineRequest.AlcoholByVolumeId
-            };
+            wine.WineName = updateWineRequest.WineName;
+            wine.AvailableStock = updateWineRequest.AvailableStock;
+            wine.Description = updateWineRequest.Description;
+            wine.ImageUrl = updateWineRequest.ImageUrl;
+            wine.Supplier = updateWineRequest.Supplier;
+            wine.MFD = updateWineRequest.MFD;
+            wine.ImportPrice = updateWineRequest.ImportPrice;
+            wine.ExportPrice = updateWineRequest.ExportPrice;
+            wine.WineCategoryId = updateWineRequest.WineCategoryId;
+            wine.CountryId = updateWineRequest.CountryId;
+            wine.TasteId = updateWineRequest.TasteId;
+            wine.ClassId = updateWineRequest.ClassId;
+            wine.QualificationId = updateWineRequest.QualificationId;
+            wine.CorkId = updateWineRequest.CorkId;
+            wine.BrandId = updateWineRequest.BrandId;
+            wine.BottleSizeId = updateWineRequest.BottleSizeId;
+            wine.AlcoholByVolumeId = updateWineRequest.AlcoholByVolumeId;
 
             var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
 
