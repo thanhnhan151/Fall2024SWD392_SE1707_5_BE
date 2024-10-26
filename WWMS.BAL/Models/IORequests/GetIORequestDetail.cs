@@ -9,7 +9,7 @@
 
         public long WineId { get; set; }
 
-        public long IORequestId { get; set; }
+//        public long IORequestId { get; set; }
 
 
 

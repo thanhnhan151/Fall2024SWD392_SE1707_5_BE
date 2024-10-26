@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
+using WWMS.BAL.Models.IORequests.IOrequestdetails;
 using WWMS.BAL.Models.Rooms;
 using WWMS.BAL.Services;
 
@@ -104,22 +105,18 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "requestCode": "REQ-001",
-        ///       "startDate": "2024-10-19T17:05:05.759Z",
-        ///       "dueDate": "2024-10-19T17:05:05.759Z",
-        ///       "comments": "Request for wine intake",
-        ///       "ioType": "In",
-        ///       "supplierName": "Supplier ABC",
-        ///       "customerName": "Customer XYZ",
+        ///       "requestCode": "string",
+        ///       "startDate": "2024-10-25T21:51:14.383Z",
+        ///       "dueDate": "2024-10-25T21:51:14.383Z",
+        ///       "comments": "string",
+        ///       "ioType": "string",
         ///       "roomId": 0,
         ///       "checkerId": 0,
+        ///       "suplierId": 0,
+        ///       "customerId": 0,
         ///       "ioRequestDetails": [
         ///         {
-        ///           "quantity": 10,
-        ///           "wineId": 0
-        ///         },
-        ///         {
-        ///           "quantity": 5,
+        ///           "quantity": 0,
         ///           "wineId": 0
         ///         }
         ///       ]
@@ -153,7 +150,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Update A Import/Export Request
+        #region Update A Import/Export Request many
         /// <summary>
         /// Update an Import/Export request in the system
         /// </summary>
@@ -161,21 +158,20 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "id": 0,
-        ///       "requestCode": "REQ-002",
-        ///       "startDate": "2024-10-19T17:13:26.774Z",
-        ///       "dueDate": "2024-10-20T17:13:26.774Z",
-        ///       "comments": "Request for wine intake",
-        ///       "ioType": "In",
-        ///       "supplierName": "Supplier XYZ",
-        ///       "customerName": "Customer ABC",
+        ///       "requestCode": "string",
+        ///       "startDate": "2024-10-26T02:52:20.461Z",
+        ///       "dueDate": "2024-10-26T02:52:20.461Z",
+        ///       "comments": "string",
+        ///       "ioType": "string",
         ///       "roomId": 0,
         ///       "checkerId": 0,
-        ///       "status": "Pending",
+        ///       "suplierId": 0,
+        ///       "customerId": 0,
+        ///       "status": "string",
         ///       "upIORequestDetails": [
         ///         {
         ///           "id": 0,
-        ///           "quantity": 5,
+        ///           "quantity": 0,
         ///           "wineId": 0
         ///         }
         ///       ]
@@ -194,7 +190,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                await _iORequestService.UpdateIORequestsAsync(updateIO,id);
+                await _iORequestService.UpdateManyIORequestsAsync(updateIO, id);
 
                 return Ok("Update Successfully");
             }
@@ -207,7 +203,6 @@ namespace WWMS.API.Controllers
             }
         }
         #endregion
-
 
         #region Import Checkout
         /// <summary>
@@ -233,7 +228,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Disable An Import/Export and details
+        #region Disable An Import/Export 
         /// <summary>
         /// Disable an Disable An Import/Export  in the system
         /// </summary>
@@ -285,6 +280,129 @@ namespace WWMS.API.Controllers
             }
 
             return NotFound();
+        }
+
+        #region Create  Import/Export Request details
+        /// <summary>
+        /// Update an Import/Export request in the system
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     {
+        ///       "ioRequestDetails": [
+        ///         {
+        ///           "quantity": 0,
+        ///           "wineId": 0
+        ///         }
+        ///       ]
+        ///     }
+        ///         
+        /// </remarks> 
+        /// <response code="200">Request that was updated</response>
+        /// <response code="204">No content</response>
+        /// <response code="400">Request does not exist</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut("Create-details/{id}")]
+        public async Task<IActionResult> UpdateDetailsAsync([FromBody] CreateDetailsById updateIO, long id)
+        {
+            try
+            {
+                await _iORequestService.CreateManyIORequestDetailsByIdAsync(updateIO, id);
+
+                return Ok("Update Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region Update Import/Export Request details
+        /// <summary>
+        /// Update an Import/Export request in the system
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     {
+        ///       "ioRequestDetails": [
+        ///         {
+        ///           "id" : 0,
+        ///           "quantity": 0,
+        ///           "wineId": 0
+        ///         }
+        ///       ]
+        ///     }
+        ///         
+        /// </remarks> 
+        /// <response code="200">Request that was updated</response>
+        /// <response code="204">No content</response>
+        /// <response code="400">Request does not exist</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut("update-details/{id}")]
+        public async Task<IActionResult> UpdateDetailsAsync([FromBody] UpdateDetailsById updateIO, long id)
+        {
+            try
+            {
+                await _iORequestService.UpdateManyIORequestDetailsByIdAsync(updateIO,id);
+
+                return Ok("Update Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        [HttpPut("delete-details/{id}")]
+        public async Task<IActionResult> DeleteDetailsAsync( long id, long detailIds)
+        {
+            try
+            {
+                await _iORequestService.RemoveIORequestDetailByIdAsync(id,detailIds);
+
+                return Ok("Update Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+
+        [HttpPut("done/{id}")]
+        public async Task<IActionResult> DonesAsync( long id)
+        {
+            try
+            {
+                await _iORequestService.DoneIORequestsAsync(id);
+
+                return Ok("Update Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
         }
     }
 
