@@ -179,7 +179,6 @@ namespace WWMS.BAL.Mappings
 
             #endregion
 
-
             #region Wine Room region
             CreateMap<WineRoom, GetActiveWineRoomNameResponse>()
                 .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room.RoomName))
@@ -215,8 +214,6 @@ namespace WWMS.BAL.Mappings
                 .ForMember(dest => dest.ActualQuantity, opt => opt.Ignore())
                 .ForMember(dest => dest.ReportFile, opt => opt.Ignore());
             #endregion
-
-
         }
     }
 }

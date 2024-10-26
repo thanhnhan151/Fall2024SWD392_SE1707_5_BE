@@ -15,8 +15,8 @@ namespace WWMS.DAL.Repositories
         }
 
         public override async Task<ICollection<Wine>> GetAllEntitiesAsync()
-            => await _dbSet.Select(w =>
-            new Wine
+            => await _dbSet.OrderByDescending(w => w.Id)
+            .Select(w => new Wine
             {
                 Id = w.Id,
                 WineName = w.WineName,
@@ -27,21 +27,11 @@ namespace WWMS.DAL.Repositories
                 ExportPrice = w.ExportPrice,
                 Status = w.Status
             })
-            .OrderByDescending(w => w.Id)
             .ToListAsync();
 
         public async Task<Wine?> GetByIdWithIncludeAsync(long id)
         {
             var result = await _dbSet
-                .Include(c => c.WineCategory)
-                .Include(c => c.Country)
-                .Include(c => c.Taste)
-                .Include(c => c.Class)
-                .Include(c => c.Qualification)
-                .Include(c => c.Cork)
-                .Include(c => c.Brand)
-                .Include(c => c.BottleSize)
-                .Include(c => c.AlcoholByVolume)
                 .Select(w =>
                         new Wine
                         {
@@ -93,7 +83,6 @@ namespace WWMS.DAL.Repositories
 
             _dbSet.Update(checkExistWine);
         }
-
 
         public async Task<Wine?> GetByIdNotTrack(long? id)
         {

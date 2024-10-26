@@ -15,7 +15,24 @@ namespace WWMS.DAL.Repositories
         }
 
         public async Task<WineCategory?> GetAllWinesByWineCategoryIdAsync(long id)
-            => await _dbSet.Include(w => w.Wines)
-                           .FirstOrDefaultAsync(c => c.Id == id);
+            => await _dbSet.Where(c => c.Id == id)
+                           .Select(c => new WineCategory
+                           {
+                               Id = c.Id,
+                               CategoryName = c.CategoryName,
+                               Wines = c.Wines
+                                     .Select(w => new Wine
+                                     {
+                                         Id = w.Id,
+                                         WineName = w.WineName,
+                                         Description = w.Description,
+                                         MFD = w.MFD,
+                                         ImageUrl = w.ImageUrl,
+                                         ImportPrice = w.ImportPrice,
+                                         ExportPrice = w.ExportPrice,
+                                         Status = w.Status
+                                     }).ToList()
+                           })
+                           .FirstOrDefaultAsync();
     }
 }

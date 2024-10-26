@@ -98,7 +98,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-     #region Gell All Staffs
+        #region Gell All Staffs
         /// <summary>
         /// Get all staff
         /// </summary>
@@ -125,9 +125,6 @@ namespace WWMS.API.Controllers
             return NotFound();
         }
         #endregion
-
-
-
 
         #region Get An User By Id
         /// <summary>
