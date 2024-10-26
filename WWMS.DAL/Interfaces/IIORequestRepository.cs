@@ -9,5 +9,7 @@ namespace WWMS.DAL.Interfaces
         Task<List<IORequest>> GetEntitiesByIOStyleAsync(string ioType);
 
         Task<List<IORequest>> GetEntitiesByIOStyleMonthAndYearAsync(string ioType, int month, int year);
+
+        Task DisableDetailsAsync(long id, long detailsId);
     }
 }

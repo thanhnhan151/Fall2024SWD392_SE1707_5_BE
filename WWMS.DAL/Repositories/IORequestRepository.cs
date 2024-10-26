@@ -81,5 +81,25 @@ namespace WWMS.DAL.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task DisableDetailsAsync(long id, long detailsId)
+        {
+ 
+            var parentRequest = await _dbSet.FindAsync(id);
+            if (parentRequest == null)
+            {
+                throw new Exception("IORequest not found.");
+            }
+
+
+            var detailToRemove = await _context.IORequestDetails.FindAsync(detailsId);
+            if (detailToRemove == null)
+            {
+                throw new Exception("Detail not found.");
+            }
+
+            _context.IORequestDetails.Remove(detailToRemove);
+            await _context.SaveChangesAsync();
+        }
     }
 }

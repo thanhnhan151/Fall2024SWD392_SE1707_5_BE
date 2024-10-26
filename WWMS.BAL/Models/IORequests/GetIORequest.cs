@@ -14,6 +14,8 @@
         public string? CheckerName { get; set; }
         public long? RoomId { get; set; }
         public long? CheckerId { get; set; }
+        public long? SuplierId { get; set; }
+        public long? CustomerId { get; set; }
         public string Status { get; set; } = string.Empty;
         public ICollection<GetIORequestDetail> IORequestDetails { get; set; } = [];
     }

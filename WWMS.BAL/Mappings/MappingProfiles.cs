@@ -8,6 +8,7 @@ using WWMS.BAL.Models.Corks;
 using WWMS.BAL.Models.Countries;
 using WWMS.BAL.Models.Customers;
 using WWMS.BAL.Models.IORequests;
+using WWMS.BAL.Models.IORequests.IOrequestdetails;
 using WWMS.BAL.Models.Qualifications;
 using WWMS.BAL.Models.ReportIORequest;
 using WWMS.BAL.Models.Roles;
@@ -72,7 +73,9 @@ namespace WWMS.BAL.Mappings
             CreateMap<GetIORequest, IORequest>();
 
             CreateMap<CreateIORequest, IORequest>();
-
+            ///
+            CreateMap<CreateDetailsById, IORequest>();
+            ///
             CreateMap<IORequestDetail, GetIORequestDetail>();
             CreateMap<GetIORequestDetail, IORequestDetail>();
 
@@ -80,6 +83,9 @@ namespace WWMS.BAL.Mappings
             CreateMap<UpdateIORequestDetail, IORequestDetail>();
 
             CreateMap<UpdateIORequest, IORequest>();
+
+            // create for details 
+
             #endregion
 
             #region Report
