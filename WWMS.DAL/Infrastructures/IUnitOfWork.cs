@@ -42,6 +42,8 @@ namespace WWMS.DAL.Infrastructures
 
         ICheckRequestRepository CheckRequests { get; }
 
+        IWineRoomRepository WineRooms { get; }
+
         Task CompleteAsync();
     }
 }

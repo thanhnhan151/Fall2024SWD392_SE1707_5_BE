@@ -7,6 +7,8 @@ namespace WWMS.BAL.Interfaces
         Task CreateUserAsync(CreateUserRequest createUserRequest);
 
         Task<List<GetUserResponse>> GetUserListAsync();
+        Task<List<GetStaffResponse>> GetStaffAsync();
+
 
         Task<GetUserResponse?> GetUserByIdAsync(long id);
 

@@ -98,6 +98,37 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
+     #region Gell All Staffs
+        /// <summary>
+        /// Get all staff
+        /// </summary>
+        // [PermissionAuthorize("ADMIN", "MANAGER")]
+        [HttpGet]
+        [Route("staff")]
+
+        public async Task<IActionResult> GetAllStaffAsync()
+        {
+            try
+            {
+                var result = await _userService.GetStaffAsync();
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return NotFound();
+        }
+        #endregion
+
+
+
+
         #region Get An User By Id
         /// <summary>
         /// Get an user in the system

@@ -128,5 +128,13 @@ namespace WWMS.DAL.Repositories
         }
 
         public async Task<User?> GetByUsernameAsync(string username) => await _dbSet.Where(u => u.Username.Equals(username)).FirstOrDefaultAsync();
+
+        public async Task<ICollection<User>> GetAllStaffAsync()
+        {
+            return await _dbSet.Where(u => 
+            !u.Status.Equals("Inactive")
+            && u.RoleId == 2
+            ).ToListAsync();
+        }
     }
 }
