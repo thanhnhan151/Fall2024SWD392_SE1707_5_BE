@@ -24,22 +24,54 @@ namespace WWMS.DAL.Repositories
 
             //if (lowerRole == "manager")
             //{
-            //    var usersManager = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 3)
-            //               .Include(u => u.Role)
+            //    var usersManager = await _dbSet
+            //               .Where(u => u.RoleId != 1 && u.RoleId != 2)
             //               .OrderByDescending(u => u.Id)
+            //               .Select(u => new User
+            //               {
+            //                   Id = u.Id,
+            //                   Username = u.Username,
+            //                   Email = u.Email,
+            //                   FirstName = u.FirstName,
+            //                   LastName = u.LastName,
+            //                   PhoneNumber = u.PhoneNumber,
+            //                   Status = u.Status,
+            //                   Role = u.Role
+            //               })
             //               .ToListAsync();
 
             //    return usersManager;
             //}
 
-            //var usersAdmin = await _dbSet.Where(u => u.Id != GetLoggedUserId())
-            //               .Include(u => u.Role)
+            //var usersAdmin = await _dbSet
+            //               .Where(u => u.Id != GetLoggedUserId())
             //               .OrderByDescending(u => u.Id)
+            //               .Select(u => new User
+            //               {
+            //                   Id = u.Id,
+            //                   Username = u.Username,
+            //                   Email = u.Email,
+            //                   FirstName = u.FirstName,
+            //                   LastName = u.LastName,
+            //                   PhoneNumber = u.PhoneNumber,
+            //                   Status = u.Status,
+            //                   Role = u.Role
+            //               })
             //               .ToListAsync();
 
-            var usersAdmin = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 3)
-                           .Include(u => u.Role)
+            var usersAdmin = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 2)
                            .OrderByDescending(u => u.Id)
+                           .Select(u => new User
+                           {
+                               Id = u.Id,
+                               Username = u.Username,
+                               Email = u.Email,
+                               FirstName = u.FirstName,
+                               LastName = u.LastName,
+                               PhoneNumber = u.PhoneNumber,
+                               Status = u.Status,
+                               Role = u.Role
+                           })
                            .ToListAsync();
 
             return usersAdmin;
@@ -47,7 +79,20 @@ namespace WWMS.DAL.Repositories
 
         public override async Task<User?> GetEntityByIdAsync(long id)
         {
-            var result = await _dbSet.Include(c => c.Role).FirstOrDefaultAsync(c => c.Id == id);
+            var result = await _dbSet
+                .Where(c => c.Id == id)
+                .Select(u => new User
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Email = u.Email,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    PhoneNumber = u.PhoneNumber,
+                    Status = u.Status,
+                    Role = u.Role
+                })
+                .FirstOrDefaultAsync();
 
             if (result != null) return result;
 
@@ -101,8 +146,20 @@ namespace WWMS.DAL.Repositories
         {
             try
             {
-                var user = await _dbSet.Include(u => u.Role)
+                var user = await _dbSet
                                        .Where(u => u.Username == username)
+                                       .Select(u => new User
+                                       {
+                                           Id = u.Id,
+                                           Username = u.Username,
+                                           PasswordHash = u.PasswordHash,
+                                           Email = u.Email,
+                                           FirstName = u.FirstName,
+                                           LastName = u.LastName,
+                                           PhoneNumber = u.PhoneNumber,
+                                           Status = u.Status,
+                                           Role = u.Role
+                                       })
                                        .FirstOrDefaultAsync();
 
                 if (user == null) return null;
@@ -131,7 +188,7 @@ namespace WWMS.DAL.Repositories
 
         public async Task<ICollection<User>> GetAllStaffAsync()
         {
-            return await _dbSet.Where(u => 
+            return await _dbSet.Where(u =>
             !u.Status.Equals("Inactive")
             && u.RoleId == 2
             ).ToListAsync();
