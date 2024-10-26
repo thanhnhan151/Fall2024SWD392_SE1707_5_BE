@@ -190,7 +190,7 @@ namespace WWMS.DAL.Repositories
         {
             return await _dbSet.Where(u =>
             !u.Status.Equals("Inactive")
-            && u.RoleId == 2
+            && u.RoleId == 3
             ).ToListAsync();
         }
     }
