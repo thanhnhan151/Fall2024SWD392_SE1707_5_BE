@@ -16,8 +16,6 @@ namespace WWMS.DAL.Repositories
 
         public override async Task<ICollection<IORequest>> GetAllEntitiesAsync() => await _dbSet.Include(c => c.IORequestDetails).ToListAsync();
 
-
-
         public async Task<IORequest?> GetAllIORequestDetailsByIORequestAsync(long id)
     => await _dbSet.Include(w => w.IORequestDetails)
                    .FirstOrDefaultAsync(c => c.Id == id);
@@ -34,12 +32,12 @@ namespace WWMS.DAL.Repositories
         public async Task<List<IORequest>> GetEntitiesByIOStyleAsync(string ioType)
         {
             var result = await _dbSet
-                .Where(c => c.IOType == ioType) 
-                .ToListAsync(); 
+                .Where(c => c.IOType == ioType)
+                .ToListAsync();
 
             return result;
         }
-        //
+
         public async Task<List<IORequest>> GetEntitiesByIOStyleMonthAndYearAsync(string ioType, int month, int year)
         {
             var result = await _dbSet
@@ -54,9 +52,9 @@ namespace WWMS.DAL.Repositories
 
         public override async Task DisableAsync(long id)
         {
-           
+
             var checkExist = await _dbSet
-                .Include(r => r.IORequestDetails) 
+                .Include(r => r.IORequestDetails)
                 .FirstOrDefaultAsync(r => r.Id == id)
                 ?? throw new Exception($"Import/Export {id} does not exist");
 
@@ -75,22 +73,18 @@ namespace WWMS.DAL.Repositories
                 throw new Exception($"Import/Export {id} does not exist");
             }
 
-
-      
             _dbSet.Update(checkExist);
-
             await _context.SaveChangesAsync();
         }
 
         public async Task DisableDetailsAsync(long id, long detailsId)
         {
- 
+
             var parentRequest = await _dbSet.FindAsync(id);
             if (parentRequest == null)
             {
                 throw new Exception("IORequest not found.");
             }
-
 
             var detailToRemove = await _context.IORequestDetails.FindAsync(detailsId);
             if (detailToRemove == null)
@@ -100,6 +94,34 @@ namespace WWMS.DAL.Repositories
 
             _context.IORequestDetails.Remove(detailToRemove);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<decimal> GetImportRequestPriceForPaymentAsync(long id)
+        {
+            decimal sum = 0;
+
+            var result = await _dbSet.Where(i => i.Id == id)
+                           .Select(i => new IORequest
+                           {
+                               IORequestDetails = i.IORequestDetails.Select(i => new IORequestDetail
+                               {
+                                   Quantity = i.Quantity,
+                                   Wine = new Wine
+                                   {
+                                       ImportPrice = i.Wine.ImportPrice
+                                   }
+                               }).ToList()
+                           })
+                           .FirstOrDefaultAsync();
+
+            if (result == null) return 0;
+
+            foreach (var item in result.IORequestDetails)
+            {
+                sum += item.Quantity * item.Wine.ImportPrice;
+            }
+
+            return sum;
         }
     }
 }
