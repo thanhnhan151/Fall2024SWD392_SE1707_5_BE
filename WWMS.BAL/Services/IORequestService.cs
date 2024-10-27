@@ -36,9 +36,7 @@ namespace WWMS.BAL.Services
             ioRequestEntity.CreatedTime = DateTime.UtcNow;
             ioRequestEntity.UpdatedTime = DateTime.UtcNow;
             ioRequestEntity.Status = "Pending";
-            //ioRequestEntity.CheckerName = user.Username;
-            //ioRequestEntity.CustomerName = customer.CustomerName;
-            //ioRequestEntity.SupplierName = supplier.SuplierName;
+ 
 
 
             if (createIORequest.IORequestDetails == null || !createIORequest.IORequestDetails.Any())
@@ -181,12 +179,6 @@ namespace WWMS.BAL.Services
                 throw new Exception("Not enough stock in the room.");
             }
 
-            //if (midWine.AvailableStock < existingDetail.Quantity)
-            //{
-            //    throw new Exception("Not enough wine stock.");
-            //}
-
-            //midWine.AvailableStock -= existingDetail.Quantity;
             _unitOfWork.Rooms.UpdateEntity(midRoom);
             _unitOfWork.Wines.UpdateEntity(midWine);
             await _unitOfWork.CompleteAsync();
@@ -194,11 +186,10 @@ namespace WWMS.BAL.Services
         public async Task<List<GetIORequest>> GetAllEntitiesByIOStyle(string ioType) => _mapper.Map<List<GetIORequest>>(await _unitOfWork.IIORequests.GetEntitiesByIOStyleAsync(ioType));
 
 
-        /// hàm này để update được nhiều lần 
         public async Task UpdateManyIORequestsAsync(UpdateIORequest updateIORequest, long id)
         {
             var currentIORequest = _mapper.Map<GetIORequest?>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
-
+            
             if (currentIORequest == null)
             {
                 throw new Exception("IORequest not found.");
@@ -222,23 +213,7 @@ namespace WWMS.BAL.Services
 
 
 
-            if (currentIORequest.CheckerId.HasValue)
-            {
-                var checker = await _unitOfWork.Users.GetEntityByIdAsync(currentIORequest.CheckerId.Value);
-                currentIORequest.SupplierName = checker.Username;
-            }
 
-            if (currentIORequest.CustomerId.HasValue)
-            {
-                var customer = await _unitOfWork.Customers.GetEntityByIdAsync(currentIORequest.CustomerId.Value);
-                currentIORequest.CustomerName = customer.CustomerName;
-            }
-
-            if (currentIORequest.SuplierId.HasValue)
-            {
-                var suplier = await _unitOfWork.Supliers.GetEntityByIdAsync(currentIORequest.SuplierId.Value);
-                currentIORequest.SupplierName = suplier.SuplierName;
-            }
 
 
             currentIORequest.Status = updateIORequest.status ?? currentIORequest.Status;
@@ -263,6 +238,7 @@ namespace WWMS.BAL.Services
             }
 
             var io = _mapper.Map<IORequest?>(currentIORequest);
+            io.CreatedTime = DateTime.Now;
             _unitOfWork.IIORequests.UpdateEntity(io);
             await _unitOfWork.CompleteAsync();
         }
@@ -271,6 +247,7 @@ namespace WWMS.BAL.Services
         public async Task CreateManyIORequestDetailsByIdAsync(CreateDetailsById updateIORequest, long id)
         {
             var currentIORequest = _mapper.Map<IORequest?>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
+
 
             if (currentIORequest == null)
             {
@@ -334,6 +311,7 @@ namespace WWMS.BAL.Services
                 }
             }
             var nowIORequest = _mapper.Map<IORequest?>(currentIORequest);
+            nowIORequest.UpdatedTime = DateTime.UtcNow;
             _unitOfWork.IIORequests.UpdateEntity(nowIORequest);
             await _unitOfWork.CompleteAsync();
         }
