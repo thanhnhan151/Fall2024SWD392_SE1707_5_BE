@@ -29,7 +29,7 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "suplierName": "Admin"
+        ///       "suplierName": "Dark Star Company"
         ///     }
         ///         
         /// </remarks> 

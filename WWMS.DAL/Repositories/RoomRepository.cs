@@ -14,12 +14,50 @@ namespace WWMS.DAL.Repositories
         {
         }
 
+        public override async Task<ICollection<Room>> GetAllEntitiesAsync()
+            => await _dbSet.OrderByDescending(r => r.Id)
+                     .Select(r => new Room
+                     {
+                         Id = r.Id,
+                         RoomName = r.RoomName,
+                         LocationAddress = r.LocationAddress,
+                         Capacity = r.Capacity,
+                         CurrentOccupancy = r.CurrentOccupancy,
+                         ManagerName = r.ManagerName,
+                         Status = r.Status
+                     })
+                     .ToListAsync();
+
         public override async Task<Room?> GetEntityByIdAsync(long id)
         {
             var result = await _dbSet
+                .Where(c => c.Id == id)
                 .Include(w => w.WineRooms)
                         .ThenInclude(w => w.Wine)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .Select(r => new Room
+                {
+                    Id = r.Id,
+                    RoomName = r.RoomName,
+                    LocationAddress = r.LocationAddress,
+                    Capacity = r.Capacity,
+                    CurrentOccupancy = r.CurrentOccupancy,
+                    ManagerName = r.ManagerName,
+                    Status = r.Status,
+                    WineRooms = r.WineRooms.Select(w => new WineRoom
+                    {
+                        Id = w.Id,
+                        WineId = w.Id,
+                        InitialQuantity = w.InitialQuantity,
+                        Import = w.Import,
+                        Export = w.Export,
+                        CurrentQuantity = w.CurrentQuantity,
+                        Wine = new Wine
+                        {
+                            WineName = w.Wine.WineName
+                        }
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
 
             if (result != null) return result;
 
@@ -59,12 +97,12 @@ namespace WWMS.DAL.Repositories
             if (localEntity == null)
             {
                 localEntity = await _dbSet
-                    .AsNoTracking() 
-                    .Include(w => w.WineRooms) 
+                    .AsNoTracking()
+                    .Include(w => w.WineRooms)
                     .FirstOrDefaultAsync(e => e.Id == id);
             }
 
-            return localEntity; 
+            return localEntity;
         }
 
         public async Task<bool> CheckExistRoomName(string roomName)

@@ -29,7 +29,7 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "customerName": "Admin"
+        ///       "customerName": "Trang Thien Bao"
         ///     }
         ///         
         /// </remarks> 

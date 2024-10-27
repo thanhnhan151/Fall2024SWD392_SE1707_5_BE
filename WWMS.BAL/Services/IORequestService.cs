@@ -36,9 +36,9 @@ namespace WWMS.BAL.Services
             ioRequestEntity.CreatedTime = DateTime.UtcNow;
             ioRequestEntity.UpdatedTime = DateTime.UtcNow;
             ioRequestEntity.Status = "Pending";
-            ioRequestEntity.CheckerName = user.Username;
-            ioRequestEntity.CustomerName = customer.CustomerName;
-            ioRequestEntity.SupplierName = supplier.SuplierName;
+            //ioRequestEntity.CheckerName = user.Username;
+            //ioRequestEntity.CustomerName = customer.CustomerName;
+            //ioRequestEntity.SupplierName = supplier.SuplierName;
 
 
             if (createIORequest.IORequestDetails == null || !createIORequest.IORequestDetails.Any())
@@ -74,7 +74,7 @@ namespace WWMS.BAL.Services
         /// hàm này để update từ pending sang done
         public async Task DoneIORequestsAsync(long id)
         {
-         
+
             var currentIORequest = _mapper.Map<GetIORequest?>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
 
             if (currentIORequest == null)
@@ -82,8 +82,8 @@ namespace WWMS.BAL.Services
                 throw new Exception("IORequest not found.");
             }
 
- 
-           
+
+
 
             if (currentIORequest.IORequestDetails != null && currentIORequest.IORequestDetails.Any())
             {
@@ -92,7 +92,7 @@ namespace WWMS.BAL.Services
                     var midRoom = await _unitOfWork.Rooms.GetByIdNotTrack((long)currentIORequest.RoomId);
                     var midWine = await _unitOfWork.Wines.GetByIdNotTrack(existingDetail.WineId);
 
-                   
+
                     if (currentIORequest.IOType == "Out" && currentIORequest.Status == "Pending")
                     {
                         await UpdateExistingWineRoomsForOutput(midRoom, midWine, existingDetail);
@@ -220,8 +220,8 @@ namespace WWMS.BAL.Services
             currentIORequest.SuplierId = updateIORequest.SuplierId ?? currentIORequest.SuplierId;
             currentIORequest.RoomId = updateIORequest.RoomId ?? currentIORequest.RoomId;
 
-  
-   
+
+
             if (currentIORequest.CheckerId.HasValue)
             {
                 var checker = await _unitOfWork.Users.GetEntityByIdAsync(currentIORequest.CheckerId.Value);
@@ -244,7 +244,7 @@ namespace WWMS.BAL.Services
             currentIORequest.Status = updateIORequest.status ?? currentIORequest.Status;
             var user = await _unitOfWork.Users.GetEntityByIdAsync((long)currentIORequest.CheckerId);
 
-         
+
 
             if (updateIORequest.UpIORequestDetails != null && updateIORequest.UpIORequestDetails.Any())
             {
@@ -283,13 +283,13 @@ namespace WWMS.BAL.Services
                 foreach (var newDetail in updateIORequest.IORequestDetails)
                 {
 
-                        currentIORequest.IORequestDetails.Add(new IORequestDetail
-                        {
-                            Quantity = newDetail.Quantity, 
-                            WineId = newDetail.WineId,     
-                            IORequestId = currentIORequest.Id 
-                        });
-                    
+                    currentIORequest.IORequestDetails.Add(new IORequestDetail
+                    {
+                        Quantity = newDetail.Quantity,
+                        WineId = newDetail.WineId,
+                        IORequestId = currentIORequest.Id
+                    });
+
                 }
             }
             var io = _mapper.Map<IORequest?>(currentIORequest);
@@ -311,19 +311,19 @@ namespace WWMS.BAL.Services
             {
                 foreach (var newDetail in updateIORequest.UpIORequestDetails)
                 {
-                   
+
                     var existingDetail = currentIORequest.IORequestDetails
                         .FirstOrDefault(d => d.Id == newDetail.Id);
 
                     if (existingDetail != null)
                     {
-     
+
                         existingDetail.Quantity = newDetail.Quantity != 0 ? newDetail.Quantity : existingDetail.Quantity;
                         existingDetail.WineId = newDetail.WineId != 0 ? newDetail.WineId : existingDetail.WineId;
                     }
                     else
                     {
-                       
+
                         currentIORequest.IORequestDetails.Add(new GetIORequestDetail
                         {
                             Quantity = newDetail.Quantity,
