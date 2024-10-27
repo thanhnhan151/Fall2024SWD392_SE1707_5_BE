@@ -21,6 +21,8 @@ namespace WWMS.BAL.Services
 
         public async Task CreateWineCategoryAsync(CreateWineCategoryRequest createWineCategoryRequest)
         {
+            if (await _unitOfWork.Tastes.CheckExistAsync(createWineCategoryRequest.CategoryName)) throw new Exception($"Category with name: {createWineCategoryRequest.CategoryName} has already existed");
+
             await _unitOfWork.WineCategories.AddEntityAsync(_mapper.Map<WineCategory>(createWineCategoryRequest));
 
             await _unitOfWork.CompleteAsync();

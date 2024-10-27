@@ -1,7 +1,5 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.AlcoholByVolumes;
 
@@ -50,7 +48,7 @@ namespace WWMS.API.Controllers
             {
                 await _alcoholService.CreateAsync(request);
 
-                return Ok(request);
+                return Ok("Created Successfully");
             }
             catch (Exception ex)
             {
