@@ -205,7 +205,7 @@ namespace WWMS.BAL.Services
             }
             if (currentIORequest.Status == "Done")
             {
-                throw new InvalidOperationException("Cannot update IORequest with status 'Done' or 'Cancel'.");
+                throw new InvalidOperationException("Cannot update IORequest with status 'Done'.");
             }
 
             // if null give a old ìnormation
