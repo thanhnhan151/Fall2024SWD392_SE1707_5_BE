@@ -14,6 +14,17 @@ namespace WWMS.DAL.Repositories
         {
         }
 
+        public async Task<bool> CheckExistAsync(string request)
+        {
+            var category = await _dbSet.Where(u => u.CategoryName == request.ToLower())
+                                   .Select(u => new WineCategory { Id = u.Id })
+                                   .FirstOrDefaultAsync();
+
+            if (category == null) return false;
+
+            return true;
+        }
+
         public async Task<WineCategory?> GetAllWinesByWineCategoryIdAsync(long id)
             => await _dbSet.Where(c => c.Id == id)
                            .Select(c => new WineCategory

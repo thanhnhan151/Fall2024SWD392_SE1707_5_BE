@@ -58,7 +58,7 @@ namespace WWMS.BAL.Services
             _vnPayConfig.TmnCode,
             DateTime.Now,
             ipAddress ?? string.Empty,
-            sum,
+            (int)sum,
             "other",
             $"Check-out import request {id}" ?? string.Empty,
             _vnPayConfig.ReturnUrl,

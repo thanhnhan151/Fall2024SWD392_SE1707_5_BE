@@ -16,11 +16,11 @@ namespace WWMS.DAL.Repositories
 
         public async Task<bool> CheckExistAsync(string request)
         {
-            var user = await _dbSet.Where(u => u.TasteType == request)
+            var taste = await _dbSet.Where(u => u.TasteType == request.ToLower())
                                    .Select(u => new Taste { Id = u.Id })
                                    .FirstOrDefaultAsync();
 
-            if (user == null) return false;
+            if (taste == null) return false;
 
             return true;
         }

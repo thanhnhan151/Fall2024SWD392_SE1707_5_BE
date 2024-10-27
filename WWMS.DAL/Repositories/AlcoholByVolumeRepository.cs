@@ -16,11 +16,11 @@ namespace WWMS.DAL.Repositories
 
         public async Task<bool> CheckExistAsync(string request)
         {
-            var user = await _dbSet.Where(u => u.AlcoholByVolumeType == request)
+            var alcoholByVolume = await _dbSet.Where(u => u.AlcoholByVolumeType == request.ToLower())
                                    .Select(u => new AlcoholByVolume { Id = u.Id })
                                    .FirstOrDefaultAsync();
 
-            if (user == null) return false;
+            if (alcoholByVolume == null) return false;
 
             return true;
         }
