@@ -69,12 +69,12 @@ namespace WWMS.DAL.Repositories
 
             if (checkExist.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
             {
-                checkExist.Status = "Cancel";
+                checkExist.Status = "Cancle";
 
             }
             else
             {
-                throw new Exception($"Import/Export {id} does not exist");
+                throw new Exception("IORequest status must be 'Pending' to Delete.");
             }
 
             _dbSet.Update(checkExist);

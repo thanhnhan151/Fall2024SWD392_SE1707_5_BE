@@ -13,10 +13,6 @@
         public long? SuplierId { get; set; }
         public long? CustomerId { get; set; }
 
-        //public string? SupplierName { get; set; }
-        //public string? CustomerName { get; set; }
-        //public string? CheckerName { get; set; }
-        public string status { get; set; }
         public ICollection<UpdateIORequestDetail> UpIORequestDetails { get; set; } = [];
 
     }

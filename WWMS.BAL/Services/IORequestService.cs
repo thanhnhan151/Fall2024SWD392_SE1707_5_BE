@@ -81,7 +81,10 @@ namespace WWMS.BAL.Services
             }
 
 
-
+            if (currentIORequest.Status != "Pending")
+            {
+                throw new Exception("IORequest status must be 'Pending' to proceed.");
+            }
 
             if (currentIORequest.IORequestDetails != null && currentIORequest.IORequestDetails.Any())
             {
@@ -194,9 +197,9 @@ namespace WWMS.BAL.Services
             {
                 throw new Exception("IORequest not found.");
             }
-            if (currentIORequest.Status == "Done")
+            if (currentIORequest.Status != "Pending")
             {
-                throw new InvalidOperationException("Cannot update IORequest with status 'Done'.");
+                throw new Exception("IORequest status must be 'Pending' to update.");
             }
 
             // if null give a old ìnormation
@@ -212,11 +215,7 @@ namespace WWMS.BAL.Services
             currentIORequest.RoomId = updateIORequest.RoomId ?? currentIORequest.RoomId;
 
 
-
-
-
-
-            currentIORequest.Status = updateIORequest.status ?? currentIORequest.Status;
+           
             var user = await _unitOfWork.Users.GetEntityByIdAsync((long)currentIORequest.CheckerId);
 
 
@@ -254,7 +253,11 @@ namespace WWMS.BAL.Services
                 throw new Exception("IORequest not found.");
             }
 
-            // Kiểm tra và thêm mới chi tiết yêu cầu
+            if (currentIORequest.Status != "Pending")
+            {
+                throw new Exception("IORequest status must be 'Pending' to update.");
+            }
+
             if (updateIORequest.IORequestDetails != null && updateIORequest.IORequestDetails.Any())
             {
                 foreach (var newDetail in updateIORequest.IORequestDetails)
@@ -282,6 +285,10 @@ namespace WWMS.BAL.Services
             if (currentIORequest == null)
             {
                 throw new Exception("IORequest not found.");
+            }
+            if (currentIORequest.Status != "Pending")
+            {
+                throw new Exception("IORequest status must be 'Pending' to update.");
             }
 
             if (updateIORequest.UpIORequestDetails != null && updateIORequest.UpIORequestDetails.Any())
