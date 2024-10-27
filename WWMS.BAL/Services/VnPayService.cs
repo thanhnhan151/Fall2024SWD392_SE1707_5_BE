@@ -47,29 +47,24 @@ namespace WWMS.BAL.Services
 
         public async Task<string> CreateUrl(int id)
         {
-            int testAmount = 15000000;
-
             var ipAddress = _httpContextAccessor?.HttpContext?.Connection?.LocalIpAddress?.ToString();
 
             var paymentUrl = string.Empty;
 
-            var import = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
+            var sum = await _unitOfWork.IIORequests.GetImportRequestPriceForPaymentAsync(id);
 
-            if (import != null)
-            {
-                var vnPayRequest = new VnPayRequest(
-                _vnPayConfig.Version,
-                _vnPayConfig.TmnCode,
-                DateTime.Now,
-                ipAddress ?? string.Empty,
-                (decimal)testAmount/*import.TotalWithDiscount*/,
-                "other",
-                $"Check-out order {import.Id}" ?? string.Empty,
-                _vnPayConfig.ReturnUrl,
-                import.Id.ToString());
+            var vnPayRequest = new VnPayRequest(
+            _vnPayConfig.Version,
+            _vnPayConfig.TmnCode,
+            DateTime.Now,
+            ipAddress ?? string.Empty,
+            sum,
+            "other",
+            $"Check-out import request {id}" ?? string.Empty,
+            _vnPayConfig.ReturnUrl,
+            id.ToString());
 
-                paymentUrl = vnPayRequest.GetLink(_vnPayConfig.PaymentUrl, _vnPayConfig.HashSecret);
-            }
+            paymentUrl = vnPayRequest.GetLink(_vnPayConfig.PaymentUrl, _vnPayConfig.HashSecret);
 
             return paymentUrl;
         }

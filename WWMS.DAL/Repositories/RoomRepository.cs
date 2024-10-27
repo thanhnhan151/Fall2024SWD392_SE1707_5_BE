@@ -32,8 +32,6 @@ namespace WWMS.DAL.Repositories
         {
             var result = await _dbSet
                 .Where(c => c.Id == id)
-                .Include(w => w.WineRooms)
-                        .ThenInclude(w => w.Wine)
                 .Select(r => new Room
                 {
                     Id = r.Id,
