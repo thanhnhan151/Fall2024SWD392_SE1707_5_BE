@@ -30,6 +30,6 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<List<GetSuplierResponse>> GetAllAsync() => _mapper.Map<List<GetSuplierResponse>>(await _unitOfWork.Roles.GetAllEntitiesAsync());
+        public async Task<List<GetSuplierResponse>> GetAllAsync() => _mapper.Map<List<GetSuplierResponse>>(await _unitOfWork.Supliers.GetAllEntitiesAsync());
     }
 }

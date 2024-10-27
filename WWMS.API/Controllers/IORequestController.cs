@@ -1,11 +1,8 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
 using WWMS.BAL.Models.IORequests.IOrequestdetails;
-using WWMS.BAL.Models.Rooms;
-using WWMS.BAL.Services;
 
 namespace WWMS.API.Controllers
 {
@@ -105,19 +102,19 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "requestCode": "string",
+        ///       "requestCode": "REQ-001",
         ///       "startDate": "2024-10-25T21:51:14.383Z",
         ///       "dueDate": "2024-10-25T21:51:14.383Z",
-        ///       "comments": "string",
-        ///       "ioType": "string",
-        ///       "roomId": 0,
-        ///       "checkerId": 0,
-        ///       "suplierId": 0,
-        ///       "customerId": 0,
+        ///       "comments": "Import",
+        ///       "ioType": "In",
+        ///       "roomId": 1,
+        ///       "checkerId": 2,
+        ///       "suplierId": 1,
+        ///       "customerId": 1,
         ///       "ioRequestDetails": [
         ///         {
-        ///           "quantity": 0,
-        ///           "wineId": 0
+        ///           "quantity": 10,
+        ///           "wineId": 1
         ///         }
         ///       ]
         ///     }
@@ -130,7 +127,6 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
-
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateIORequest createIORequest)
         {
@@ -260,8 +256,6 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-
-
         [HttpGet("style")]
         public async Task<IActionResult> GetAllByIOStyleAsync(string io)
         {
@@ -355,7 +349,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
-                await _iORequestService.UpdateManyIORequestDetailsByIdAsync(updateIO,id);
+                await _iORequestService.UpdateManyIORequestDetailsByIdAsync(updateIO, id);
 
                 return Ok("Update Successfully");
             }
@@ -370,11 +364,11 @@ namespace WWMS.API.Controllers
         #endregion
 
         [HttpPut("delete-details/{id}")]
-        public async Task<IActionResult> DeleteDetailsAsync( long id, long detailIds)
+        public async Task<IActionResult> DeleteDetailsAsync(long id, long detailIds)
         {
             try
             {
-                await _iORequestService.RemoveIORequestDetailByIdAsync(id,detailIds);
+                await _iORequestService.RemoveIORequestDetailByIdAsync(id, detailIds);
 
                 return Ok("Update Successfully");
             }
@@ -388,7 +382,7 @@ namespace WWMS.API.Controllers
         }
 
         [HttpPut("done/{id}")]
-        public async Task<IActionResult> DonesAsync( long id)
+        public async Task<IActionResult> DonesAsync(long id)
         {
             try
             {
@@ -405,7 +399,6 @@ namespace WWMS.API.Controllers
             }
         }
     }
-
 }
 
 

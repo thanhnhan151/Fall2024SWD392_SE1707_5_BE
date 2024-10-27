@@ -1,6 +1,4 @@
-﻿using WWMS.DAL.Entities;
-
-namespace WWMS.BAL.Models.Rooms
+﻿namespace WWMS.BAL.Models.Rooms
 {
     public class RoomItem
     {
@@ -9,9 +7,7 @@ namespace WWMS.BAL.Models.Rooms
         public int Import { get; set; } = 0;
         public int Export { get; set; } = 0;
         public int CurrentQuantity { get; set; } = 0;
-
-        public long RoomId { get; set; }
-
         public long WineId { get; set; }
+        public string WineName { get; set; } = string.Empty;
     }
 }
