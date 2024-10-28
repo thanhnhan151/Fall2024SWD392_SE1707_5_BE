@@ -89,6 +89,10 @@ namespace WWMS.DAL.Repositories
             {
                 throw new Exception("IORequest not found.");
             }
+            if (parentRequest.Status != "Pending")
+            {
+                throw new Exception("IORequest status must be 'Pending' to proceed.");
+            }
 
             var detailToRemove = await _context.IORequestDetails.FindAsync(detailsId);
             if (detailToRemove == null)
