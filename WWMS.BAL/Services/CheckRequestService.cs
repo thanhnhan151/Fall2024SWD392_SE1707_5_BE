@@ -53,7 +53,7 @@ namespace WWMS.BAL.Services
 
         }
 
-        public async Task DisableAsync(long id, DisableCheckRequestRequest request)
+        public async Task DisableAsync(long id)
         {
             CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(id);
             if (checkRequest is null)
@@ -62,10 +62,6 @@ namespace WWMS.BAL.Services
             }
 
             checkRequest.Status = "DISABLED";
-            checkRequest.Comments = string.IsNullOrEmpty(checkRequest.Comments)
-                ? $"Disable Reason: {request.Comments}"
-                : $"{checkRequest.Comments}\nDisable Reason: {request.Comments}";
-
             foreach (CheckRequestDetail detail in checkRequest.CheckRequestDetails)
             {
                 detail.Status = "DISABLED";
@@ -106,7 +102,7 @@ namespace WWMS.BAL.Services
         {
             CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(updateCheckRequestRequest.Id);
 
-            if (checkRequest is null || checkRequest.DueDate > DateTime.Now || checkRequest.Status.Equals("DISABLED"))
+            if (checkRequest is null || checkRequest.DueDate < DateTime.Now || checkRequest.Status.Equals("DISABLED"))
             {
                 throw new Exception("Overdue or disabled or Id not found");
             }

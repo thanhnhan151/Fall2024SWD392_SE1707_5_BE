@@ -117,11 +117,11 @@ namespace WWMS.API.Controllers
         /// Manager disable check request => disable relations too
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DisableAsync(int id, [FromBody] DisableCheckRequestRequest request)
+        public async Task<IActionResult> DisableAsync(int id)
         {
             try
             {
-                await _checkRequestService.DisableAsync(id, request);
+                await _checkRequestService.DisableAsync(id);
                 return Ok("Disabled check request ok!");
             }
             catch (Exception ex)

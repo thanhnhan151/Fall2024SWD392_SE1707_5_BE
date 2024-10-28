@@ -12,6 +12,6 @@ namespace WWMS.BAL.Interfaces
 
         Task UpdateCheckRequestAsync(UpdateCheckRequestRequest updateCheckRequestRequest);
 
-        Task DisableAsync(long id, DisableCheckRequestRequest request);
+        Task DisableAsync(long id);
     }
 }
