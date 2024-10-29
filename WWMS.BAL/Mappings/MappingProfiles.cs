@@ -166,7 +166,9 @@ namespace WWMS.BAL.Mappings
             CreateMap<CheckRequest, GetCheckRequestWithDetailsResponse>()
                 .ForMember(dest => dest.CheckRequestDetails, opt => opt.MapFrom(src => src.CheckRequestDetails));
 
-            CreateMap<CheckRequestDetail, GetCheckRequestDetailListItemResponse>();
+            // CreateMap<CheckRequestDetail, GetCheckRequestDetailListItemResponse>();
+            CreateMap<CheckRequestDetail, GetCheckRequestDetailListItemResponse>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
             #endregion
 
             #region staff 
