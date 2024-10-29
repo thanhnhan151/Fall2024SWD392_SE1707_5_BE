@@ -530,24 +530,27 @@ public partial class WineWarehouseDbContext : DbContext
             entity.Property(ird => ird.Quantity)
                 .IsRequired();
 
-            // Report fields
-            //entity.Property(crd => crd.ReportCode)
-            //    .IsRequired();
+            //Report fields
+            entity.Property(crd => crd.ReportCode)
+                .HasMaxLength(10)
+                .IsRequired();
 
-            //entity.Property(crd => crd.ReportDescription)
-            //    .IsRequired(false); // Optional
+            entity.Property(crd => crd.ReportDescription)
+                .HasMaxLength(100)
+                .IsRequired(false); // Optional
 
-            //entity.Property(crd => crd.ReporterAssigned)
-            //    .IsRequired();
+            entity.Property(crd => crd.ReporterAssigned)
+                .HasMaxLength(15)
+                .IsRequired();
 
-            //entity.Property(crd => crd.DiscrepanciesFound)
-            //    .IsRequired(false); // Optional
+            entity.Property(crd => crd.DiscrepanciesFound)
+                .IsRequired(false); // Optional
 
-            //entity.Property(crd => crd.ActualQuantity)
-            //    .IsRequired();
+            entity.Property(crd => crd.ActualQuantity)
+                .IsRequired();
 
-            //entity.Property(crd => crd.ReportFile)
-            //    .IsRequired(false); // Optional
+            entity.Property(crd => crd.ReportFile)
+                .IsRequired(false); // Optional
 
             // Foreign keys
             entity.Property(ird => ird.WineId)

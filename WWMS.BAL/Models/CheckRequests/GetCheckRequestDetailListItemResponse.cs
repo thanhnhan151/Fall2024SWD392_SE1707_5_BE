@@ -20,5 +20,7 @@ namespace WWMS.BAL.Models.CheckRequests
         //WINE_ROOM REFERENCE
         public long WineRoomId { get; set; }
         public int ExpectedCurrQuantity { get; set; }
+        public string Status { get; set; }
+
     }
 }
