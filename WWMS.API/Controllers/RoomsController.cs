@@ -1,7 +1,5 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Rooms;
 
@@ -83,6 +81,39 @@ namespace WWMS.API.Controllers
             try
             {
                 var result = await _roomService.GetRoomListAsync();
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return NotFound();
+        }
+        #endregion
+
+        #region Gell All Available Rooms
+        /// <summary>
+        /// Get all available rooms in the system
+        /// </summary>
+        /// <returns>A list of all available rooms</returns>
+        /// <response code="200">Return all available rooms in the system</response>
+        /// <response code="400">If no available rooms are in the system</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        //[PermissionAuthorize("Staff")]
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAllAvailableAsync()
+        {
+            try
+            {
+                var result = await _roomService.GetAvailableRoomListAsync();
 
                 if (result is not null)
                 {

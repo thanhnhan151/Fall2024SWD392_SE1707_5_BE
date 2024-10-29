@@ -28,6 +28,17 @@ namespace WWMS.DAL.Repositories
                      })
                      .ToListAsync();
 
+        public async Task<ICollection<Room>> GetAllAvailableRoomsAsync()
+            => await _dbSet.Where(r => r.Status.Equals("Active"))
+                           .Select(r => new Room
+                           {
+                               Id = r.Id,
+                               RoomName = r.RoomName,
+                               Capacity = r.Capacity,
+                               CurrentOccupancy = r.CurrentOccupancy
+                           })
+                           .ToListAsync();
+
         public override async Task<Room?> GetEntityByIdAsync(long id)
         {
             var result = await _dbSet

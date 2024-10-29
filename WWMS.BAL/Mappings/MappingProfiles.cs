@@ -52,14 +52,14 @@ namespace WWMS.BAL.Mappings
 
             CreateMap<Room, GetRoomResponse>();
 
+            CreateMap<Room, GetAvailableRoomResponse>()
+                .ForMember(r => r.RoomName, r => r.MapFrom(r => r.RoomName.Concat($" (Available: {r.Capacity - r.CurrentOccupancy})")));
+
             CreateMap<Room, GetRoomDetailResponse>();
 
             CreateMap<CreateRoomRequest, Room>();
 
             CreateMap<UpdateRoomRequest, Room>();
-
-
-
 
             CreateMap<Room, GetRoom>();
 
@@ -213,7 +213,7 @@ namespace WWMS.BAL.Mappings
                 .ForMember(dest => dest.DiscrepanciesFound, opt => opt.MapFrom(src => src.DiscrepanciesFound))
                 .ForMember(dest => dest.ActualQuantity, opt => opt.MapFrom(src => src.ActualQuantity))
                 .ForMember(dest => dest.ReportFile, opt => opt.MapFrom(src => src.ReportFile))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                //.ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.RequesterId, opt => opt.MapFrom(src => src.CheckRequest.RequesterId))
                 .ForMember(dest => dest.RequesterName, opt => opt.MapFrom(src => src.CheckRequest.RequesterName));
 
