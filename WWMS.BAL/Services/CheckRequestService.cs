@@ -49,6 +49,9 @@ namespace WWMS.BAL.Services
             checkRequest.CreatedBy = createCheckRequestRequest.RequesterName;
 
             checkRequest.CheckRequestDetails = _mapper.Map<List<CheckRequestDetail>>(createCheckRequestRequest.CreateCheckRequestDetailRequests);
+            foreach(var item in checkRequest.CheckRequestDetails){
+                item.Status = "ACTIVE";
+            }
             return checkRequest;
 
         }

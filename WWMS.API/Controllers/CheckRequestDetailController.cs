@@ -34,6 +34,7 @@ namespace WWMS.API.Controllers
         {
             try
             {
+                //TODO: get user info from token then if MANAGER => fetch all
                 var result = await _checkRequestDetailService.GetAllAsync();
 
                 if (result is not null)
@@ -51,28 +52,28 @@ namespace WWMS.API.Controllers
         #endregion
 
         #region Get All Check Request Details as tasks of staff
-        /// <summary>
-        ///Staff get all their check request details as their tasks
-        /// </summary>
-        [HttpGet("staff/{reporterName}")]
-        public async Task<IActionResult> GetAllByReporterNameAsync(string reporterName)
-        {
-            try
-            {
-                var result = await _checkRequestDetailService.GetAllByReporterNameAsync(reporterName);
+        // /// <summary>
+        // ///Staff get all their check request details as their tasks
+        // /// </summary>
+        // [HttpGet("staff/{reporterName}")]
+        // public async Task<IActionResult> GetAllByReporterNameAsync(string reporterName)
+        // {
+        //     try
+        //     {
+        //         var result = await _checkRequestDetailService.GetAllByReporterNameAsync(reporterName);
 
-                if (result is not null)
-                {
-                    return Ok(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+        //         if (result is not null)
+        //         {
+        //             return Ok(result);
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         throw new Exception(ex.Message);
+        //     }
 
-            return NotFound();
-        }
+        //     return NotFound();
+        // }
         #endregion
 
         #region Create an additional check request detail

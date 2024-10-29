@@ -1,4 +1,3 @@
-using WWMS.DAL.Entities;
 
 namespace WWMS.BAL.Models.CheckRequests
 {
@@ -49,5 +48,10 @@ namespace WWMS.BAL.Models.CheckRequests
         public int? DiscrepanciesFound { get; set; }
         public int ActualQuantity { get; set; }
         public string? ReportFile { get; set; }
+
+
+        //STATUS
+
+        public string Status { get; set; }
     }
 }
