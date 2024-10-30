@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Users;
 
@@ -45,7 +46,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("ADMIN")]
+        [PermissionAuthorize("ADMIN")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest createUserRequest)
         {
@@ -76,7 +77,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("ADMIN", "MANAGER")]
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -102,7 +103,7 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Get all staff
         /// </summary>
-        // [PermissionAuthorize("ADMIN", "MANAGER")]
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet]
         [Route("staff")]
 
@@ -138,6 +139,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("ADMIN", "MANAGER", "STAFF")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
@@ -187,6 +189,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("ADMIN", "MANAGER", "STAFF")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(long id, [FromBody] UpdateUserRequest updateUserRequest)
         {
@@ -219,7 +222,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("ADMIN")]
+        [PermissionAuthorize("ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {

@@ -78,12 +78,14 @@ namespace WWMS.BAL
             services.AddScoped<IReportCheckRequestService, ReportCheckRequestService>();
 
             services.AddScoped<IDashBoardService, DashBoardService>();
+
             services.AddScoped<IWineRoomService, WineRoomService>();
 
             #endregion
 
             #region Validators
             services.AddScoped<IValidator<CreateUserRequest>, CreateUserRequestValidator>();
+
             services.AddScoped<IValidator<CreateUpdateWineRequest>, CreateUpdateWineRequestValidator>();
             #endregion
 

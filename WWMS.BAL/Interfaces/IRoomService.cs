@@ -8,6 +8,8 @@ namespace WWMS.BAL.Interfaces
 
         Task<List<GetRoomResponse>> GetRoomListAsync();
 
+        Task<List<GetAvailableRoomResponse>> GetAvailableRoomListAsync();
+
         Task<GetRoomDetailResponse?> GetRoomByIdAsync(long id);
 
         Task UpdateRoomAsync(long id, UpdateRoomRequest updateRoomRequest);

@@ -62,6 +62,8 @@ namespace WWMS.BAL.Services
 
         public async Task<List<GetRoomResponse>> GetRoomListAsync() => _mapper.Map<List<GetRoomResponse>>(await _unitOfWork.Rooms.GetAllEntitiesAsync());
 
+        public async Task<List<GetAvailableRoomResponse>> GetAvailableRoomListAsync() => _mapper.Map<List<GetAvailableRoomResponse>>(await _unitOfWork.Rooms.GetAllAvailableRoomsAsync());
+
         public async Task UpdateRoomAsync(long id, UpdateRoomRequest updateRoomRequest)
         {
             var room = await _unitOfWork.Rooms.GetEntityByIdAsync(id) ?? throw new Exception($"Room with id: {id} does not exist");

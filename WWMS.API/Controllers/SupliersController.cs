@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Supliers;
 
@@ -40,7 +41,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Admin")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateSuplierRequest request)
         {
@@ -71,7 +72,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Admin")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {

@@ -59,7 +59,7 @@ namespace WWMS.BAL.Services
         {
             CheckRequestDetail checkRequestDetail = _mapper.Map<CheckRequestDetail>(createCheckRequestDetailRequest);
             checkRequestDetail.Status = "ACTIVE";
-            await _unitOfWork.CheckRequestDetails.AddEntityAsync(_mapper.Map<CheckRequestDetail>(createCheckRequestDetailRequest));
+            await _unitOfWork.CheckRequestDetails.AddEntityAsync(checkRequestDetail);
             await _unitOfWork.CompleteAsync();
         }
 

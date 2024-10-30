@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
@@ -45,7 +44,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Manager")]
+        [PermissionAuthorize("MANAGER")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateRoomRequest createRoomRequest)
         {
@@ -76,13 +75,46 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Staff")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
             try
             {
                 var result = await _roomService.GetRoomListAsync();
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return NotFound();
+        }
+        #endregion
+
+        #region Gell All Available Rooms
+        /// <summary>
+        /// Get all available rooms in the system
+        /// </summary>
+        /// <returns>A list of all available rooms</returns>
+        /// <response code="200">Return all available rooms in the system</response>
+        /// <response code="400">If no available rooms are in the system</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("MANAGER", "STAFF")]
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAllAvailableAsync()
+        {
+            try
+            {
+                var result = await _roomService.GetAvailableRoomListAsync();
 
                 if (result is not null)
                 {
@@ -110,6 +142,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
@@ -159,7 +192,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Manager")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(long id, [FromBody] UpdateRoomRequest updateRoomRequest)
         {
@@ -192,7 +225,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Manager")]
+        [PermissionAuthorize("MANAGER")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {

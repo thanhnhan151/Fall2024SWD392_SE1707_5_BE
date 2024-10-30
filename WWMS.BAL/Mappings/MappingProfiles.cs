@@ -52,14 +52,14 @@ namespace WWMS.BAL.Mappings
 
             CreateMap<Room, GetRoomResponse>();
 
+            CreateMap<Room, GetAvailableRoomResponse>()
+                .ForMember(r => r.RoomName, r => r.MapFrom(r => r.RoomName + $" (Available: {r.Capacity - r.CurrentOccupancy}) bottles"));
+
             CreateMap<Room, GetRoomDetailResponse>();
 
             CreateMap<CreateRoomRequest, Room>();
 
             CreateMap<UpdateRoomRequest, Room>();
-
-
-
 
             CreateMap<Room, GetRoom>();
 
@@ -188,6 +188,36 @@ namespace WWMS.BAL.Mappings
             #endregion
 
             #region CheckRequest Detail
+
+            CreateMap<CheckRequestDetail, GetCheckRequestDetailViewDetailResponse>()
+                .ForMember(dest => dest.CheckRequestCode, opt => opt.MapFrom(src => src.CheckRequestCode))
+                .ForMember(dest => dest.Purpose, opt => opt.MapFrom(src => src.Purpose))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
+                .ForMember(dest => dest.CheckRequestId, opt => opt.MapFrom(src => src.CheckRequestId))
+                .ForMember(dest => dest.WineId, opt => opt.MapFrom(src => src.WineId))
+                .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
+                .ForMember(dest => dest.WineName, opt => opt.MapFrom(src => src.WineName))
+                .ForMember(dest => dest.MFD, opt => opt.MapFrom(src => src.MFD))
+                .ForMember(dest => dest.RoomId, opt => opt.MapFrom(src => src.RoomId))
+                .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.RoomName))
+                .ForMember(dest => dest.RoomCapacity, opt => opt.MapFrom(src => src.RoomCapacity))
+                .ForMember(dest => dest.CheckerId, opt => opt.MapFrom(src => src.CheckerId))
+                .ForMember(dest => dest.CheckerName, opt => opt.MapFrom(src => src.CheckerName))
+                .ForMember(dest => dest.WineRoomId, opt => opt.MapFrom(src => src.WineRoomId))
+                .ForMember(dest => dest.ExpectedCurrQuantity, opt => opt.MapFrom(src => src.ExpectedCurrQuantity))
+                .ForMember(dest => dest.ReportCode, opt => opt.MapFrom(src => src.ReportCode))
+                .ForMember(dest => dest.ReportDescription, opt => opt.MapFrom(src => src.ReportDescription))
+                .ForMember(dest => dest.ReporterAssigned, opt => opt.MapFrom(src => src.ReporterAssigned))
+                .ForMember(dest => dest.DiscrepanciesFound, opt => opt.MapFrom(src => src.DiscrepanciesFound))
+                .ForMember(dest => dest.ActualQuantity, opt => opt.MapFrom(src => src.ActualQuantity))
+                .ForMember(dest => dest.ReportFile, opt => opt.MapFrom(src => src.ReportFile))
+                //.ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.RequesterId, opt => opt.MapFrom(src => src.CheckRequest.RequesterId))
+                .ForMember(dest => dest.RequesterName, opt => opt.MapFrom(src => src.CheckRequest.RequesterName));
+
+
             CreateMap<CreateAdditionalCheckRequestDetailRequest, CheckRequestDetail>()
                 .ForMember(dest => dest.Purpose, opt => opt.MapFrom(src => src.Purpose))
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
