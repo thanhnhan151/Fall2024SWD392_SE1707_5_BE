@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.WineCategories;
 
@@ -41,6 +41,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateWineCategoryRequest createWineCategoryRequest)
         {
@@ -71,7 +72,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Staff")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -105,6 +106,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("{id}/wines")]
         public async Task<IActionResult> GetAllWinesByWineCategoryIdAsync(int id)
         {
