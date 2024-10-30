@@ -29,7 +29,8 @@ namespace WWMS.DAL.Repositories
                      .ToListAsync();
 
         public async Task<ICollection<Room>> GetAllAvailableRoomsAsync()
-            => await _dbSet.Where(r => r.Status.Equals("Active"))
+            => await _dbSet.Where(r => r.Status.Equals("Active")
+                                    && r.Capacity - r.CurrentOccupancy >= 20)
                            .Select(r => new Room
                            {
                                Id = r.Id,

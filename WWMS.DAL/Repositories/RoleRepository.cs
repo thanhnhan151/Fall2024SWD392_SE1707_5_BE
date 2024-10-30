@@ -15,7 +15,7 @@ namespace WWMS.DAL.Repositories
         }
 
         public override async Task<ICollection<Role>> GetAllEntitiesAsync()
-            => await _dbSet.Where(r => r.Id != 1 && r.Id != 2).ToListAsync();
+            => await _dbSet.Where(r => r.Id != 1).ToListAsync();
 
         public async Task<bool> CheckExistAsync(string request)
         {
