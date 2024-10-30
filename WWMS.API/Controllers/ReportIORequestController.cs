@@ -1,11 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.Runtime.CompilerServices;
-using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.ReportIORequest;
-using WWMS.BAL.Services;
 
 namespace WWMS.API.Controllers
 {
@@ -42,10 +38,8 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("Staff")]
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet]
-
         public async Task<IActionResult> GetAllAsync()
         {
             try
@@ -64,10 +58,6 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-
-        ///////////////////
-        ///
-
         #region Get A Report Import/Export By Id
         /// <summary>
         /// Get a Report Import/Export in the system
@@ -80,7 +70,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
@@ -102,7 +92,8 @@ namespace WWMS.API.Controllers
             });
         }
         #endregion
-        [PermissionAuthorize("MANAGER", "STAFF")]
+
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("GetReportsByIORequestId/{id}")]
         public async Task<IActionResult> GetAllReportByIOIdAsync(long id)
         {
@@ -124,8 +115,6 @@ namespace WWMS.API.Controllers
             });
         }
 
-
-
         #region Update A report for Import/Export Request
         /// <summary>
         /// Update a room in the system
@@ -141,7 +130,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(CreateReport updateIO, long id)
         {
@@ -161,7 +150,6 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-
         #region Disable An Import/Export and details
         /// <summary>
         /// Disable an Disable An Import/Export  in the system
@@ -175,9 +163,9 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DisableAsync(long id,long idDetails)
+        public async Task<IActionResult> DisableAsync(long id, long idDetails)
         {
             try
             {
