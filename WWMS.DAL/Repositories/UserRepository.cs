@@ -16,52 +16,18 @@ namespace WWMS.DAL.Repositories
 
         public override async Task<ICollection<User>> GetAllEntitiesAsync()
         {
-            var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase));
+            //var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase));
 
-            if (role == null) return new List<User>();
+            //if (role == null) return new List<User>();
 
-            var lowerRole = role.Value.ToString().ToLower();
+            //var lowerRole = role.Value.ToString().ToLower();
 
-            if (lowerRole == "manager")
-            {
-                var usersManager = await _dbSet
-                           .Where(u => u.RoleId != 1
-                                    && u.RoleId != 2
-                                    && u.Status.Equals("Active"))
-                           .OrderByDescending(u => u.Id)
-                           .Select(u => new User
-                           {
-                               Id = u.Id,
-                               Username = u.Username,
-                               Email = u.Email,
-                               FirstName = u.FirstName,
-                               LastName = u.LastName,
-                               PhoneNumber = u.PhoneNumber,
-                               Status = u.Status,
-                               Role = u.Role
-                           })
-                           .ToListAsync();
-
-                return usersManager;
-            }
-
-            var usersAdmin = await _dbSet
-                           .Where(u => u.Id != GetLoggedUserId())
-                           .OrderByDescending(u => u.Id)
-                           .Select(u => new User
-                           {
-                               Id = u.Id,
-                               Username = u.Username,
-                               Email = u.Email,
-                               FirstName = u.FirstName,
-                               LastName = u.LastName,
-                               PhoneNumber = u.PhoneNumber,
-                               Status = u.Status,
-                               Role = u.Role
-                           })
-                           .ToListAsync();
-
-            //var usersAdmin = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 2)
+            //if (lowerRole == "manager")
+            //{
+            //    var usersManager = await _dbSet
+            //               .Where(u => u.RoleId != 1
+            //                        && u.RoleId != 2
+            //                        && u.Status.Equals("Active"))
             //               .OrderByDescending(u => u.Id)
             //               .Select(u => new User
             //               {
@@ -75,6 +41,40 @@ namespace WWMS.DAL.Repositories
             //                   Role = u.Role
             //               })
             //               .ToListAsync();
+
+            //    return usersManager;
+            //}
+
+            //var usersAdmin = await _dbSet
+            //               .Where(u => u.Id != GetLoggedUserId())
+            //               .OrderByDescending(u => u.Id)
+            //               .Select(u => new User
+            //               {
+            //                   Id = u.Id,
+            //                   Username = u.Username,
+            //                   Email = u.Email,
+            //                   FirstName = u.FirstName,
+            //                   LastName = u.LastName,
+            //                   PhoneNumber = u.PhoneNumber,
+            //                   Status = u.Status,
+            //                   Role = u.Role
+            //               })
+            //               .ToListAsync();
+
+            var usersAdmin = await _dbSet.Where(u => u.RoleId != 1 && u.RoleId != 2)
+                           .OrderByDescending(u => u.Id)
+                           .Select(u => new User
+                           {
+                               Id = u.Id,
+                               Username = u.Username,
+                               Email = u.Email,
+                               FirstName = u.FirstName,
+                               LastName = u.LastName,
+                               PhoneNumber = u.PhoneNumber,
+                               Status = u.Status,
+                               Role = u.Role
+                           })
+                           .ToListAsync();
 
             return usersAdmin;
         }
