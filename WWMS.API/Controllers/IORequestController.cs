@@ -102,16 +102,34 @@ namespace WWMS.API.Controllers
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// 
+        ///
+        ///     Import
+        ///     
         ///     {
         ///       "requestCode": "REQ-001",
         ///       "startDate": "2024-10-25T21:51:14.383Z",
-        ///       "dueDate": "2024-10-25T21:51:14.383Z",
         ///       "comments": "Import",
         ///       "ioType": "In",
         ///       "roomId": 1,
         ///       "checkerId": 2,
         ///       "suplierId": 1,
+        ///       "ioRequestDetails": [
+        ///         {
+        ///           "quantity": 10,
+        ///           "wineId": 1
+        ///         }
+        ///       ]
+        ///     }
+        ///     
+        ///     Export
+        ///     
+        ///     {
+        ///       "requestCode": "REQ-001",
+        ///       "startDate": "2024-10-25T21:51:14.383Z",
+        ///       "comments": "Export",
+        ///       "ioType": "Out",
+        ///       "roomId": 1,
+        ///       "checkerId": 2,
         ///       "customerId": 1,
         ///       "ioRequestDetails": [
         ///         {
