@@ -2,7 +2,8 @@
 {
     public class CreateReportIORequest
     {
-        public string ReportCode { get; set; } = string.Empty;
+        public long Id { get; set; }
+
         public string? ReportDescription { get; set; } = string.Empty;
         public string ReporterAssigned { get; set; } = string.Empty;
         public int? DiscrepanciesFound { get; set; }

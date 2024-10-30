@@ -53,6 +53,7 @@ namespace WWMS.DAL.Infrastructures
         public ICheckRequestRepository CheckRequests { get; private set; }
         public IWineRoomRepository WineRooms { get; private set; }
 
+        public IReportRepository Reports { get; private set; }
 
         public UnitOfWork(WineWarehouseDbContext context
             , ILoggerFactory loggerFactory
@@ -101,7 +102,10 @@ namespace WWMS.DAL.Infrastructures
             CheckRequests = new CheckRequestRepository(_context, _logger, _httpContextAccessor);
 
             CheckRequestDetails = new CheckRequestDetailRepository(_context, _logger, _httpContextAccessor);
+
             WineRooms = new WineRoomRepository(_context, _logger, _httpContextAccessor);
+
+            Reports = new ReportRepository(_context, _logger, _httpContextAccessor);
         }
 
         public async Task CompleteAsync() => await _context.SaveChangesAsync();

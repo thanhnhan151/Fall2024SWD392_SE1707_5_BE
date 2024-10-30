@@ -44,6 +44,8 @@ namespace WWMS.DAL.Infrastructures
 
         IWineRoomRepository WineRooms { get; }
 
+        IReportRepository Reports { get; }
+
         Task CompleteAsync();
     }
 }

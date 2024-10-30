@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
 using WWMS.BAL.Interfaces;
+using WWMS.BAL.Models.IORequests.IOrequestdetails;
+using WWMS.BAL.Models.IORequests;
+using WWMS.BAL.Models.ReportIORequest;
+using WWMS.DAL.Entities;
 using WWMS.DAL.Infrastructures;
+using Microsoft.EntityFrameworkCore;
 
 namespace WWMS.BAL.Services
 {
@@ -17,93 +22,133 @@ namespace WWMS.BAL.Services
             _unitOfWork = unitOfWork;
         }
 
-        //public async Task<GetReportIORequest?> GetReportIORequestByIdAsync(long id) => _mapper.Map<GetReportIORequest?>(await _unitOfWork.IIORequestsDetail.GetEntityByIdAsync(id));
+        public async Task<GetReportIORequest?> GetReportIORequestByIdAsync(long id)
+        {
+            var reportIORequest = await _unitOfWork.Reports.GetEntityByIdAsync(id);
+
+      
+            if (reportIORequest == null || string.IsNullOrWhiteSpace(reportIORequest.ReportCode))
+            {
+                return null; 
+            }
+
+            return _mapper.Map<GetReportIORequest?>(reportIORequest);
+        }
 
 
-        //public async Task<List<GetReportIORequest>> GetReportIORequestListAsync()
-        //{
+        public async Task<List<GetReportIORequest>> GetReportIORequestListAsync()
+        {
+            var allReportIORequests = await _unitOfWork.Reports.GetAllEntitiesAsync();
 
-        //    var allReportIORequests = await _unitOfWork.IIORequestsDetail.GetAllEntitiesAsync();
+            var filteredReportIORequests = allReportIORequests
+                .Where(reportIORequest => !string.IsNullOrWhiteSpace(reportIORequest.ReportCode)) 
+                .ToList();
 
-        //    // Lọc danh sách để chỉ lấy những phần tử mà ReportCode không null hoặc empty
-        //    var filteredReportIORequests = allReportIORequests
-        //        .Where(reportIORequest => !string.IsNullOrEmpty(reportIORequest.ReportCode))
-        //        .ToList();
+            return _mapper.Map<List<GetReportIORequest>>(filteredReportIORequests);
+        }
+        // get All report By Io request id
+        public async Task<List<GetReportIORequest>> GetReportByIORequestidAsync(long id)
+        {
+            var IORequest = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
+
+            if (IORequest == null)
+            {
+                throw new Exception("IORequest not found.");
+            }
 
 
-        //    return _mapper.Map<List<GetReportIORequest>>(filteredReportIORequests);
-        //}
+            var filteredIORequestDetails = IORequest.IORequestDetails
+                .Where(detail => detail != null &&
+                                !string.IsNullOrWhiteSpace(detail.ReportCode)).ToList();
 
-        //public async Task UpdateReportIORequestAsync(UpdateReportIORequest updateReportIO, string file)
-        //{
-        //    var currentReportIORequest = await _unitOfWork.IIORequestsDetail.GetEntityByIdAsync(updateReportIO.Id);
 
-        //    if (currentReportIORequest == null)
-        //        throw new Exception("IORequestDetails not found.");
+            return _mapper.Map<List<GetReportIORequest>>(filteredIORequestDetails);
+        }
 
-        //    // Kiểm tra nếu yêu cầu đã có trạng thái "Done"
-        //    if (currentReportIORequest.Status == "Done" || currentReportIORequest.Status == "Cancel")
-        //        throw new Exception("This request has already been completed and cannot be modified.");
+        public async Task UpdateReportIORequestDetailsByIdAsync(CreateReport updateIORequest, long id)
+        {
 
-        //    // Cập nhật thông tin report
-        //    currentReportIORequest.ReportCode = !string.IsNullOrEmpty(updateReportIO.ReportCode) ? updateReportIO.ReportCode : currentReportIORequest.ReportCode;
-        //    currentReportIORequest.ReportDescription = updateReportIO.ReportDescription ?? currentReportIORequest.ReportDescription;
-        //    currentReportIORequest.ReporterAssigned = !string.IsNullOrEmpty(updateReportIO.ReporterAssigned) ? updateReportIO.ReporterAssigned : currentReportIORequest.ReporterAssigned;
-        //    currentReportIORequest.DiscrepanciesFound = updateReportIO.DiscrepanciesFound ?? currentReportIORequest.DiscrepanciesFound;
-        //    currentReportIORequest.ActualQuantity = updateReportIO.ActualQuantity != default ? updateReportIO.ActualQuantity : currentReportIORequest.ActualQuantity;
-        //    currentReportIORequest.ReportFile = !string.IsNullOrEmpty(file) ? file : currentReportIORequest.ReportFile;
+            var currentIORequest = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
 
-        //    _unitOfWork.IIORequestsDetail.UpdateEntity(currentReportIORequest);
+            if (currentIORequest == null)
+            {
+                throw new Exception("IORequest not found.");
+            }
 
-        //    // Kiểm tra trạng thái sau khi update và chuyển thành done
-        //    var IorequeDetail = await _unitOfWork.IIORequestsDetail.CheckDoneAsync(updateReportIO.Id);
-        //    var IorequestFather = await _unitOfWork.IIORequests.GetEntityByIdAsync(IorequeDetail.IORequestId);
+            
+            if (currentIORequest.Status != "Pending")
+            {
+                throw new Exception("IORequest status must be 'Pending' to update.");
+            }
 
-        //    // Nhập kho (In)
-        //    if (IorequestFather.IOType == "In" && IorequeDetail.Status == "Done")
-        //    {
-        //        var room = await _unitOfWork.Rooms.GetEntityByIdAsync(currentReportIORequest.RoomId);
+           
+            if (updateIORequest.IORequestDetails != null && updateIORequest.IORequestDetails.Any())
+            {
+                foreach (var newDetail in updateIORequest.IORequestDetails)
+                {
+                
+                    var existingDetail = currentIORequest.IORequestDetails
+                        .FirstOrDefault(d => d.Id == newDetail.Id);
 
-        //        if (room.CurrentOccupancy + currentReportIORequest.ActualQuantity <= room.Capacity)
-        //        {
-        //            room.CurrentOccupancy += currentReportIORequest.ActualQuantity;
-        //            _unitOfWork.Rooms.UpdateEntity(room);
-        //        }
-        //        else
-        //        {
-        //            IorequeDetail.Status = "InProcess";
-        //            _unitOfWork.IIORequestsDetail.UpdateEntity(IorequeDetail);
+                    if (existingDetail != null)
+                    {
+               
+                        existingDetail.ReportCode = string.IsNullOrEmpty(existingDetail.ReportCode) ? GenerateRandomCode(8) : existingDetail.ReportCode;
+                        existingDetail.ReportDescription = string.IsNullOrEmpty(newDetail.ReportDescription) ? existingDetail.ReportDescription : newDetail.ReportDescription;
+                        existingDetail.ReporterAssigned = string.IsNullOrEmpty(newDetail.ReporterAssigned) ? existingDetail.ReporterAssigned : newDetail.ReporterAssigned;
+                        existingDetail.DiscrepanciesFound = newDetail.DiscrepanciesFound ?? existingDetail.DiscrepanciesFound;
+                        existingDetail.ActualQuantity = newDetail.ActualQuantity != 0 ? newDetail.ActualQuantity : existingDetail.ActualQuantity;
+                        existingDetail.ReportFile = string.IsNullOrEmpty(newDetail.ReportFile) ? existingDetail.ReportFile : newDetail.ReportFile;
+                    }
+                }
+            }
 
-        //            throw new Exception("The room does not have enough capacity for the additional quantity.");
-        //        }
-        //    }
+ 
+            currentIORequest.UpdatedTime = DateTime.UtcNow;
 
-        //    // Xuất kho (Out)
-        //    if (IorequestFather.IOType == "Out" && IorequeDetail.Status == "Done")
-        //    {
-        //        var room = await _unitOfWork.Rooms.GetEntityByIdAsync(currentReportIORequest.RoomId);
+            _unitOfWork.IIORequests.UpdateEntity(currentIORequest);
+            await _unitOfWork.CompleteAsync();
+        }
 
-        //        if (room.CurrentOccupancy >= currentReportIORequest.ActualQuantity)
-        //        {
-        //            room.CurrentOccupancy -= currentReportIORequest.ActualQuantity;
-        //            _unitOfWork.Rooms.UpdateEntity(room);
-        //        }
-        //        else
-        //        {
-        //            IorequeDetail.Status = "InProcess";
-        //            _unitOfWork.IIORequestsDetail.UpdateEntity(IorequeDetail);
+        public string GenerateRandomCode(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        public async Task DisableReportIORequestsAsync(long id, long detailId)
+        {
+        
+            var parentRequest = await _unitOfWork.IIORequests.GetEntityByIdAsync(id);
+            if (parentRequest == null)
+            {
+                throw new Exception("IORequest not found.");
+            }
 
-        //            throw new Exception("The room does not have enough quantity for the requested outflow.");
-        //        }
-        //    }
+          
+            if (parentRequest.Status != "Pending")
+            {
+                throw new Exception("IORequest status must be 'Pending' to proceed.");
+            }
 
-        //    await _unitOfWork.CompleteAsync();
-        //}
+           
+            foreach (var current in parentRequest.IORequestDetails)
+            {
+                if (current.Id == detailId)
+                {
+                    current.ReportCode = " ";
+                    current.ReportDescription =" ";
+                    current.ReporterAssigned = " ";
+                    current.DiscrepanciesFound = 0;
+                    current.ActualQuantity = 0;
+                    current.ReportFile = " ";
+                    break;
+                }
+            }
 
-        //public async Task DisableReportIORequestsAsync(long id)
-        //{
-        //    await _unitOfWork.IIORequestsDetail.DisableAsync(id);
-        //    await _unitOfWork.CompleteAsync();
-        //}
+            _unitOfWork.IIORequests.UpdateEntity(parentRequest);
+            await _unitOfWork.CompleteAsync();
+        }
     }
 }

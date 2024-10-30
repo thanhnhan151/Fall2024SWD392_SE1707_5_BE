@@ -13,8 +13,8 @@ namespace WWMS.BAL.Models.IORequests
 
         public long RoomId { get; set; }
         public long CheckerId { get; set; }
-        public long SuplierId { get; set; }
-        public long CustomerId { get; set; }
+        public long? SuplierId { get; set; }
+        public long? CustomerId { get; set; }
 
 
         /// </summary>
