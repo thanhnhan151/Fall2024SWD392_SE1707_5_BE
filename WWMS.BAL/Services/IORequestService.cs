@@ -29,15 +29,10 @@ namespace WWMS.BAL.Services
         public async Task CreateIORequestsAsync(CreateIORequest createIORequest)
         {
             var ioRequestEntity = _mapper.Map<IORequest>(createIORequest);
-            var user = await _unitOfWork.Users.GetEntityByIdAsync(createIORequest.CheckerId);
-            var customer = await _unitOfWork.Customers.GetEntityByIdAsync(createIORequest.CustomerId);
-            var supplier = await _unitOfWork.Supliers.GetEntityByIdAsync(createIORequest.SuplierId);
-
             ioRequestEntity.CreatedTime = DateTime.UtcNow;
             ioRequestEntity.UpdatedTime = DateTime.UtcNow;
             ioRequestEntity.Status = "Pending";
  
-
 
             if (createIORequest.IORequestDetails == null || !createIORequest.IORequestDetails.Any())
             {

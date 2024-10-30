@@ -1,16 +1,18 @@
-﻿namespace WWMS.BAL.Interfaces
+﻿using WWMS.BAL.Models.IORequests;
+using WWMS.BAL.Models.ReportIORequest;
+
+namespace WWMS.BAL.Interfaces
 {
     public interface IReportIORequestService
     {
-        //Task CreateReportIORequestAsync(CreateIORequest createIORequest);
 
-        //Task<List<GetReportIORequest>> GetReportIORequestListAsync();
+        Task<List<GetReportIORequest>> GetReportIORequestListAsync();
 
-        //Task<GetReportIORequest?> GetReportIORequestByIdAsync(long id);
+        Task<GetReportIORequest?> GetReportIORequestByIdAsync(long id);
 
-        //Task UpdateReportIORequestAsync(UpdateReportIORequest updateReportIO,string file);
+        Task UpdateReportIORequestDetailsByIdAsync(CreateReport updateIORequest, long id);
 
-
-        //Task DisableReportIORequestsAsync(long id);
+        Task<List<GetReportIORequest>> GetReportByIORequestidAsync(long id);
+        Task DisableReportIORequestsAsync(long id, long idDetails);
     }
 }
