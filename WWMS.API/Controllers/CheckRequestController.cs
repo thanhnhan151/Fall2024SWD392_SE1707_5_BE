@@ -1,6 +1,5 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.CheckRequests;
 
@@ -29,7 +28,7 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Manager, Admin get all check requests
         /// </summary>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -55,7 +54,7 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Manager, Admin get Check Request Information (include details) By CheckRequestID
         /// </summary>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
@@ -81,7 +80,7 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Manager, Admin create check request
         /// </summary>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateCheckRequestRequest request)
         {
@@ -101,7 +100,7 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Manager, Admin update check request
         /// </summary>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateCheckRequestRequest request)
         {
@@ -121,7 +120,7 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Manager disable check request => disable relations too
         /// </summary>
-        [PermissionAuthorize("MANAGER")]
+        //[PermissionAuthorize("MANAGER")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(int id)
         {

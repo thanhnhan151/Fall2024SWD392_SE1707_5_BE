@@ -112,6 +112,17 @@ namespace WWMS.DAL.Repositories
             return true;
         }
 
+        public async Task<bool> CheckExistEmailAsync(string email)
+        {
+            var user = await _dbSet.Where(u => u.Email == email)
+                                   .Select(u => new User { Id = u.Id })
+                                   .FirstOrDefaultAsync();
+
+            if (user == null) return false;
+
+            return true;
+        }
+
         public override async Task DisableAsync(long id)
         {
             long Id = 0;

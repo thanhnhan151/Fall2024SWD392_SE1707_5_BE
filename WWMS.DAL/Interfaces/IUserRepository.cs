@@ -9,7 +9,10 @@ namespace WWMS.DAL.Interfaces
 
         Task<bool> CheckExistUsernameAsync(string username);
 
+        Task<bool> CheckExistEmailAsync(string email);
+
         Task<User?> GetByUsernameAsync(string username);
+
         Task<ICollection<User>> GetAllStaffAsync();
     }
 }

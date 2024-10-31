@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.IORequests;
 using WWMS.BAL.Models.IORequests.IOrequestdetails;
@@ -37,7 +36,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -71,7 +70,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
@@ -147,7 +146,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateIORequest createIORequest)
         {
@@ -202,7 +201,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateIORequest updateIO, long id)
         {
@@ -234,7 +233,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("STAFF")]
+        //[PermissionAuthorize("STAFF")]
         [HttpPost("{id}/payment")]
         public async Task<IActionResult> CreateAsync(int id)
         {
@@ -260,7 +259,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
@@ -280,7 +279,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("style")]
         public async Task<IActionResult> GetAllByIOStyleAsync(string io)
         {
@@ -325,7 +324,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut("Create-details/{id}")]
         public async Task<IActionResult> UpdateDetailsAsync([FromBody] CreateDetailsById updateIO, long id)
         {
@@ -370,7 +369,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut("update-details/{id}")]
         public async Task<IActionResult> UpdateDetailsAsync([FromBody] UpdateDetailsById updateIO, long id)
         {
@@ -390,7 +389,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut("delete-details/{id}")]
         public async Task<IActionResult> DeleteDetailsAsync(long id, long detailIds)
         {
@@ -409,7 +408,7 @@ namespace WWMS.API.Controllers
             }
         }
 
-        [PermissionAuthorize("MANAGER", "STAFF")]
+        //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut("done/{id}")]
         public async Task<IActionResult> DonesAsync(long id)
         {

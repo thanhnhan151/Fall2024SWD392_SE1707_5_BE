@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Roles;
 
@@ -41,7 +40,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("ADMIN")]
+        //[PermissionAuthorize("ADMIN")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateRoleRequest request)
         {
@@ -72,7 +71,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        [PermissionAuthorize("ADMIN")]
+        //[PermissionAuthorize("ADMIN")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
