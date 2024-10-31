@@ -104,7 +104,7 @@ namespace WWMS.API.Controllers
         /// <summary>
         /// Get all staff
         /// </summary>
-        [PermissionAuthorize("ADMIN", "MANAGER")]
+        //[PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet]
         [Route("staff")]
         public async Task<IActionResult> GetAllStaffAsync()
