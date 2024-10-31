@@ -14,17 +14,14 @@ namespace WWMS.API.Controllers
     {
         private readonly ILogger<UsersController> _logger;
         private readonly IUserService _userService;
-        private readonly IUploadFileService _uploadFileService;
 
 
         public UsersController(
             ILogger<UsersController> logger,
-            IUserService userService,
-            IUploadFileService uploadFileService)
+            IUserService userService)
         {
             _logger = logger;
             _userService = userService;
-            _uploadFileService = uploadFileService;
         }
 
         #region Create An User
@@ -321,7 +318,8 @@ namespace WWMS.API.Controllers
         /// 
         [HttpPost]
         [Route("upload-profile-image")]
-        public async Task<IActionResult> UploadProfileImageAsync([FromBody, Required] IFormFile file)
+        [PermissionAuthorize("ADMIN", "MANAGER", "STAFF")]
+        public async Task<IActionResult> UploadProfileImageAsync(IFormFile file)
         {
             try
             {
