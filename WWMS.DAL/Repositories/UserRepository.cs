@@ -79,7 +79,7 @@ namespace WWMS.DAL.Repositories
             return usersAdmin;
         }
 
-        public override async Task<User?> GetEntityByIdAsync(long id)
+        public async Task<User?> GetUserInfoAsync(long id)
         {
             var result = await _dbSet
                 .Where(c => c.Id == id)

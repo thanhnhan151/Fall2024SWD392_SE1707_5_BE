@@ -7,6 +7,8 @@ namespace WWMS.DAL.Interfaces
     {
         Task<User?> LoginAsync(string username, string password);
 
+        Task<User?> GetUserInfoAsync(long id);
+
         Task<bool> CheckExistUsernameAsync(string username);
 
         Task<bool> CheckExistEmailAsync(string email);
