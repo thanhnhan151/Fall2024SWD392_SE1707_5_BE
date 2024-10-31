@@ -8,8 +8,8 @@ namespace WWMS.BAL.Interfaces
         Task CreateUserAsync(CreateUserRequest createUserRequest);
 
         Task<List<GetUserResponse>> GetUserListAsync();
-        Task<List<GetStaffResponse>> GetStaffAsync();
 
+        Task<List<GetStaffResponse>> GetStaffAsync();
 
         Task<GetUserResponse?> GetUserByIdAsync(long id);
 
@@ -24,6 +24,7 @@ namespace WWMS.BAL.Interfaces
         Task UpdatePasswordAsync(UpdatePasswordRequest updatePasswordRequest);
 
         Task SendCodeResetPassAsync(SendCodeResetPassRequest sendCodeResetPassRequest);
+
         Task<string> UploadProfileImageAsync(IFormFile file);
     }
 }
