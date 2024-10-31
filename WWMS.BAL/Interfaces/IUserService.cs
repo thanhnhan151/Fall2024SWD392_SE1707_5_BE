@@ -1,4 +1,5 @@
-﻿using WWMS.BAL.Models.Users;
+﻿using Microsoft.AspNetCore.Http;
+using WWMS.BAL.Models.Users;
 
 namespace WWMS.BAL.Interfaces
 {
@@ -23,5 +24,6 @@ namespace WWMS.BAL.Interfaces
         Task UpdatePasswordAsync(UpdatePasswordRequest updatePasswordRequest);
 
         Task SendCodeResetPassAsync(SendCodeResetPassRequest sendCodeResetPassRequest);
+        Task<string> UploadProfileImageAsync(IFormFile file);
     }
 }

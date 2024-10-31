@@ -61,7 +61,7 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<GetUserResponse?> GetUserByIdAsync(long id) => _mapper.Map<GetUserResponse?>(await _unitOfWork.Users.GetEntityByIdAsync(id));
+        public async Task<GetUserResponse?> GetUserByIdAsync(long id) => _mapper.Map<GetUserResponse?>(await _unitOfWork.Users.GetUserInfoAsync(id));
 
         public async Task<List<GetUserResponse>> GetUserListAsync() => _mapper.Map<List<GetUserResponse>>(await _unitOfWork.Users.GetAllEntitiesAsync());
 
@@ -70,6 +70,8 @@ namespace WWMS.BAL.Services
         public async Task UpdateUserAsync(long id, UpdateUserRequest updateUserRequest)
         {
             var user = await _unitOfWork.Users.GetEntityByIdAsync(id) ?? throw new Exception($"User with id: {id} does not exist");
+
+            if (await _unitOfWork.Users.CheckExistEmailAsync(updateUserRequest.Email)) throw new Exception($"User with email: {updateUserRequest.Email} has already existed");
 
             _unitOfWork.Users.UpdateEntity(MappingUpdateRequest(updateUserRequest, user));
 
@@ -116,10 +118,10 @@ namespace WWMS.BAL.Services
         private User MappingUpdateRequest(UpdateUserRequest updateUserRequest, User user)
         {
 
-            user.FirstName = string.IsNullOrEmpty(updateUserRequest.FirstName) ? user.FirstName : updateUserRequest.FirstName;
-            user.LastName = string.IsNullOrEmpty(updateUserRequest.LastName) ? user.LastName : updateUserRequest.LastName;
-            user.PhoneNumber = string.IsNullOrEmpty(updateUserRequest.PhoneNumber) ? user.PhoneNumber : updateUserRequest.PhoneNumber;
-            user.Email = string.IsNullOrEmpty(updateUserRequest.Email) ? user.Email : updateUserRequest.Email;
+            user.FirstName = updateUserRequest.FirstName;
+            user.LastName = updateUserRequest.LastName;
+            user.PhoneNumber = updateUserRequest.PhoneNumber;
+            user.Email = updateUserRequest.Email;
             user.UpdatedTime = DateTime.Now;
 
             return user;
@@ -182,5 +184,11 @@ namespace WWMS.BAL.Services
 
         public async Task<List<GetStaffResponse>> GetStaffAsync()
         => _mapper.Map<List<GetStaffResponse>>(await _unitOfWork.Users.GetAllStaffAsync());
+
+        public Task<string> UploadProfileImageAsync(IFormFile file)
+        {
+            //TODO: implement later
+            throw new NotImplementedException();
+        }
     }
 }
