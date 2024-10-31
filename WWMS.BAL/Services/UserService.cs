@@ -43,6 +43,8 @@ namespace WWMS.BAL.Services
         {
             if (await _unitOfWork.Users.CheckExistUsernameAsync(createUserRequest.Username)) throw new Exception($"User with username: {createUserRequest.Username} has already existed");
 
+            if (await _unitOfWork.Users.CheckExistEmailAsync(createUserRequest.Email)) throw new Exception($"User with email: {createUserRequest.Email} has already existed");
+
             var validationResult = await _createUserRequestValidator.ValidateAsync(createUserRequest);
 
             if (!validationResult.IsValid) throw new ValidationException(validationResult.Errors);
