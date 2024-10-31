@@ -75,6 +75,20 @@ namespace WWMS.BAL.Mappings
             CreateMap<CreateIORequest, IORequest>();
             ///
             CreateMap<CreateDetailsById, IORequest>();
+            /// report
+            CreateMap<CreateReport, IORequest>();
+            CreateMap<CreateReportIORequest, IORequestDetail>();
+            
+            CreateMap<GetIorequestForReport, IORequest>();
+            CreateMap<IORequest, GetIorequestForReport>();
+            //
+
+
+
+            CreateMap<GetReportIORequest,IORequestDetail>();
+            CreateMap<IORequestDetail, GetReportIORequest>();
+            ///
+
             ///
             CreateMap<IORequestDetail, GetIORequestDetail>();
             CreateMap<GetIORequestDetail, IORequestDetail>();
