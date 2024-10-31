@@ -40,7 +40,7 @@ namespace WWMS.DAL.Repositories
                            })
                            .ToListAsync();
 
-        public override async Task<Room?> GetEntityByIdAsync(long id)
+        public async Task<Room?> GetByIdWithIncludeAsync(long id)
         {
             var result = await _dbSet
                 .Where(c => c.Id == id)

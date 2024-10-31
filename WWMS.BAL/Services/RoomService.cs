@@ -58,7 +58,7 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<GetRoomDetailResponse?> GetRoomByIdAsync(long id) => _mapper.Map<GetRoomDetailResponse?>(await _unitOfWork.Rooms.GetEntityByIdAsync(id));
+        public async Task<GetRoomDetailResponse?> GetRoomByIdAsync(long id) => _mapper.Map<GetRoomDetailResponse?>(await _unitOfWork.Rooms.GetByIdWithIncludeAsync(id));
 
         public async Task<List<GetRoomResponse>> GetRoomListAsync() => _mapper.Map<List<GetRoomResponse>>(await _unitOfWork.Rooms.GetAllEntitiesAsync());
 
