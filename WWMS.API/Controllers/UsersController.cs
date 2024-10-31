@@ -1,4 +1,5 @@
-﻿using Asp.Versioning;
+﻿using System.ComponentModel.DataAnnotations;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
@@ -13,13 +14,17 @@ namespace WWMS.API.Controllers
     {
         private readonly ILogger<UsersController> _logger;
         private readonly IUserService _userService;
+        private readonly IUploadFileService _uploadFileService;
+
 
         public UsersController(
             ILogger<UsersController> logger,
-            IUserService userService)
+            IUserService userService,
+            IUploadFileService uploadFileService)
         {
             _logger = logger;
             _userService = userService;
+            _uploadFileService = uploadFileService;
         }
 
         #region Create An User
@@ -298,6 +303,31 @@ namespace WWMS.API.Controllers
                 await _userService.SendCodeResetPassAsync(sendCodeResetPassRequest);
 
                 return Ok("Sent Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region Handle upload profile image
+        /// <summary>
+        /// The user change/ add new profile image
+        /// </summary>
+        /// 
+        [HttpPost]
+        [Route("upload-profile-image")]
+        public async Task<IActionResult> UploadProfileImageAsync([FromBody, Required] IFormFile file)
+        {
+            try
+            {
+                var imgUrl = await _userService.UploadProfileImageAsync(file);
+
+                return Ok(imgUrl);
             }
             catch (Exception ex)
             {

@@ -184,5 +184,11 @@ namespace WWMS.BAL.Services
 
         public async Task<List<GetStaffResponse>> GetStaffAsync()
         => _mapper.Map<List<GetStaffResponse>>(await _unitOfWork.Users.GetAllStaffAsync());
+
+        public Task<string> UploadProfileImageAsync(IFormFile file)
+        {
+            //TODO: implement later
+            throw new NotImplementedException();
+        }
     }
 }
