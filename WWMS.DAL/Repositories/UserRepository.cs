@@ -38,6 +38,7 @@ namespace WWMS.DAL.Repositories
                                LastName = u.LastName,
                                PhoneNumber = u.PhoneNumber,
                                Status = u.Status,
+                               ProfileImageUrl = u.ProfileImageUrl,
                                Role = u.Role
                            })
                            .ToListAsync();
@@ -57,6 +58,7 @@ namespace WWMS.DAL.Repositories
                                LastName = u.LastName,
                                PhoneNumber = u.PhoneNumber,
                                Status = u.Status,
+                               ProfileImageUrl = u.ProfileImageUrl,
                                Role = u.Role
                            })
                            .ToListAsync();
@@ -72,6 +74,7 @@ namespace WWMS.DAL.Repositories
             //                   LastName = u.LastName,
             //                   PhoneNumber = u.PhoneNumber,
             //                   Status = u.Status,
+            //                   ProfileImageUrl = u.ProfileImageUrl,
             //                   Role = u.Role
             //               })
             //               .ToListAsync();
@@ -92,6 +95,7 @@ namespace WWMS.DAL.Repositories
                     LastName = u.LastName,
                     PhoneNumber = u.PhoneNumber,
                     Status = u.Status,
+                    ProfileImageUrl = u.ProfileImageUrl,
                     Role = u.Role
                 })
                 .FirstOrDefaultAsync();
@@ -171,6 +175,7 @@ namespace WWMS.DAL.Repositories
                                            LastName = u.LastName,
                                            PhoneNumber = u.PhoneNumber,
                                            Status = u.Status,
+                                           ProfileImageUrl = u.ProfileImageUrl,
                                            Role = u.Role
                                        })
                                        .FirstOrDefaultAsync();

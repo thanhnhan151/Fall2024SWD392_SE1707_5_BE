@@ -18,7 +18,7 @@
 
         public string Role { get; set; } = string.Empty;
 
-        //public string? ProfileImageUrl { get; set; }
+        public string Avatar { get; set; } = string.Empty;
 
         public string Status { get; set; } = string.Empty;
     }

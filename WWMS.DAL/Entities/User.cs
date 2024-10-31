@@ -13,7 +13,7 @@ public class User : CommonEntity
     public string? LastName { get; set; }
     public string Email { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
-    public string? ProfileImageUrl { get; set; }
+    public string ProfileImageUrl { get; set; } = "N/A";
     // Relationships
 
     public long RoleId { get; set; }

@@ -29,7 +29,8 @@ namespace WWMS.BAL.Mappings
         {
             #region User
             CreateMap<User, GetUserResponse>()
-                .ForMember(w => w.Role, w => w.MapFrom(w => w.Role.RoleName));
+                .ForMember(w => w.Role, w => w.MapFrom(w => w.Role.RoleName))
+                .ForMember(w => w.Avatar, w => w.MapFrom(w => w.ProfileImageUrl));
             #endregion
 
             #region Wine
@@ -78,14 +79,14 @@ namespace WWMS.BAL.Mappings
             /// report
             CreateMap<CreateReport, IORequest>();
             CreateMap<CreateReportIORequest, IORequestDetail>();
-            
+
             CreateMap<GetIorequestForReport, IORequest>();
             CreateMap<IORequest, GetIorequestForReport>();
             //
 
 
 
-            CreateMap<GetReportIORequest,IORequestDetail>();
+            CreateMap<GetReportIORequest, IORequestDetail>();
             CreateMap<IORequestDetail, GetReportIORequest>();
             ///
 

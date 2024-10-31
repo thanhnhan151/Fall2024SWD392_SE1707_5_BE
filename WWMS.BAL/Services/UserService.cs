@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 using WWMS.BAL.Helpers;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Users;
@@ -71,9 +72,7 @@ namespace WWMS.BAL.Services
         {
             var user = await _unitOfWork.Users.GetEntityByIdAsync(id) ?? throw new Exception($"User with id: {id} does not exist");
 
-            if (await _unitOfWork.Users.CheckExistEmailAsync(updateUserRequest.Email)) throw new Exception($"User with email: {updateUserRequest.Email} has already existed");
-
-            _unitOfWork.Users.UpdateEntity(MappingUpdateRequest(updateUserRequest, user));
+            _unitOfWork.Users.UpdateEntity(await MappingUpdateRequest(updateUserRequest, user));
 
             await _unitOfWork.CompleteAsync();
         }
@@ -115,14 +114,35 @@ namespace WWMS.BAL.Services
             return user;
         }
 
-        private User MappingUpdateRequest(UpdateUserRequest updateUserRequest, User user)
+        private async Task<User> MappingUpdateRequest(UpdateUserRequest updateUserRequest, User user)
         {
+            var email = _httpContextAccessor.HttpContext.User.Claims.Single(x => x.Type == ClaimTypes.Email).Value;
+
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userName == null) throw new Exception("Something went wrong. Please bear with us!");
+
+            if (email == null) throw new Exception("Something went wrong. Please bear with us!");
+
+            if (email.Equals(updateUserRequest.Email))
+            {
+                user.FirstName = updateUserRequest.FirstName;
+                user.LastName = updateUserRequest.LastName;
+                user.PhoneNumber = updateUserRequest.PhoneNumber;
+                user.UpdatedBy = userName.Value;
+                user.UpdatedTime = DateTime.Now;
+
+                return user;
+            }
+
+            if (await _unitOfWork.Users.CheckExistEmailAsync(updateUserRequest.Email)) throw new Exception($"User with email: {updateUserRequest.Email} has already existed");
 
             user.FirstName = updateUserRequest.FirstName;
             user.LastName = updateUserRequest.LastName;
             user.PhoneNumber = updateUserRequest.PhoneNumber;
             user.Email = updateUserRequest.Email;
             user.UpdatedTime = DateTime.Now;
+            user.UpdatedBy = userName.Value;
 
             return user;
         }
