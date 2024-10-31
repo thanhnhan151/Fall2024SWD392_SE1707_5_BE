@@ -16,19 +16,22 @@ namespace WWMS.BAL.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
         private readonly IValidator<CreateUserRequest> _createUserRequestValidator;
+        private readonly IUploadFileService _uploadFileService;
 
         public UserService(
             IUnitOfWork unitOfWork
             , IMapper mapper
             , IHttpContextAccessor httpContextAccessor
             , IEmailService emailService
-            , IValidator<CreateUserRequest> createUserRequestValidator)
+            , IValidator<CreateUserRequest> createUserRequestValidator
+            , IUploadFileService uploadFileService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
             _createUserRequestValidator = createUserRequestValidator;
+            _uploadFileService = uploadFileService;
         }
 
         private string GenRandomString(int length = 12)
@@ -185,10 +188,20 @@ namespace WWMS.BAL.Services
         public async Task<List<GetStaffResponse>> GetStaffAsync()
         => _mapper.Map<List<GetStaffResponse>>(await _unitOfWork.Users.GetAllStaffAsync());
 
-        public Task<string> UploadProfileImageAsync(IFormFile file)
+        public async Task<string> UploadProfileImageAsync(IFormFile file)
         {
-            //TODO: implement later
-            throw new NotImplementedException();
+            string imgUrl = await _uploadFileService.UploadImage(file);
+            var userName = _httpContextAccessor
+            .HttpContext.User
+            .Claims.FirstOrDefault(x => x.Type
+            .Equals("Username", StringComparison.CurrentCultureIgnoreCase))
+            .Value;
+
+            User user = await _unitOfWork.Users.GetByUsernameAsync(userName);
+            user.ProfileImageUrl = imgUrl;
+            _unitOfWork.Users.UpdateEntity(user);
+            _unitOfWork.CompleteAsync();
+            return imgUrl;
         }
     }
 }
