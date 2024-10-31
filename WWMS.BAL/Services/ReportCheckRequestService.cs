@@ -44,11 +44,10 @@ namespace WWMS.BAL.Services
             {
                 throw new Exception("Cannot find the check request detail id OR report existed please update instead");
             }
-            //TODO: get the reporter information from jwt token
             checkRequestDetail.ReportCode = GenRandomString();
             checkRequestDetail.DiscrepanciesFound = request.DiscrepanciesFound;
             checkRequestDetail.ActualQuantity = request.ActualQuantity;
-            //TODO: use firebase to gen link
+            //TODO: Implement file upload for report later
             checkRequestDetail.ReportFile = request.ReportFile;
 
             _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);
@@ -65,11 +64,10 @@ namespace WWMS.BAL.Services
             {
                 throw new Exception("Cannot find the check request detail id OR report code");
             }
-            //TODO: get the reporter information from jwt token
             checkRequestDetail.ReportCode = GenRandomString();
             checkRequestDetail.DiscrepanciesFound = request.DiscrepanciesFound;
             checkRequestDetail.ActualQuantity = request.ActualQuantity;
-            //TODO: use firebase to gen link
+            //TODO: Implement file upload for report later
             checkRequestDetail.ReportFile = request.ReportFile;
 
             _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);

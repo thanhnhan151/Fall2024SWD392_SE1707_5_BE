@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 
 namespace WWMS.API.Controllers
@@ -30,6 +31,7 @@ namespace WWMS.API.Controllers
         ///Get All ID-WINEID-WINENAME_ROOMID_ROOMANME => SELECTED BOX ON FE 
         /// </summary>
         [HttpGet]
+        [PermissionAuthorize("MANAGER")]
         public async Task<IActionResult> GetAllAsync()
         {
             try
