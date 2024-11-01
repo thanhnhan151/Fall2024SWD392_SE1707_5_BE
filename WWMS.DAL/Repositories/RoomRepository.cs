@@ -23,7 +23,7 @@ namespace WWMS.DAL.Repositories
                          LocationAddress = r.LocationAddress,
                          Capacity = r.Capacity,
                          CurrentOccupancy = r.CurrentOccupancy,
-                         ManagerName = r.ManagerName,
+                         ManagerName = r.ManagerName ?? "N/A",
                          Status = r.Status
                      })
                      .ToListAsync();
@@ -51,7 +51,7 @@ namespace WWMS.DAL.Repositories
                     LocationAddress = r.LocationAddress,
                     Capacity = r.Capacity,
                     CurrentOccupancy = r.CurrentOccupancy,
-                    ManagerName = r.ManagerName,
+                    ManagerName = r.ManagerName ?? "N/A",
                     Status = r.Status,
                     WineRooms = r.WineRooms.Select(w => new WineRoom
                     {
