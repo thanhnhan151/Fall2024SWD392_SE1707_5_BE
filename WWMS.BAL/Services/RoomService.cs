@@ -74,8 +74,6 @@ namespace WWMS.BAL.Services
 
             room.LocationAddress = updateRoomRequest.LocationAddress;
 
-            room.ManagerName = updateRoomRequest.ManagerName;
-
             room.RoomName = updateRoomRequest.RoomName;
 
             var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
