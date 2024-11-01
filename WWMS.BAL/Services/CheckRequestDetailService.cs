@@ -78,10 +78,25 @@ namespace WWMS.BAL.Services
             }
 
             CheckRequestDetail checkRequestDetail = _mapper.Map<CheckRequestDetail>(createCheckRequestDetailRequest);
+
             checkRequestDetail.Status = "ACTIVE";
             checkRequestDetail.CreatedTime = DateTime.Now;
             var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase)).Value;
             checkRequestDetail.CreatedBy = userName;
+
+            //wine room
+            WineRoom wineRoom = await _unitOfWork.WineRooms.GetEntityByIdWithWRInfoAsync(createCheckRequestDetailRequest.WineRoomId);
+
+            checkRequestDetail.ExpectedCurrQuantity = wineRoom.CurrentQuantity;
+            //wine
+            checkRequestDetail.WineName = wineRoom.Wine.WineName;
+            checkRequestDetail.MFD = wineRoom.Wine.MFD;
+            checkRequestDetail.WineId = wineRoom.WineId;
+            //room
+            checkRequestDetail.RoomId = wineRoom.RoomId;
+            checkRequestDetail.RoomName = wineRoom.Room.RoomName;
+            checkRequestDetail.RoomCapacity = (int)wineRoom.Room.Capacity;
+
             await _unitOfWork.CheckRequestDetails.AddEntityAsync(checkRequestDetail);
             await _unitOfWork.CompleteAsync();
         }
@@ -109,7 +124,7 @@ namespace WWMS.BAL.Services
 
         public async Task<GetCheckRequestDetailViewDetailResponse> GetByIdAsync(long id)
         {
-            GetCheckRequestDetailViewDetailResponse response = _mapper.Map<GetCheckRequestDetailViewDetailResponse>(await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(id));
+            GetCheckRequestDetailViewDetailResponse response = _mapper.Map<GetCheckRequestDetailViewDetailResponse>(await _unitOfWork.CheckRequestDetails.GetByIdWithCheckRequestAsync(id));
             var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase)).Value;
             var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
             if (string.Equals(role, "MANAGER") || response.CheckerId == long.Parse(userId))

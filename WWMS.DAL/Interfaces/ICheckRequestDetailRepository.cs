@@ -9,5 +9,7 @@ namespace WWMS.DAL.Interfaces
         Task<ICollection<CheckRequestDetail>> GetAllCheckRequestDetailsByReporterNameAsync(string reporterName);
 
         Task<(int totalPositive, int totalNegative)> GetQuantityByMonthAndYearAsync(int month, int year);
+
+        Task<CheckRequestDetail> GetByIdWithCheckRequestAsync(long id);
     }
 }

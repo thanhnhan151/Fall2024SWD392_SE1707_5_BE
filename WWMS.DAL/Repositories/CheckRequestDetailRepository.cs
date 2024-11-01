@@ -24,6 +24,12 @@ namespace WWMS.DAL.Repositories
         public async Task<ICollection<CheckRequestDetail>> GetAllCheckRequestDetailsByReporterNameAsync(string reporterName)
         => await _dbSet.Where(c => c.CheckerName.Equals(reporterName)).ToListAsync();
 
+        public async Task<CheckRequestDetail> GetByIdWithCheckRequestAsync(long id)
+        {
+            return await _dbSet
+                .Include(cr => cr.CheckRequest)
+                .FirstOrDefaultAsync(cr => cr.Id == id);
+        }
 
         public async Task<(int totalPositive, int totalNegative)> GetQuantityByMonthAndYearAsync(int month, int year)
         {
