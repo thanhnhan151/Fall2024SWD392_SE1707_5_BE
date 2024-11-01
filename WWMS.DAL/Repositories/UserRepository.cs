@@ -38,7 +38,7 @@ namespace WWMS.DAL.Repositories
                                LastName = u.LastName ?? string.Empty,
                                PhoneNumber = u.PhoneNumber ?? string.Empty,
                                Status = u.Status ?? "Unknown",
-                               ProfileImageUrl = u.ProfileImageUrl ?? string.Empty,
+                               ProfileImageUrl = u.ProfileImageUrl ?? "N/A",
                                Role = u.Role
                            })
                            .ToListAsync();
@@ -58,7 +58,7 @@ namespace WWMS.DAL.Repositories
                                LastName = u.LastName ?? string.Empty,
                                PhoneNumber = u.PhoneNumber ?? string.Empty,
                                Status = u.Status ?? "Unknown",
-                               ProfileImageUrl = u.ProfileImageUrl ?? string.Empty,
+                               ProfileImageUrl = u.ProfileImageUrl ?? "N/A",
                                Role = u.Role
                            })
                            .ToListAsync();
@@ -95,7 +95,7 @@ namespace WWMS.DAL.Repositories
                     LastName = u.LastName,
                     PhoneNumber = u.PhoneNumber,
                     Status = u.Status,
-                    ProfileImageUrl = u.ProfileImageUrl,
+                    ProfileImageUrl = u.ProfileImageUrl ?? "N/A",
                     Role = u.Role
                 })
                 .FirstOrDefaultAsync();
@@ -217,7 +217,5 @@ namespace WWMS.DAL.Repositories
                 })
                 .ToListAsync();
         }
-
-
     }
 }

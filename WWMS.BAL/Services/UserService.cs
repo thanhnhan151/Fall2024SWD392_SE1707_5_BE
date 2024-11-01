@@ -132,6 +132,7 @@ namespace WWMS.BAL.Services
                 user.FirstName = updateUserRequest.FirstName;
                 user.LastName = updateUserRequest.LastName;
                 user.PhoneNumber = updateUserRequest.PhoneNumber;
+                user.ProfileImageUrl = updateUserRequest.ProfileImageUrl;
                 user.UpdatedBy = userName.Value;
                 user.UpdatedTime = DateTime.Now;
 
@@ -144,6 +145,7 @@ namespace WWMS.BAL.Services
             user.LastName = updateUserRequest.LastName;
             user.PhoneNumber = updateUserRequest.PhoneNumber;
             user.Email = updateUserRequest.Email;
+            user.ProfileImageUrl = updateUserRequest.ProfileImageUrl;
             user.UpdatedTime = DateTime.Now;
             user.UpdatedBy = userName.Value;
 
