@@ -41,17 +41,38 @@ namespace WWMS.BAL.Services
         }
         private CheckRequest MapCreateModelToCheckRequest(CreateCheckRequestRequest createCheckRequestRequest)
         {
-            //TODO: get the requester info from jwt token
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase)).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+
             CheckRequest checkRequest = _mapper.Map<CheckRequest>(createCheckRequestRequest);
             checkRequest.RequestCode = GenRandomString();
             checkRequest.Status = "ACTIVE";
             checkRequest.CreatedTime = DateTime.Now;
-            checkRequest.CreatedBy = createCheckRequestRequest.RequesterName;
+            checkRequest.CreatedBy = userName;
+            checkRequest.RequesterId = long.Parse(userId);
+            checkRequest.RequesterName = userName;
 
             checkRequest.CheckRequestDetails = _mapper.Map<List<CheckRequestDetail>>(createCheckRequestRequest.CreateCheckRequestDetailRequests);
-            foreach(var item in checkRequest.CheckRequestDetails){
+            //get the start/end date for main check request by the min/max start date/end date
+            DateTime? mainStartDate = DateTime.MaxValue;
+            DateTime? mainDueDate = DateTime.MinValue;
+
+            foreach (var item in checkRequest.CheckRequestDetails)
+            {
                 item.Status = "ACTIVE";
+
+                if (item.StartDate <= mainStartDate)
+                {
+                    mainStartDate = item.StartDate;
+                }
+
+                if (item.DueDate >= mainDueDate)
+                {
+                    mainDueDate = item.DueDate;
+                }
             }
+            checkRequest.StartDate = mainStartDate;
+            checkRequest.DueDate = mainDueDate;
             return checkRequest;
 
         }
@@ -59,10 +80,19 @@ namespace WWMS.BAL.Services
         public async Task DisableAsync(long id)
         {
             CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(id);
-            if (checkRequest is null)
+            if (checkRequest is null || checkRequest.Status.Equals("DISABLED"))
             {
-                throw new Exception("Cannot find the check request with the provided id");
+                throw new Exception("Cannot find the check request with the provided id OR already DISABLED");
             }
+            //Auth rule
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+
+            if (checkRequest.RequesterId != long.Parse(userId)) throw new Exception("Fail to verify requester with current user");
+
+            //Business rule
+
+            //rule_01: overdue one cannot be disabled anymore
+            if (checkRequest.DueDate < DateTime.Now) throw new Exception("Overdue cannot be disabled anymore");
 
             checkRequest.Status = "DISABLED";
             foreach (CheckRequestDetail detail in checkRequest.CheckRequestDetails)
@@ -110,8 +140,14 @@ namespace WWMS.BAL.Services
                 throw new Exception("Overdue or disabled or Id not found");
             }
 
-            checkRequest.StartDate = updateCheckRequestRequest.StartDate ?? checkRequest.StartDate;
-            checkRequest.DueDate = updateCheckRequestRequest.DueDate ?? checkRequest.DueDate;
+            //Business rules:
+
+            //Auth for requester
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase)).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+
+            if (checkRequest.RequesterId != long.Parse(userId)) throw new Exception("Fail to verify requester with current user");
+
             checkRequest.Purpose = !string.IsNullOrEmpty(updateCheckRequestRequest.Purpose)
                 ? updateCheckRequestRequest.Purpose
                 : checkRequest.Purpose;
@@ -123,6 +159,7 @@ namespace WWMS.BAL.Services
                 : checkRequest.Comments;
 
             checkRequest.UpdatedTime = DateTime.Now;
+            checkRequest.UpdatedBy = userName;
 
             _unitOfWork.CheckRequests.UpdateEntity(checkRequest);
             await _unitOfWork.CompleteAsync();

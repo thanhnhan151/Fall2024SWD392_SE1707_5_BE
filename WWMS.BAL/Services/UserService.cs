@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 using WWMS.BAL.Helpers;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Users;
@@ -16,19 +17,22 @@ namespace WWMS.BAL.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
         private readonly IValidator<CreateUserRequest> _createUserRequestValidator;
+        private readonly IUploadFileService _uploadFileService;
 
         public UserService(
             IUnitOfWork unitOfWork
             , IMapper mapper
             , IHttpContextAccessor httpContextAccessor
             , IEmailService emailService
-            , IValidator<CreateUserRequest> createUserRequestValidator)
+            , IValidator<CreateUserRequest> createUserRequestValidator
+            , IUploadFileService uploadFileService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
             _createUserRequestValidator = createUserRequestValidator;
+            _uploadFileService = uploadFileService;
         }
 
         private string GenRandomString(int length = 12)
@@ -71,9 +75,7 @@ namespace WWMS.BAL.Services
         {
             var user = await _unitOfWork.Users.GetEntityByIdAsync(id) ?? throw new Exception($"User with id: {id} does not exist");
 
-            if (await _unitOfWork.Users.CheckExistEmailAsync(updateUserRequest.Email)) throw new Exception($"User with email: {updateUserRequest.Email} has already existed");
-
-            _unitOfWork.Users.UpdateEntity(MappingUpdateRequest(updateUserRequest, user));
+            _unitOfWork.Users.UpdateEntity(await MappingUpdateRequest(updateUserRequest, user));
 
             await _unitOfWork.CompleteAsync();
         }
@@ -115,14 +117,37 @@ namespace WWMS.BAL.Services
             return user;
         }
 
-        private User MappingUpdateRequest(UpdateUserRequest updateUserRequest, User user)
+        private async Task<User> MappingUpdateRequest(UpdateUserRequest updateUserRequest, User user)
         {
+            var email = _httpContextAccessor.HttpContext.User.Claims.Single(x => x.Type == ClaimTypes.Email).Value;
+
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase));
+
+            if (userName == null) throw new Exception("Something went wrong. Please bear with us!");
+
+            if (email == null) throw new Exception("Something went wrong. Please bear with us!");
+
+            if (email.Equals(updateUserRequest.Email))
+            {
+                user.FirstName = updateUserRequest.FirstName;
+                user.LastName = updateUserRequest.LastName;
+                user.PhoneNumber = updateUserRequest.PhoneNumber;
+                user.ProfileImageUrl = updateUserRequest.ProfileImageUrl;
+                user.UpdatedBy = userName.Value;
+                user.UpdatedTime = DateTime.Now;
+
+                return user;
+            }
+
+            if (await _unitOfWork.Users.CheckExistEmailAsync(updateUserRequest.Email)) throw new Exception($"User with email: {updateUserRequest.Email} has already existed");
 
             user.FirstName = updateUserRequest.FirstName;
             user.LastName = updateUserRequest.LastName;
             user.PhoneNumber = updateUserRequest.PhoneNumber;
             user.Email = updateUserRequest.Email;
+            user.ProfileImageUrl = updateUserRequest.ProfileImageUrl;
             user.UpdatedTime = DateTime.Now;
+            user.UpdatedBy = userName.Value;
 
             return user;
         }
@@ -140,8 +165,12 @@ namespace WWMS.BAL.Services
 
         public async Task UpdatePasswordAsync(UpdatePasswordRequest updatePasswordRequest)
         {
-            //TODO: get user id || username from token instead of get from the body request
-            var user = await _unitOfWork.Users.GetByUsernameAsync(updatePasswordRequest.Username);
+            var userName = _httpContextAccessor
+                            .HttpContext.User
+                            .Claims.FirstOrDefault(x => x.Type
+                            .Equals("Username", StringComparison.CurrentCultureIgnoreCase))
+                            .Value;
+            var user = await _unitOfWork.Users.GetByUsernameAsync(userName);
 
             if (!BC.EnhancedVerify(updatePasswordRequest.OldPass, user.PasswordHash))
             {
@@ -185,10 +214,20 @@ namespace WWMS.BAL.Services
         public async Task<List<GetStaffResponse>> GetStaffAsync()
         => _mapper.Map<List<GetStaffResponse>>(await _unitOfWork.Users.GetAllStaffAsync());
 
-        public Task<string> UploadProfileImageAsync(IFormFile file)
+        public async Task<string> UploadProfileImageAsync(IFormFile file)
         {
-            //TODO: implement later
-            throw new NotImplementedException();
+            string imgUrl = await _uploadFileService.UploadImage(file);
+            var userName = _httpContextAccessor
+            .HttpContext.User
+            .Claims.FirstOrDefault(x => x.Type
+            .Equals("Username", StringComparison.CurrentCultureIgnoreCase))
+            .Value;
+
+            User user = await _unitOfWork.Users.GetByUsernameAsync(userName);
+            user.ProfileImageUrl = imgUrl;
+            _unitOfWork.Users.UpdateEntity(user);
+            _unitOfWork.CompleteAsync();
+            return imgUrl;
         }
     }
 }

@@ -39,17 +39,27 @@ namespace WWMS.BAL.Services
 
         public async Task CreateCheckRequestReportAsync(CreateCheckRequestReportRequest request)
         {
+            //TODO: implement file upload for report later
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase)).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+            var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase)).Value;
+
             CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(request.CheckRequestDetailId);
             if (checkRequestDetail is null || !String.IsNullOrEmpty(checkRequestDetail.ReportCode))
             {
                 throw new Exception("Cannot find the check request detail id OR report existed please update instead");
             }
-            //TODO: get the reporter information from jwt token
+            //verify reporter
+            if (string.Equals(role, "STAFF") && checkRequestDetail.CheckerId != long.Parse(userId))
+            {
+                throw new Exception("No verified checker");
+            }
+
             checkRequestDetail.ReportCode = GenRandomString();
             checkRequestDetail.DiscrepanciesFound = request.DiscrepanciesFound;
             checkRequestDetail.ActualQuantity = request.ActualQuantity;
-            //TODO: use firebase to gen link
-            checkRequestDetail.ReportFile = request.ReportFile;
+            checkRequestDetail.ReportDescription = request.ReportDescription;
+            checkRequestDetail.ReporterAssigned = userName;
 
             _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);
             await _unitOfWork.CompleteAsync();
@@ -65,11 +75,10 @@ namespace WWMS.BAL.Services
             {
                 throw new Exception("Cannot find the check request detail id OR report code");
             }
-            //TODO: get the reporter information from jwt token
             checkRequestDetail.ReportCode = GenRandomString();
             checkRequestDetail.DiscrepanciesFound = request.DiscrepanciesFound;
             checkRequestDetail.ActualQuantity = request.ActualQuantity;
-            //TODO: use firebase to gen link
+            //TODO: Implement file upload for report later
             checkRequestDetail.ReportFile = request.ReportFile;
 
             _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);

@@ -32,12 +32,13 @@ namespace WWMS.DAL.Repositories
                            .Select(u => new User
                            {
                                Id = u.Id,
-                               Username = u.Username,
-                               Email = u.Email,
-                               FirstName = u.FirstName,
-                               LastName = u.LastName,
-                               PhoneNumber = u.PhoneNumber,
-                               Status = u.Status,
+                               Username = u.Username ?? string.Empty,
+                               Email = u.Email ?? string.Empty,
+                               FirstName = u.FirstName ?? string.Empty,
+                               LastName = u.LastName ?? string.Empty,
+                               PhoneNumber = u.PhoneNumber ?? string.Empty,
+                               Status = u.Status ?? "Unknown",
+                               ProfileImageUrl = u.ProfileImageUrl ?? "N/A",
                                Role = u.Role
                            })
                            .ToListAsync();
@@ -51,12 +52,13 @@ namespace WWMS.DAL.Repositories
                            .Select(u => new User
                            {
                                Id = u.Id,
-                               Username = u.Username,
-                               Email = u.Email,
-                               FirstName = u.FirstName,
-                               LastName = u.LastName,
-                               PhoneNumber = u.PhoneNumber,
-                               Status = u.Status,
+                               Username = u.Username ?? string.Empty,
+                               Email = u.Email ?? string.Empty,
+                               FirstName = u.FirstName ?? string.Empty,
+                               LastName = u.LastName ?? string.Empty,
+                               PhoneNumber = u.PhoneNumber ?? string.Empty,
+                               Status = u.Status ?? "Unknown",
+                               ProfileImageUrl = u.ProfileImageUrl ?? "N/A",
                                Role = u.Role
                            })
                            .ToListAsync();
@@ -72,6 +74,7 @@ namespace WWMS.DAL.Repositories
             //                   LastName = u.LastName,
             //                   PhoneNumber = u.PhoneNumber,
             //                   Status = u.Status,
+            //                   ProfileImageUrl = u.ProfileImageUrl,
             //                   Role = u.Role
             //               })
             //               .ToListAsync();
@@ -92,6 +95,7 @@ namespace WWMS.DAL.Repositories
                     LastName = u.LastName,
                     PhoneNumber = u.PhoneNumber,
                     Status = u.Status,
+                    ProfileImageUrl = u.ProfileImageUrl ?? "N/A",
                     Role = u.Role
                 })
                 .FirstOrDefaultAsync();
@@ -167,10 +171,11 @@ namespace WWMS.DAL.Repositories
                                            Username = u.Username,
                                            PasswordHash = u.PasswordHash,
                                            Email = u.Email,
-                                           FirstName = u.FirstName,
-                                           LastName = u.LastName,
-                                           PhoneNumber = u.PhoneNumber,
-                                           Status = u.Status,
+                                           FirstName = u.FirstName ?? string.Empty,
+                                           LastName = u.LastName ?? string.Empty,
+                                           PhoneNumber = u.PhoneNumber ?? string.Empty,
+                                           Status = u.Status ?? "Unknown",
+                                           ProfileImageUrl = string.IsNullOrEmpty(u.ProfileImageUrl) ? "N/A" : u.ProfileImageUrl,
                                            Role = u.Role
                                        })
                                        .FirstOrDefaultAsync();
@@ -201,10 +206,16 @@ namespace WWMS.DAL.Repositories
 
         public async Task<ICollection<User>> GetAllStaffAsync()
         {
-            return await _dbSet.Where(u =>
-            !u.Status.Equals("Inactive")
-            && u.RoleId == 3
-            ).ToListAsync();
+            return await _dbSet
+                .Where(u => u.Status != null && !u.Status.Equals("Inactive") && u.RoleId == 3)
+                .Select(u => new User
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    FirstName = u.FirstName ?? string.Empty,
+                    LastName = u.LastName ?? string.Empty,
+                })
+                .ToListAsync();
         }
     }
 }

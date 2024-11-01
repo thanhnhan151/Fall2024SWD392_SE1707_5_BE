@@ -29,7 +29,8 @@ namespace WWMS.BAL.Mappings
         {
             #region User
             CreateMap<User, GetUserResponse>()
-                .ForMember(w => w.Role, w => w.MapFrom(w => w.Role.RoleName));
+                .ForMember(w => w.Role, w => w.MapFrom(w => w.Role.RoleName))
+                .ForMember(w => w.Avatar, w => w.MapFrom(w => w.ProfileImageUrl));
             #endregion
 
             #region Wine
@@ -78,14 +79,14 @@ namespace WWMS.BAL.Mappings
             /// report
             CreateMap<CreateReport, IORequest>();
             CreateMap<CreateReportIORequest, IORequestDetail>();
-            
+
             CreateMap<GetIorequestForReport, IORequest>();
             CreateMap<IORequest, GetIorequestForReport>();
             //
 
 
 
-            CreateMap<GetReportIORequest,IORequestDetail>();
+            CreateMap<GetReportIORequest, IORequestDetail>();
             CreateMap<IORequestDetail, GetReportIORequest>();
             ///
 
@@ -180,7 +181,6 @@ namespace WWMS.BAL.Mappings
             CreateMap<CheckRequest, GetCheckRequestWithDetailsResponse>()
                 .ForMember(dest => dest.CheckRequestDetails, opt => opt.MapFrom(src => src.CheckRequestDetails));
 
-            // CreateMap<CheckRequestDetail, GetCheckRequestDetailListItemResponse>();
             CreateMap<CheckRequestDetail, GetCheckRequestDetailListItemResponse>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
             #endregion
@@ -238,7 +238,6 @@ namespace WWMS.BAL.Mappings
                 .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
                 .ForMember(dest => dest.CheckRequestId, opt => opt.MapFrom(src => src.CheckRequestId))
-                .ForMember(dest => dest.CheckRequestCode, opt => opt.MapFrom(src => src.CheckRequestCode))
                 .ForMember(dest => dest.CheckerId, opt => opt.MapFrom(src => src.CheckerId))
                 .ForMember(dest => dest.WineRoomId, opt => opt.MapFrom(src => src.WineRoomId))
 

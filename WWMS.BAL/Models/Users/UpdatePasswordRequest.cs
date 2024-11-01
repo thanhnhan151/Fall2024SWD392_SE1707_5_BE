@@ -9,6 +9,5 @@ namespace WWMS.BAL.Models.Users
     {
         public string NewPass { get; set; } = null!;
         public string OldPass { get; set; } = null!;
-        public string Username { get; set; } = null!;
     }
 }

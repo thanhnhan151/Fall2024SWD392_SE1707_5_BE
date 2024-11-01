@@ -28,8 +28,18 @@ namespace WWMS.BAL.Services
         }
         #endregion
         public async Task<List<GetCheckRequestDetailListItemResponse>> GetAllAsync()
-        => _mapper.Map<List<GetCheckRequestDetailListItemResponse>>
-        (await _unitOfWork.CheckRequestDetails.GetAllEntitiesAsync());
+        {
+            var userRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("role", StringComparison.CurrentCultureIgnoreCase)).Value;
+
+            if (string.Equals(userRole, "MANAGER"))
+            {
+                return _mapper.Map<List<GetCheckRequestDetailListItemResponse>>
+                     (await _unitOfWork.CheckRequestDetails.GetAllEntitiesAsync());
+            }
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+            return _mapper.Map<List<GetCheckRequestDetailListItemResponse>>
+                     (await _unitOfWork.CheckRequestDetails.GetAllByChecKerIdAsync(long.Parse(userId)));
+        }
 
         public async Task<List<GetCheckRequestDetailListItemResponse>> GetAllByReporterNameAsync(string reporterName)
         => _mapper.Map<List<GetCheckRequestDetailListItemResponse>>
@@ -57,8 +67,21 @@ namespace WWMS.BAL.Services
 
         public async Task CreateCheckRequestDetailAsync(CreateAdditionalCheckRequestDetailRequest createCheckRequestDetailRequest)
         {
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+            CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(createCheckRequestDetailRequest.CheckRequestId);
+            if (checkRequest is null
+            || checkRequest.RequesterId != long.Parse(userId)
+            || checkRequest.StartDate > createCheckRequestDetailRequest.StartDate
+            || checkRequest.DueDate < createCheckRequestDetailRequest.DueDate)
+            {
+                throw new Exception("Not valid requester || request || date time range");
+            }
+
             CheckRequestDetail checkRequestDetail = _mapper.Map<CheckRequestDetail>(createCheckRequestDetailRequest);
             checkRequestDetail.Status = "ACTIVE";
+            checkRequestDetail.CreatedTime = DateTime.Now;
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase)).Value;
+            checkRequestDetail.CreatedBy = userName;
             await _unitOfWork.CheckRequestDetails.AddEntityAsync(checkRequestDetail);
             await _unitOfWork.CompleteAsync();
         }
@@ -66,16 +89,35 @@ namespace WWMS.BAL.Services
         public async Task DisableCheckRequestDetailAsync(long id)
         {
             CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(id);
-            if (checkRequestDetail is null) throw new Exception("Id not found");
-            //other business rule ...
+            if (checkRequestDetail is null || DateTime.Now > checkRequestDetail.DueDate) throw new Exception("Id not found || Overdue");
+
+            CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(checkRequestDetail.CheckRequestId);
+
+            //compare requester
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+            if (checkRequest.RequesterId != long.Parse(userId)) throw new Exception("Not valid requester");
+
+            var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase)).Value;
+
             checkRequestDetail.Status = "DISABLED";
             checkRequestDetail.DeletedTime = DateTime.Now;
+            checkRequestDetail.DeletedBy = userName;
+
             _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);
             _unitOfWork.CompleteAsync();
         }
 
         public async Task<GetCheckRequestDetailViewDetailResponse> GetByIdAsync(long id)
-        => _mapper.Map<GetCheckRequestDetailViewDetailResponse>(await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(id));
+        {
+            GetCheckRequestDetailViewDetailResponse response = _mapper.Map<GetCheckRequestDetailViewDetailResponse>(await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(id));
+            var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase)).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+            if (string.Equals(role, "MANAGER") || response.CheckerId == long.Parse(userId))
+            {
+                return response;
+            }
+            throw new Exception("NO VERIFIED USER");
+        }
 
         public async Task DeleteReportAsync(int detailId)
         {

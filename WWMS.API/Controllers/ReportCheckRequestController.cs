@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.CheckRequestReports;
 
@@ -28,6 +29,7 @@ namespace WWMS.API.Controllers
         /// Staff create a report for check request detail
         /// </summary>
         [HttpPost]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         public async Task<IActionResult> CreateAsync([FromBody] CreateCheckRequestReportRequest request)
         {
             try
@@ -61,7 +63,6 @@ namespace WWMS.API.Controllers
             }
         }
         #endregion
-
 
         #region get report by check request detail id
 
