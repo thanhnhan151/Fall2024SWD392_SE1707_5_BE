@@ -31,8 +31,7 @@ namespace WWMS.API.Controllers
         ///     {
         ///       "roomName": "Hybrid Overdrive",
         ///       "locationAddress": "In the middle of nowhere",
-        ///       "capacity": 100,
-        ///       "managerName": "Tran Van Bao"
+        ///       "capacity": 100
         ///     }
         ///         
         /// </remarks> 
@@ -178,9 +177,7 @@ namespace WWMS.API.Controllers
         ///     {
         ///       "roomName": "Vintage Only",
         ///       "locationAddress": "On the very top",
-        ///       "capacity": 100,
-        ///       "currentOccupancy": 1,
-        ///       "managerName": "Tran Van Teo"
+        ///       "capacity": 100
         ///     }
         ///         
         /// </remarks> 

@@ -36,10 +36,10 @@ namespace WWMS.BAL.Services
 
         public async Task CreateRequestAsync(CreateCheckRequestRequest createCheckRequestRequest)
         {
-            await _unitOfWork.CheckRequests.AddEntityAsync(MapCreateModelToCheckRequest(createCheckRequestRequest));
+            await _unitOfWork.CheckRequests.AddEntityAsync(await MapCreateModelToCheckRequest(createCheckRequestRequest));
             await _unitOfWork.CompleteAsync();
         }
-        private CheckRequest MapCreateModelToCheckRequest(CreateCheckRequestRequest createCheckRequestRequest)
+        private async Task<CheckRequest> MapCreateModelToCheckRequest(CreateCheckRequestRequest createCheckRequestRequest)
         {
             var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase)).Value;
             var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
@@ -52,6 +52,7 @@ namespace WWMS.BAL.Services
             checkRequest.RequesterId = long.Parse(userId);
             checkRequest.RequesterName = userName;
 
+
             checkRequest.CheckRequestDetails = _mapper.Map<List<CheckRequestDetail>>(createCheckRequestRequest.CreateCheckRequestDetailRequests);
             //get the start/end date for main check request by the min/max start date/end date
             DateTime? mainStartDate = DateTime.MaxValue;
@@ -59,7 +60,26 @@ namespace WWMS.BAL.Services
 
             foreach (var item in checkRequest.CheckRequestDetails)
             {
+                //map other fields
+
+
                 item.Status = "ACTIVE";
+                item.CheckRequestCode = checkRequest.RequestCode;
+                User checker = await _unitOfWork.Users.GetEntityByIdAsync(item.CheckerId);
+                item.CheckerName = checker.Username;
+
+                //wine room
+                WineRoom wineRoom = await _unitOfWork.WineRooms.GetEntityByIdWithWRInfoAsync(item.WineRoomId);
+                item.ExpectedCurrQuantity = wineRoom.CurrentQuantity;
+                //wine
+                item.WineName = wineRoom.Wine.WineName;
+                item.MFD = wineRoom.Wine.MFD;
+                item.WineId = wineRoom.WineId;
+                //room
+                item.RoomId = wineRoom.RoomId;
+                item.RoomName = wineRoom.Room.RoomName;
+                item.RoomCapacity = (int)wineRoom.Room.Capacity;
+
 
                 if (item.StartDate <= mainStartDate)
                 {

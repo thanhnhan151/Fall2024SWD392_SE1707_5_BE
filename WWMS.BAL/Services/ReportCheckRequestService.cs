@@ -61,7 +61,11 @@ namespace WWMS.BAL.Services
             checkRequestDetail.ReportDescription = request.ReportDescription;
             checkRequestDetail.ReporterAssigned = userName;
 
+            WineRoom wineRoom = await _unitOfWork.WineRooms.GetEntityByIdAsync(checkRequestDetail.WineRoomId);
+            wineRoom.CurrentQuantity = request.ActualQuantity;
+
             _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);
+            _unitOfWork.WineRooms.UpdateEntity(wineRoom);
             await _unitOfWork.CompleteAsync();
         }
 
