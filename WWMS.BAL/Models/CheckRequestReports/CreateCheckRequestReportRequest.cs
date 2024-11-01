@@ -6,6 +6,6 @@ namespace WWMS.BAL.Models.CheckRequestReports
         public string? ReportDescription { get; set; } = string.Empty;
         public int? DiscrepanciesFound { get; set; }
         public int ActualQuantity { get; set; }
-        public string? ReportFile { get; set; }
+        
     }
 }

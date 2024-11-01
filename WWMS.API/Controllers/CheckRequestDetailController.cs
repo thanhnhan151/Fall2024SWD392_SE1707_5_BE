@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.CheckRequests;
 using WWMS.BAL.Models.CheckRequests.Report;
@@ -30,11 +31,11 @@ namespace WWMS.API.Controllers
         /// Manager get all check request details
         /// </summary>
         [HttpGet]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         public async Task<IActionResult> GetAllAsync()
         {
             try
             {
-                //TODO: get user info from token then if MANAGER => fetch all
                 var result = await _checkRequestDetailService.GetAllAsync();
 
                 if (result is not null)
@@ -81,6 +82,7 @@ namespace WWMS.API.Controllers
         /// Manager create an additional check request detail with existed check request
         /// </summary>
         [HttpPost]
+        [PermissionAuthorize("MANAGER")]
         public async Task<IActionResult> CreateAsync([FromBody] CreateAdditionalCheckRequestDetailRequest request)
         {
             try
@@ -119,6 +121,7 @@ namespace WWMS.API.Controllers
         /// Manager disable check request detail
         /// </summary>
         [HttpDelete("{id}")]
+        [PermissionAuthorize("MANAGER")]
         public async Task<IActionResult> DisableAsync(int id)
         {
             try
@@ -133,12 +136,12 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-
-        #region Disable the check request detail
+        #region Get detail the check request detail
         /// <summary>
         /// MANAGER OR STAFF CAN VIEW DETAIL OF CHECK_REQUEST_DETAIL
         /// </summary>
         [HttpGet("{id}")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             try
@@ -157,53 +160,6 @@ namespace WWMS.API.Controllers
             }
             return NotFound();
         }
-        #endregion
-
-
-
-        #region REPORT
-
-        #region Create/Update REPORT FIELDS
-        /// <summary>
-        ///STAFF create/update report fields
-        /// </summary>
-        [HttpPost]
-        [Route("/report/{detailId}")]
-        public async Task<IActionResult> CreateOrUpdateReportAsync([FromBody] CreateOrUpdateCheckRequestDetailReportRequest request, int detailId)
-        {
-            try
-            {
-                await _checkRequestDetailService.CreateOrUpdateReportAsync(request, detailId);
-                return Ok("Created/Updated check request detail report ok!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-        #endregion
-
-        #region Delete REPORT FIELDS
-        /// <summary>
-        ///STAFF delete report fields
-        /// </summary>
-
-        [HttpDelete]
-        [Route("/report/{detailId}")]
-        public async Task<IActionResult> DeleteReportAsync(int detailId)
-        {
-            try
-            {
-                await _checkRequestDetailService.DeleteReportAsync(detailId);
-                return Ok("Delete ok!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-        #endregion
-
         #endregion
 
     }

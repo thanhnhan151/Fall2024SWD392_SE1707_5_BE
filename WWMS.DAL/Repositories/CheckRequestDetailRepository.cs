@@ -13,6 +13,14 @@ namespace WWMS.DAL.Repositories
         public CheckRequestDetailRepository(WineWarehouseDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor) : base(context, logger, httpContextAccessor)
         {
         }
+
+        public async Task<ICollection<CheckRequestDetail>> GetAllByChecKerIdAsync(long checkerId)
+        {
+            return await _dbSet
+                .Where(c => c.CheckerId == checkerId)
+                .ToListAsync();
+        }
+
         public async Task<ICollection<CheckRequestDetail>> GetAllCheckRequestDetailsByReporterNameAsync(string reporterName)
         => await _dbSet.Where(c => c.CheckerName.Equals(reporterName)).ToListAsync();
 
