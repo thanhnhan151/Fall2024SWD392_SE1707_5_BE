@@ -54,7 +54,7 @@ namespace WWMS.BAL.Mappings
             CreateMap<Room, GetRoomResponse>();
 
             CreateMap<Room, GetAvailableRoomResponse>()
-                .ForMember(r => r.RoomName, r => r.MapFrom(r => r.RoomName + $" (Available: {r.Capacity - r.CurrentOccupancy}) bottles"));
+                .ForMember(r => r.RoomName, r => r.MapFrom(r => r.RoomName + $" (Available: {r.Capacity - r.CurrentOccupancy} bottles)"));
 
             CreateMap<Room, GetRoomDetailResponse>();
 
