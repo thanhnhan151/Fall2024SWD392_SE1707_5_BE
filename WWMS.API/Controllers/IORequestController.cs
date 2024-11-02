@@ -105,7 +105,6 @@ namespace WWMS.API.Controllers
         ///     Import
         ///     
         ///     {
-        ///       "requestCode": "REQ-001",
         ///       "startDate": "2024-10-25T21:51:14.383Z",
         ///       "comments": "Import",
         ///       "ioType": "In",
@@ -123,7 +122,6 @@ namespace WWMS.API.Controllers
         ///     Export
         ///     
         ///     {
-        ///       "requestCode": "REQ-001",
         ///       "startDate": "2024-10-25T21:51:14.383Z",
         ///       "comments": "Export",
         ///       "ioType": "Out",
@@ -174,16 +172,13 @@ namespace WWMS.API.Controllers
         /// Sample request:
         /// 
         ///     {
-        ///       "requestCode": "string",
         ///       "startDate": "2024-10-26T02:52:20.461Z",
-        ///       "dueDate": "2024-10-26T02:52:20.461Z",
         ///       "comments": "string",
         ///       "ioType": "string",
         ///       "roomId": 0,
         ///       "checkerId": 0,
         ///       "suplierId": 0,
         ///       "customerId": 0,
-        ///       "status": "string",
         ///       "upIORequestDetails": [
         ///         {
         ///           "id": 0,

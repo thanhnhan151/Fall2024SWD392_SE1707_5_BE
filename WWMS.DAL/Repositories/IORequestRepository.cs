@@ -69,7 +69,7 @@ namespace WWMS.DAL.Repositories
 
             if (checkExist.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
             {
-                checkExist.Status = "Cancle";
+                checkExist.Status = "Cancel";
 
             }
             else

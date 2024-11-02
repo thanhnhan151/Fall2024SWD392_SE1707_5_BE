@@ -32,6 +32,7 @@ namespace WWMS.BAL.Services
             ioRequestEntity.CreatedTime = DateTime.UtcNow;
             ioRequestEntity.UpdatedTime = DateTime.UtcNow;
             ioRequestEntity.Status = "Pending";
+            ioRequestEntity.RequestCode = GenRandomString();
  
 
             if (createIORequest.IORequestDetails == null || !createIORequest.IORequestDetails.Any())
@@ -52,7 +53,13 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-
+        private string GenRandomString(int length = 12)
+        {
+            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            Random random = new();
+            return new string(Enumerable.Repeat(validChars, length)
+                                        .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
         public async Task DisableIORequestsAsync(long id)
         {
             await _unitOfWork.IIORequests.DisableAsync(id);
@@ -183,24 +190,12 @@ namespace WWMS.BAL.Services
         }
         public async Task<List<GetIORequest>> GetAllEntitiesByIOStyle(string ioType) => _mapper.Map<List<GetIORequest>>(await _unitOfWork.IIORequests.GetEntitiesByIOStyleAsync(ioType));
 
-
+        // fixx
         public async Task UpdateManyIORequestsAsync(UpdateIORequest updateIORequest, long id)
         {
-            var currentIORequest = _mapper.Map<GetIORequest?>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
-            
-            if (currentIORequest == null)
-            {
-                throw new Exception("IORequest not found.");
-            }
-            if (currentIORequest.Status != "Pending")
-            {
-                throw new Exception("IORequest status must be 'Pending' to update.");
-            }
-
-            // if null give a old ìnormation
-            currentIORequest.RequestCode = string.IsNullOrEmpty(updateIORequest.RequestCode) ? currentIORequest.RequestCode : updateIORequest.RequestCode;
+            var currentIORequest = _mapper.Map<IORequest>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
+            currentIORequest.RequestCode = currentIORequest.RequestCode;
             currentIORequest.StartDate = updateIORequest.StartDate ?? currentIORequest.StartDate;
-            currentIORequest.DueDate = updateIORequest.DueDate ?? currentIORequest.DueDate;
             currentIORequest.Comments = updateIORequest.Comments ?? currentIORequest.Comments;
             currentIORequest.IOType = string.IsNullOrEmpty(updateIORequest.IOType) ? currentIORequest.IOType : updateIORequest.IOType;
 
@@ -209,35 +204,25 @@ namespace WWMS.BAL.Services
             currentIORequest.SuplierId = updateIORequest.SuplierId ?? currentIORequest.SuplierId;
             currentIORequest.RoomId = updateIORequest.RoomId ?? currentIORequest.RoomId;
 
-
-           
-            var user = await _unitOfWork.Users.GetEntityByIdAsync((long)currentIORequest.CheckerId);
-
-
-
-            if (updateIORequest.UpIORequestDetails != null && updateIORequest.UpIORequestDetails.Any())
+            foreach (var item in updateIORequest.UpIORequestDetails)
             {
-                foreach (var newDetail in updateIORequest.UpIORequestDetails)
+                if (item != null)
                 {
-                    var existingDetail = currentIORequest.IORequestDetails.FirstOrDefault(d => d.Id == newDetail.Id);
-
-                    if (existingDetail != null)
+                    var existingDetail = currentIORequest.IORequestDetails.FirstOrDefault(d => d.Id == item.Id);
+                    if(existingDetail != null)
                     {
-
-                        existingDetail.Quantity = newDetail.Quantity != 0 ? newDetail.Quantity : existingDetail.Quantity;
-                        existingDetail.WineId = newDetail.WineId != 0 ? newDetail.WineId : existingDetail.WineId;
-
+                        existingDetail.Quantity = item.Quantity != 0 ? item.Quantity : existingDetail.Quantity;
+                        existingDetail.WineId = item.WineId != 0 ? item.WineId : existingDetail.WineId;
                     }
+                    
                 }
             }
 
-            var io = _mapper.Map<IORequest?>(currentIORequest);
-            io.CreatedTime = DateTime.Now;
-            _unitOfWork.IIORequests.UpdateEntity(io);
+            _unitOfWork.IIORequests.UpdateEntity(currentIORequest);
             await _unitOfWork.CompleteAsync();
         }
 
-        /// update and create iorequest details 
+
         public async Task CreateManyIORequestDetailsByIdAsync(CreateDetailsById updateIORequest, long id)
         {
             var currentIORequest = _mapper.Map<IORequest?>(await _unitOfWork.IIORequests.GetEntityByIdAsync(id));
@@ -271,7 +256,7 @@ namespace WWMS.BAL.Services
             _unitOfWork.IIORequests.UpdateEntity(io);
             await _unitOfWork.CompleteAsync();
         }
-        /// update one iorequest details 
+
 
         public async Task UpdateManyIORequestDetailsByIdAsync(UpdateDetailsById updateIORequest, long id)
         {
