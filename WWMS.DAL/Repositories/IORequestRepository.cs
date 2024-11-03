@@ -37,6 +37,7 @@ namespace WWMS.DAL.Repositories
         {
             var result = await _dbSet
                 .Where(c => c.IOType == ioType)
+                .OrderByDescending(c => c.Id) 
                 .ToListAsync();
 
             return result;

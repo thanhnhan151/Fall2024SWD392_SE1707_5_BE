@@ -136,7 +136,7 @@ namespace WWMS.BAL.Services
                 {
                     RoomId = midRoom.Id,
                     WineId = existingDetail.WineId,
-                    Import = existingDetail.Quantity,
+                    Import = 0,
                     InitialQuantity = existingDetail.Quantity,
                     CurrentQuantity = existingDetail.Quantity
                 };
@@ -151,7 +151,7 @@ namespace WWMS.BAL.Services
                 throw new Exception($"Room over capacity. Current: {midRoom.CurrentOccupancy}, Capacity: {midRoom.Capacity}");
             }
 
-            //midWine.AvailableStock += existingDetail.Quantity;
+
 
             _unitOfWork.Rooms.UpdateEntity(midRoom);
             _unitOfWork.Wines.UpdateEntity(midWine);
@@ -203,6 +203,11 @@ namespace WWMS.BAL.Services
             currentIORequest.CustomerId = updateIORequest.CustomerId ?? currentIORequest.CustomerId;
             currentIORequest.SuplierId = updateIORequest.SuplierId ?? currentIORequest.SuplierId;
             currentIORequest.RoomId = updateIORequest.RoomId ?? currentIORequest.RoomId;
+       
+            if (currentIORequest.Status != "Pending")
+            {
+                throw new Exception("IORequest status must be 'Pending' to update.");
+            }
 
             foreach (var item in updateIORequest.UpIORequestDetails)
             {
