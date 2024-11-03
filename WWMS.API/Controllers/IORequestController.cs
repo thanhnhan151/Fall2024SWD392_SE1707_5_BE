@@ -105,7 +105,6 @@ namespace WWMS.API.Controllers
         ///     Import
         ///     
         ///     {
-        ///       "requestCode": "REQ-001",
         ///       "startDate": "2024-10-25T21:51:14.383Z",
         ///       "comments": "Import",
         ///       "ioType": "In",
@@ -123,7 +122,6 @@ namespace WWMS.API.Controllers
         ///     Export
         ///     
         ///     {
-        ///       "requestCode": "REQ-001",
         ///       "startDate": "2024-10-25T21:51:14.383Z",
         ///       "comments": "Export",
         ///       "ioType": "Out",
@@ -166,41 +164,58 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Update A Import/Export Request many
+        #region Update A Import/Export Request Many
         /// <summary>
-        /// Update an Import/Export request in the system
+        /// Update an Import/Export request in the system. This endpoint allows for updating details of import or export requests based on the specified type.
         /// </summary>
         /// <remarks>
-        /// Sample request:
-        /// 
+        /// Sample requests:
+        ///
+        /// **Import**
+        /// ```json
+        /// {
+        ///   "startDate": "2024-11-02T15:09:43.985Z",
+        ///   "comments": "string",
+        ///   "ioType": "In",
+        ///   "roomId": 2,
+        ///   "checkerId": 2,
+        ///   "suplierId": 2,
+        ///   "upIORequestDetails": [
         ///     {
-        ///       "requestCode": "string",
-        ///       "startDate": "2024-10-26T02:52:20.461Z",
-        ///       "dueDate": "2024-10-26T02:52:20.461Z",
-        ///       "comments": "string",
-        ///       "ioType": "string",
-        ///       "roomId": 0,
-        ///       "checkerId": 0,
-        ///       "suplierId": 0,
-        ///       "customerId": 0,
-        ///       "status": "string",
-        ///       "upIORequestDetails": [
-        ///         {
-        ///           "id": 0,
-        ///           "quantity": 0,
-        ///           "wineId": 0
-        ///         }
-        ///       ]
+        ///       "id": 25,
+        ///       "quantity": 12,
+        ///       "wineId": 3
         ///     }
-        ///         
-        /// </remarks> 
+        ///   ]
+        /// }
+        /// ```
+        ///
+        /// **Export**
+        /// ```json
+        /// {
+        ///   "startDate": "2024-10-25T21:51:14.383Z",
+        ///   "comments": "Export",
+        ///   "ioType": "Out",
+        ///   "roomId": 1,
+        ///   "checkerId": 2,
+        ///   "customerId": 1,
+        ///   "upIORequestDetails": [
+        ///     {
+        ///       "id": 35,
+        ///       "quantity": 22,
+        ///       "wineId": 1
+        ///     }
+        ///   ]
+        /// }
+        /// ```
+        /// </remarks>
         /// <response code="200">Request that was updated</response>
         /// <response code="204">No content</response>
         /// <response code="400">Request does not exist</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
-        /// <response code="500">Internal Server Error</response>
+        /// <response code="500">Internal Server Error</response>  
         //[PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateIORequest updateIO, long id)

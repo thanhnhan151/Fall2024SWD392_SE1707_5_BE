@@ -37,6 +37,7 @@ namespace WWMS.DAL.Repositories
         {
             var result = await _dbSet
                 .Where(c => c.IOType == ioType)
+                .OrderByDescending(c => c.Id) 
                 .ToListAsync();
 
             return result;
@@ -69,7 +70,7 @@ namespace WWMS.DAL.Repositories
 
             if (checkExist.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
             {
-                checkExist.Status = "Cancle";
+                checkExist.Status = "Cancel";
 
             }
             else
