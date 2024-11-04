@@ -32,6 +32,7 @@ namespace WWMS.DAL.Repositories
                                Id = c.Id,
                                CategoryName = c.CategoryName,
                                Wines = c.Wines
+                                     .OrderByDescending(w => w.Id)
                                      .Select(w => new Wine
                                      {
                                          Id = w.Id,
