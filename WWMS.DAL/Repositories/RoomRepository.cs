@@ -56,7 +56,7 @@ namespace WWMS.DAL.Repositories
                     WineRooms = r.WineRooms.Select(w => new WineRoom
                     {
                         Id = w.Id,
-                        WineId = w.Id,
+                        WineId = w.WineId,
                         InitialQuantity = w.InitialQuantity,
                         Import = w.Import,
                         Export = w.Export,
