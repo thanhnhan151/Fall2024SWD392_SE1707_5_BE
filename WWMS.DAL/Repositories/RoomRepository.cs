@@ -42,7 +42,7 @@ namespace WWMS.DAL.Repositories
 
         public async Task<ICollection<Room>> GetAllAvailableRoomsForExportAsync()
             => await _dbSet.FromSqlRaw(
-                "SELECT [r].[Id], [r].[RoomName], [r].[Capacity], [r].[CreatedBy], [r].[UpdatedBy], [r].[DeletedBy], [r].[Status], [r].[CreatedTime], [r].[UpdatedTime], [r].[DeletedTime], [r].[CurrentOccupancy], [r].[LocationAddress], [r].[ManagerName] " +
+                "SELECT DISTINCT [r].[Id], [r].[RoomName], [r].[Capacity], [r].[CreatedBy], [r].[UpdatedBy], [r].[DeletedBy], [r].[Status], [r].[CreatedTime], [r].[UpdatedTime], [r].[DeletedTime], [r].[CurrentOccupancy], [r].[LocationAddress], [r].[ManagerName] " +
                 "FROM [Room] AS [r] " +
                 "INNER JOIN " +
                 "(SELECT [w].[Id], [w].[RoomId] FROM [WineRoom] AS [w] " +
