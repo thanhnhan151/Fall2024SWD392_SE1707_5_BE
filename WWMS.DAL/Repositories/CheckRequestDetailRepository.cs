@@ -39,11 +39,13 @@ namespace WWMS.DAL.Repositories
             var result = await _dbSet
                 .Where(c => c.StartDate.HasValue
                             && c.StartDate.Value.Month == month
-                            && c.StartDate.Value.Year == year)
+                            && c.StartDate.Value.Year == year
+                            && c.Status == "ACTIVE")
                 .ToListAsync();
 
             foreach (var newDetail in result)
             {
+
                 int quantity = newDetail.ExpectedCurrQuantity - newDetail.ActualQuantity;
 
                 if (quantity > 0)
