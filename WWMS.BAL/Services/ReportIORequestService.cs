@@ -27,10 +27,10 @@ namespace WWMS.BAL.Services
             var reportIORequest = await _unitOfWork.Reports.GetEntityByIdAsync(id);
 
       
-            if (reportIORequest == null || string.IsNullOrWhiteSpace(reportIORequest.ReportCode))
-            {
-                return null; 
-            }
+            //if (reportIORequest == null || string.IsNullOrWhiteSpace(reportIORequest.ReportCode))
+            //{
+            //    return null; 
+            //}
 
             return _mapper.Map<GetReportIORequest?>(reportIORequest);
         }
@@ -58,8 +58,7 @@ namespace WWMS.BAL.Services
 
 
             var filteredIORequestDetails = IORequest.IORequestDetails
-                .Where(detail => detail != null &&
-                                !string.IsNullOrWhiteSpace(detail.ReportCode)).ToList();
+                .Where(detail => detail != null).ToList();
 
 
             return _mapper.Map<List<GetReportIORequest>>(filteredIORequestDetails);
