@@ -11,7 +11,7 @@ namespace WWMS.BAL.Models.ReportIORequest
     {
         public string RequestCode { get; set; } = null!;
         public DateTime? StartDate { get; set; }
-        public DateTime? DueDate { get; set; }
+
         public string? Comments { get; set; }
         public string IOType { get; set; } = string.Empty;
         public long? RoomId { get; set; }
