@@ -98,22 +98,22 @@ namespace WWMS.API.Controllers
         #endregion
 
         #region Update a check request detail
-        /// <summary>
-        /// Manager update the information of check request detail
-        /// </summary>
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateCheckRequestDetailRequest request)
-        {
-            try
-            {
-                await _checkRequestDetailService.UpdateCheckRequestDetailAsync(request);
-                return Ok("Updated check request detail ok!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+        // /// <summary>
+        // /// Manager update the information of check request detail
+        // /// </summary>
+        // [HttpPut]
+        // public async Task<IActionResult> UpdateAsync([FromBody] UpdateCheckRequestDetailRequest request)
+        // {
+        //     try
+        //     {
+        //         await _checkRequestDetailService.UpdateCheckRequestDetailAsync(request);
+        //         return Ok("Updated check request detail ok!");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //     }
+        // }
         #endregion
 
         #region Disable the check request detail

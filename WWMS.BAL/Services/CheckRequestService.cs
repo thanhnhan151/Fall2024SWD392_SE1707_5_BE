@@ -54,6 +54,96 @@ namespace WWMS.BAL.Services
 
 
             checkRequest.CheckRequestDetails = _mapper.Map<List<CheckRequestDetail>>(createCheckRequestRequest.CreateCheckRequestDetailRequests);
+
+            #region verify the request
+            //verify duplicate wineroomid
+            List<long> wineRoomIds = createCheckRequestRequest.CreateCheckRequestDetailRequests.Select(d => d.WineRoomId).ToList();
+            if (new HashSet<long>(wineRoomIds).Count < wineRoomIds.Count) throw new Exception("Duplicate wine room id");
+
+            //verify busy checker
+            var checkerDateRangeMap = new Dictionary<long, Dictionary<DateTime, DateTime>>();
+            var comparatorSizeDateRanges = new Dictionary<long, int>();
+            //inserting all
+            foreach (var item in checkRequest.CheckRequestDetails)
+            {
+                if (item.StartDate <= DateTime.Now)
+                {
+                    throw new Exception("Future time required!");
+                }
+
+                if (item.StartDate > item.DueDate)
+                {
+                    throw new Exception("Invalid date range, correct pattern: start date < due date");
+                }
+                if (checkerDateRangeMap.ContainsKey(item.CheckerId))
+                {
+                    checkerDateRangeMap[item.CheckerId].Add((DateTime)item.StartDate, (DateTime)item.DueDate);
+                    comparatorSizeDateRanges[item.CheckerId] += 2;
+                }
+                else
+                {
+                    //add new
+                    Dictionary<DateTime, DateTime> checkerDateRangeAdded = new Dictionary<DateTime, DateTime>();
+                    checkerDateRangeAdded.Add((DateTime)item.StartDate, (DateTime)item.DueDate);
+                    checkerDateRangeMap.Add(item.CheckerId, checkerDateRangeAdded);
+                    comparatorSizeDateRanges.Add(item.CheckerId, 2);
+                }
+            }
+
+            //check size if found throw exception
+            foreach (var checker in checkerDateRangeMap.Keys)
+            {
+                if (
+                    (checkerDateRangeMap[checker].Keys.Count + checkerDateRangeMap[checker].Values.Count)
+                    != comparatorSizeDateRanges[checker]
+                )
+                {
+                    throw new Exception("Conflict working date with checker: " + checker);
+                }
+            }
+
+            var CheckerHasMoreThan2Selected = checkerDateRangeMap.Where(c => c.Value.Count > 1)
+                                                .ToDictionary(c => c.Key, c => c.Value);
+
+
+            foreach (var checker in CheckerHasMoreThan2Selected.Keys)
+            {
+                //verify start date
+                foreach (var checkedStart in CheckerHasMoreThan2Selected[checker].Keys)
+                {
+                    foreach (var comparator in CheckerHasMoreThan2Selected[checker].Keys)
+                    {
+                        if (comparator < checkedStart)
+                        {
+                            //check due date
+                            if (checkedStart < CheckerHasMoreThan2Selected[checker][comparator])
+                            {
+                                throw new Exception("Conflict working date range: " + comparator + " -> " + CheckerHasMoreThan2Selected[checker][comparator] + "with checker id: " + checker);
+                            }
+                        }
+                    }
+                }
+                //verify due date
+                foreach (var checkDue in CheckerHasMoreThan2Selected[checker].Values)
+                {
+                    foreach (var comparator in CheckerHasMoreThan2Selected[checker].Values)
+                    {
+                        if (comparator > checkDue)
+                        {
+                            //check start date
+                            var checkstartDate = CheckerHasMoreThan2Selected[checker].FirstOrDefault(d => d.Value == comparator).Key;
+                            if (checkDue > checkstartDate)
+                            {
+                                throw new Exception("Conflict working date range: " + checkstartDate + " -> " + comparator + "with checker id: " + checker);
+                            }
+                        }
+                    }
+                }
+
+            }
+            #endregion
+
+
             //get the start/end date for main check request by the min/max start date/end date
             DateTime? mainStartDate = DateTime.MaxValue;
             DateTime? mainDueDate = DateTime.MinValue;
@@ -100,9 +190,9 @@ namespace WWMS.BAL.Services
         public async Task DisableAsync(long id)
         {
             CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(id);
-            if (checkRequest is null || checkRequest.Status.Equals("DISABLED"))
+            if (checkRequest is null || checkRequest.Status.Equals("DISABLED") || checkRequest.Status.Equals("COMPLETED") || checkRequest.DueDate < DateTime.Now)
             {
-                throw new Exception("Cannot find the check request with the provided id OR already DISABLED");
+                throw new Exception("Cannot find the check request with the provided id OR already DISABLED/COMPLETED or Overdue to disable");
             }
             //Auth rule
             var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
@@ -155,9 +245,9 @@ namespace WWMS.BAL.Services
         {
             CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(updateCheckRequestRequest.Id);
 
-            if (checkRequest is null || checkRequest.DueDate < DateTime.Now || checkRequest.Status.Equals("DISABLED"))
+            if (checkRequest is null || checkRequest.DueDate < DateTime.Now || checkRequest.Status.Equals("DISABLED") || checkRequest.Status.Equals("COMPLETED"))
             {
-                throw new Exception("Overdue or disabled or Id not found");
+                throw new Exception("Overdue or disabled/completed or Id not found");
             }
 
             //Business rules:

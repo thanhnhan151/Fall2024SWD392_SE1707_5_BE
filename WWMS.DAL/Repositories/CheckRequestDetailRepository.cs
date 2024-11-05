@@ -14,6 +14,11 @@ namespace WWMS.DAL.Repositories
         {
         }
 
+        public async Task<ICollection<CheckRequestDetail>> GetAllActiveAsync()
+        {
+            return await _dbSet.Where(cr => string.Equals(cr.Status, "ACTIVE")).Include(d => d.CheckRequest).ToListAsync();
+        }
+
         public async Task<ICollection<CheckRequestDetail>> GetAllByChecKerIdAsync(long checkerId)
         {
             return await _dbSet

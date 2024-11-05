@@ -24,5 +24,10 @@ namespace WWMS.DAL.Repositories
                 .FirstOrDefaultAsync(cr => cr.Id == id);
         }
 
+        //QUERY ACTIVE ONLY
+        public async Task<ICollection<CheckRequest>> GetAllEntitiesActiveAsync()
+        {
+            return await _dbSet.Where(cr => string.Equals(cr.Status, "ACTIVE")).ToListAsync();
+        }
     }
 }
