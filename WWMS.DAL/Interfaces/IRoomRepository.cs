@@ -11,6 +11,10 @@ namespace WWMS.DAL.Interfaces
 
         Task<ICollection<Room>> GetAllAvailableRoomsAsync();
 
+        Task<ICollection<Room>> GetAllAvailableRoomsForExportAsync();
+
+        Task<Room?> GetByIdWithIncludeForExport(long id);
+
         Task<Room?> GetByIdNotTrack(long? id);
     }
 }

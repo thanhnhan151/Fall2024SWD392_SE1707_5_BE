@@ -128,13 +128,83 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
+        #region Gell All Export Rooms
+        /// <summary>
+        /// Get all export rooms in the system
+        /// </summary>
+        /// <returns>A list of all export rooms</returns>
+        /// <response code="200">Return all export rooms in the system</response>
+        /// <response code="400">If no export rooms are in the system</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [HttpGet("export")]
+        public async Task<IActionResult> GetAllExportAsync()
+        {
+            try
+            {
+                var result = await _roomService.GetExportRoomListAsync();
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return NotFound();
+        }
+        #endregion
+
+        #region Get An Export Room By Id
+        /// <summary>
+        /// Get an export room in the system
+        /// </summary>
+        /// <param name="id">Id of the room you want to get</param>
+        /// <returns>An Room</returns>
+        /// <response code="200">Return a room in the system</response>
+        /// <response code="400">If the Room is null</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [HttpGet("export/{id}")]
+        public async Task<IActionResult> GetExportRoomByIdAsync(int id)
+        {
+            try
+            {
+                var result = await _roomService.GetExportRoomByIdAsync(id);
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return NotFound(new
+            {
+                ErrorMessage = $"Room with id: {id} does not exist"
+            });
+        }
+        #endregion
+
         #region Get A Room By Id
         /// <summary>
         /// Get a room in the system
         /// </summary>
         /// <param name="id">Id of the room you want to get</param>
         /// <returns>An Room</returns>
-        /// <response code="200">Return ar room in the system</response>
+        /// <response code="200">Return a room in the system</response>
         /// <response code="400">If the Room is null</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>

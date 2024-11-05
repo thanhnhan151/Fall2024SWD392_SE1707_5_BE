@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Interfaces;
 
@@ -32,15 +31,15 @@ namespace WWMS.API.Controllers
             {
                 var response = await _vnPayService.ExecutePayment(Request.Query);
 
-                if (response == null) return Redirect("http://localhost:5173/#/payment/fail");
+                if (response == null) return Redirect("http://localhost:5173/payment-failure");
 
-                if (response.VnPayResponseCode == "00") return Redirect("http://localhost:5173/#/payment/success");
+                if (response.VnPayResponseCode == "00") return Redirect("http://localhost:5173/payment-success");
 
-                return Redirect("http://localhost:5173/#/payment/fail");
+                return Redirect("http://localhost:5173/payment-failure");
             }
             catch (Exception)
             {
-                return Redirect("http://localhost:5173/#/payment/fail");
+                return Redirect("http://localhost:5173/payment-failure");
             }
 
         }
