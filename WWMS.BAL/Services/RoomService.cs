@@ -89,6 +89,6 @@ namespace WWMS.BAL.Services
 
         public async Task<List<GetExportRoomResponse>> GetExportRoomListAsync() => _mapper.Map<List<GetExportRoomResponse>>(await _unitOfWork.Rooms.GetAllAvailableRoomsForExportAsync());
 
-        public async Task<GetExportRoomDetailResponse?> GetExportRoomByIdAsync(long id) => _mapper.Map<GetExportRoomDetailResponse?>(await _unitOfWork.Rooms.GetByIdWithIncludeForExport(id));
+        public async Task<GetExportRoomDetailResponse?> GetExportRoomByIdAsync(long id) => _mapper.Map<GetExportRoomDetailResponse?>(await _unitOfWork.Rooms.GetByIdWithIncludeForExportAsync(id));
     }
 }
