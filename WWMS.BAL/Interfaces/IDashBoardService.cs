@@ -4,6 +4,8 @@ namespace WWMS.BAL.Interfaces
 {
     public interface IDashBoardService
     {
-        Task<List<GettMonthQuantity>> GetQuantityPerMonthListAsync(int month, int year);
+        Task<List<GettMonthQuantity>> GetQuantityPerMonthListAsync(int year);
+
+        Task<List<GetToltalWine>> GetQuantityWineListAsync();
     }
 }

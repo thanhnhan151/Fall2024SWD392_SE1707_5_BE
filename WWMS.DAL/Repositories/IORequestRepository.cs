@@ -49,7 +49,8 @@ namespace WWMS.DAL.Repositories
                 .Where(c => c.IOType == ioType
                             && c.StartDate.HasValue
                             && c.StartDate.Value.Month == month
-                            && c.StartDate.Value.Year == year)
+                            && c.StartDate.Value.Year == year
+                            && c.Status == "Done")
                 .ToListAsync();
 
             return result;
