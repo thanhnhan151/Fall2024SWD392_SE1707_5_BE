@@ -40,6 +40,46 @@ namespace WWMS.DAL.Repositories
                            })
                            .ToListAsync();
 
+        public async Task<ICollection<Room>> GetAllAvailableRoomsForExportAsync()
+        => await _dbSet.Where(r => r.Status.Equals("Active")
+                                    && r.WineRooms.Count() > 0)
+                           .Select(r => new Room
+                           {
+                               Id = r.Id,
+                               RoomName = r.RoomName,
+                               WineRooms = r.WineRooms.Select(w => new WineRoom
+                               {
+                                   Id = w.Id
+                               }).ToList()
+                           })
+                           .ToListAsync();
+
+        public async Task<Room?> GetByIdWithIncludeForExport(long id)
+        {
+            var result = await _dbSet
+                .Where(c => c.Id == id)
+                .Select(r => new Room
+                {
+                    Id = r.Id,
+                    WineRooms = r.WineRooms
+                                 .Where(r => r.CurrentQuantity > 0)
+                                 .Select(w => new WineRoom
+                                 {
+                                     WineId = w.WineId,
+                                     CurrentQuantity = w.CurrentQuantity,
+                                     Wine = new Wine
+                                     {
+                                         WineName = w.Wine.WineName
+                                     }
+                                 }).ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            if (result != null) return result;
+
+            return null;
+        }
+
         public async Task<Room?> GetByIdWithIncludeAsync(long id)
         {
             var result = await _dbSet

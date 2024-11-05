@@ -51,10 +51,17 @@ namespace WWMS.BAL.Mappings
             CreateMap<WineRoom, RoomItem>()
                 .ForMember(w => w.WineName, w => w.MapFrom(w => w.Wine.WineName));
 
+            CreateMap<WineRoom, RoomExportItem>()
+                .ForMember(w => w.WineName, w => w.MapFrom(w => w.Wine.WineName));
+
             CreateMap<Room, GetRoomResponse>();
 
             CreateMap<Room, GetAvailableRoomResponse>()
                 .ForMember(r => r.RoomName, r => r.MapFrom(r => r.RoomName + $" (Available: {r.Capacity - r.CurrentOccupancy} bottles)"));
+
+            CreateMap<Room, GetExportRoomResponse>();
+
+            CreateMap<Room, GetExportRoomDetailResponse>();
 
             CreateMap<Room, GetRoomDetailResponse>();
 
@@ -100,7 +107,7 @@ namespace WWMS.BAL.Mappings
             CreateMap<UpdateIORequest, IORequest>();
             CreateMap<UpdateIORequestDetail, IORequestDetail>();
 
-            
+
 
             // create for details 
 
