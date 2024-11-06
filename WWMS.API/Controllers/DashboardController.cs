@@ -85,5 +85,68 @@ namespace WWMS.API.Controllers
             return NotFound();
         }
         #endregion
+        #region Gell All wine by category 
+        /// <summary>
+        /// Get all Import/Export Request in the system
+        /// </summary>
+        /// <returns>A list of all Import/Export Request</returns>
+        /// <response code="200">Return all Import/Export Request in the system</response>
+        /// <response code="400">If no Import/Export Request are in the system</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        [HttpGet("quantityCategory")]
+        public async Task<IActionResult> GetAllWinebyCategoryAsync()
+        {
+            try
+            {
+                var result = await _dashBoardService.GetQuantityWineListCategoryAsync();
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return NotFound();
+        }
+        #endregion
+        #region Gell All Import/Export quantity
+        /// <summary>
+        /// Get all Import/Export Request in the system
+        /// </summary>
+        /// <returns>A list of all Import/Export Request</returns>
+        /// <response code="200">Return all Import/Export Request in the system</response>
+        /// <response code="400">If no Import/Export Request are in the system</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server</response>
+        //[PermissionAuthorize("ADMIN", "MANAGER")]
+        [HttpGet("quantityIo")]
+        public async Task<IActionResult> GetIOAllAsync(int year)
+        {
+            try
+            {
+                var result = await _dashBoardService.GetQuantityPerMonthIOListAsync(year);
+
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return NotFound();
+        }
+        #endregion
     }
 }

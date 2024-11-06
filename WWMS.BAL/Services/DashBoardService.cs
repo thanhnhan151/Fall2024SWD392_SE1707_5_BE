@@ -54,7 +54,6 @@ namespace WWMS.BAL.Services
 
         public async Task<List<GetToltalWine>> GetQuantityWineListAsync()
         {
-            //get all data
             var listWineQuantities = new List<GetToltalWine>();
             var listWine = await _unitOfWork.Wines.GetAllEntitiesAsync();
             var listWineRoom = await _unitOfWork.WineRooms.GetAllEntitiesAsync();
@@ -65,18 +64,23 @@ namespace WWMS.BAL.Services
                 {
                 
                     var wineRoomsForWine = listWineRoom.Where(wr => wr.WineId == wine.Id).ToList();
-
+                    var wines = _mapper.Map<GetWineDetailResponse>(await _unitOfWork.Wines.GetByIdWithIncludeAsync(wine.Id));
+         
                     if (wineRoomsForWine.Any())
                     {
             
                         var existingWine = listWineQuantities.FirstOrDefault(w => w.Id == wine.Id);
+                    
 
+                        // Kiểm tra nếu không tìm thấy danh mục rượu
+              
                         if (existingWine == null)
                         {
                             existingWine = new GetToltalWine
                             {
                                 Id = wine.Id,
                                 WineName = wine.WineName,
+                                CategoryName = wines.WineCategory.CategoryName,
                                 ToltalQuantity = 0,
                                 WineRooms = new List<WineItem>()
                             };
@@ -109,5 +113,66 @@ namespace WWMS.BAL.Services
 
 
 
+        public async Task<List<GettMonthQuantityIO>> GetQuantityPerMonthIOListAsync(int year)
+        {
+
+            var monthlyQuantities = new List<GettMonthQuantityIO>();
+
+            for (int month = 1; month <= 12; month++)
+            {
+                var importByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleMonthAndYearAsync("In", month, year);
+                var exportByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleMonthAndYearAsync("Out", month, year);
+                var checkRequest = await _unitOfWork.CheckRequestDetails.GetQuantityByMonthAndYearAsync(month, year);
+
+                int totalImportQuantity = 0;
+                int totalExportQuantity = 0;
+
+                foreach (var import in importByMonth)
+                {
+                    if(import.Status == "Done")
+                    {
+                        totalImportQuantity += import.IORequestDetails.Sum(detail => detail.Quantity);
+                    }
+                }
+
+                foreach (var export in exportByMonth)
+                {
+                    if (export.Status == "Done")
+                    {
+                        totalExportQuantity += export.IORequestDetails.Sum(detail => detail.Quantity);
+                    }
+                }
+
+                monthlyQuantities.Add(new GettMonthQuantityIO
+                {
+                    Month = month,
+                    ImportMonthQuantity = totalImportQuantity,
+                    ExportMonthQuantity = totalExportQuantity
+                });
+
+            }
+
+
+            return monthlyQuantities;
+        }
+        // viết hàm de tinh tong ruou theo categoory
+        public async Task<List<GetToltalWineCategory>> GetQuantityWineListCategoryAsync()
+        {
+ 
+            var total = await GetQuantityWineListAsync();
+
+          
+            var totalWineCategories = total
+                .GroupBy(q => q.CategoryName)  
+                .Select(g => new GetToltalWineCategory
+                {
+                    CategoryName = g.Key,  
+                    ToltalQuantity = g.Sum(q => q.ToltalQuantity) 
+                })
+                .ToList();
+
+            
+            return totalWineCategories;
+        }
     }
 }
