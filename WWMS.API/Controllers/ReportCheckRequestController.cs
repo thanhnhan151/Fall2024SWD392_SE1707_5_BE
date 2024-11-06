@@ -26,7 +26,7 @@ namespace WWMS.API.Controllers
 
         #region create report for a check request detail
         /// <summary>
-        /// Staff create a report for check request detail
+        /// Staff/Manager create a report for check request detail
         /// </summary>
         [HttpPost]
         [PermissionAuthorize("MANAGER", "STAFF")]
@@ -44,57 +44,6 @@ namespace WWMS.API.Controllers
         }
 
         #endregion
-
-        #region update report for a check request detail
-        /// <summary>
-        /// Staff update a check request report
-        /// </summary>
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateCheckRequestReportRequest request)
-        {
-            try
-            {
-                await _reportCheckRequestService.UpdateCheckRequestReportAsync(request);
-                return Ok("Updated check request report ok!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-        #endregion
-
-        #region get report by check request detail id
-
-        /// <summary>
-        /// User get the report by the check request detail id
-        /// </summary>
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByCheckRequestDetailIdAsync(int id)
-        {
-            try
-            {
-                var result = await _reportCheckRequestService.GetReportByCheckRequestDetailIdAsync(id);
-
-                if (result is not null)
-                {
-                    return Ok(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-
-            }
-            return NotFound();
-        }
-        #endregion
-
-
-
-
-
 
     }
 }

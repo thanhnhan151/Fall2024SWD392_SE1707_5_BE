@@ -41,20 +41,17 @@ namespace WWMS.DAL.Repositories
                            .ToListAsync();
 
         public async Task<ICollection<Room>> GetAllAvailableRoomsForExportAsync()
-        => await _dbSet.Where(r => r.Status.Equals("Active")
-                                    && r.WineRooms.Count() > 0)
-                           .Select(r => new Room
-                           {
-                               Id = r.Id,
-                               RoomName = r.RoomName,
-                               WineRooms = r.WineRooms.Select(w => new WineRoom
-                               {
-                                   Id = w.Id
-                               }).ToList()
-                           })
-                           .ToListAsync();
+            => await _dbSet.FromSqlRaw(
+                "SELECT DISTINCT [r].[Id], [r].[RoomName], [r].[Capacity], [r].[CreatedBy], [r].[UpdatedBy], [r].[DeletedBy], [r].[Status], [r].[CreatedTime], [r].[UpdatedTime], [r].[DeletedTime], [r].[CurrentOccupancy], [r].[LocationAddress], [r].[ManagerName] " +
+                "FROM [Room] AS [r] " +
+                "INNER JOIN " +
+                "(SELECT [w].[Id], [w].[RoomId] FROM [WineRoom] AS [w] " +
+                "WHERE [w].[CurrentQuantity] > 0) AS [t] ON [r].[Id] = [t].[RoomId] " +
+                "WHERE [r].[Status] = N'Active' " +
+                "ORDER BY [r].[Id]")
+            .ToListAsync();
 
-        public async Task<Room?> GetByIdWithIncludeForExport(long id)
+        public async Task<Room?> GetByIdWithIncludeForExportAsync(long id)
         {
             var result = await _dbSet
                 .Where(c => c.Id == id)

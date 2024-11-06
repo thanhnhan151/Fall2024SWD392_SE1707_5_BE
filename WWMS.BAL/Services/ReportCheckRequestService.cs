@@ -39,23 +39,39 @@ namespace WWMS.BAL.Services
 
         public async Task CreateCheckRequestReportAsync(CreateCheckRequestReportRequest request)
         {
-            //TODO: implement file upload for report later
             var userName = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.CurrentCultureIgnoreCase)).Value;
             var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
             var role = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.CurrentCultureIgnoreCase)).Value;
 
             CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(request.CheckRequestDetailId);
-            if (checkRequestDetail is null || !String.IsNullOrEmpty(checkRequestDetail.ReportCode))
+            if (checkRequestDetail is null)
             {
-                throw new Exception("Cannot find the check request detail id OR report existed please update instead");
+                throw new Exception("Cannot find the check request detail id ");
             }
+
+            if (DateTime.Now > checkRequestDetail.DueDate || checkRequestDetail.Status == "COMPLETED" || checkRequestDetail.Status == "DISABLED") throw new Exception("Overdue || COMPLETED || DISABLED");
+
             //verify reporter
             if (string.Equals(role, "STAFF") && checkRequestDetail.CheckerId != long.Parse(userId))
             {
                 throw new Exception("No verified checker");
             }
 
-            checkRequestDetail.ReportCode = GenRandomString();
+            //verify numeric value for quantities
+
+            //0 <= DiscrepanciesFound <= Expected
+            if (!(0 <= request.DiscrepanciesFound && request.DiscrepanciesFound <= checkRequestDetail.ExpectedCurrQuantity))
+            {
+                throw new Exception("Error numeric value for DiscrepanciesFound");
+            }
+            //0 <= Actual <= Expected - DiscrepanciesFound
+            if (!(0 <= request.ActualQuantity && request.ActualQuantity <= checkRequestDetail.ExpectedCurrQuantity - request.DiscrepanciesFound))
+            {
+                throw new Exception("Error numeric value for ActualQuantity");
+            }
+
+
+            checkRequestDetail.ReportCode = string.IsNullOrEmpty(checkRequestDetail.ReportCode) ? GenRandomString() : checkRequestDetail.ReportCode;
             checkRequestDetail.DiscrepanciesFound = request.DiscrepanciesFound;
             checkRequestDetail.ActualQuantity = request.ActualQuantity;
             checkRequestDetail.ReportDescription = request.ReportDescription;
@@ -69,24 +85,6 @@ namespace WWMS.BAL.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<GetCheckRequestReportResponse> GetReportByCheckRequestDetailIdAsync(int id)
-        => _mapper.Map<GetCheckRequestReportResponse>(await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(id));
 
-        public async Task UpdateCheckRequestReportAsync(UpdateCheckRequestReportRequest request)
-        {
-            CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(request.CheckRequestDetailId);
-            if (checkRequestDetail is null || String.IsNullOrEmpty(checkRequestDetail.ReportCode))
-            {
-                throw new Exception("Cannot find the check request detail id OR report code");
-            }
-            checkRequestDetail.ReportCode = GenRandomString();
-            checkRequestDetail.DiscrepanciesFound = request.DiscrepanciesFound;
-            checkRequestDetail.ActualQuantity = request.ActualQuantity;
-            //TODO: Implement file upload for report later
-            checkRequestDetail.ReportFile = request.ReportFile;
-
-            _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);
-            await _unitOfWork.CompleteAsync();
-        }
     }
 }

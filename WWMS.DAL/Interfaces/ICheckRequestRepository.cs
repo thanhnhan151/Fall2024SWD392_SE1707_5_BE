@@ -5,6 +5,6 @@ namespace WWMS.DAL.Interfaces
 {
     public interface ICheckRequestRepository : IGenericRepository<CheckRequest>
     {
-
+        Task<ICollection<CheckRequest>> GetAllEntitiesActiveAsync();
     }
 }

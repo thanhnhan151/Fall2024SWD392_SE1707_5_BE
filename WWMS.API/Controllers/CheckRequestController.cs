@@ -79,7 +79,7 @@ namespace WWMS.API.Controllers
 
         #region Create a check request
         /// <summary>
-        /// Manager, Admin create check request
+        /// Manager create check request
         /// </summary>
         [PermissionAuthorize("MANAGER")]
         [HttpPost]

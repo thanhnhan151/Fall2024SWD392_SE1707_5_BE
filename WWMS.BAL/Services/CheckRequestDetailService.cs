@@ -69,15 +69,82 @@ namespace WWMS.BAL.Services
         {
             var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
             CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(createCheckRequestDetailRequest.CheckRequestId);
+            #region verify the create request
             if (checkRequest is null
-            || checkRequest.RequesterId != long.Parse(userId)
-            || checkRequest.StartDate > createCheckRequestDetailRequest.StartDate
-            || checkRequest.DueDate < createCheckRequestDetailRequest.DueDate)
+            || DateTime.Now > checkRequest.DueDate
+            || checkRequest.Status == "DISABLED"
+            || checkRequest.Status == "COMPLETED"
+            )
             {
-                throw new Exception("Not valid requester || request || date time range");
+                throw new Exception("Not valid  request || Overdue to add || Main check request is already disabled or completed");
+            }
+            if (checkRequest.RequesterId != long.Parse(userId))
+            {
+                throw new Exception("Not the verified requester");
+            }
+            //verify duplicate wine room id
+            HashSet<long> wineRoomIds = checkRequest.CheckRequestDetails.Select(d => d.WineRoomId).ToHashSet();
+            if (wineRoomIds.Contains(createCheckRequestDetailRequest.WineRoomId))
+            {
+                throw new Exception("Duplicate wine room in same request");
             }
 
+            //verify the daterange with fixed daterange of Main Check Request
+
+            if (
+                !(
+                    (createCheckRequestDetailRequest.StartDate <= createCheckRequestDetailRequest.DueDate)
+                &&
+
+                (createCheckRequestDetailRequest.StartDate > DateTime.Now)
+                &&
+                (checkRequest.StartDate <= createCheckRequestDetailRequest.StartDate &&
+                createCheckRequestDetailRequest.StartDate <= checkRequest.DueDate)
+                &&
+                (checkRequest.StartDate <= createCheckRequestDetailRequest.DueDate &&
+                createCheckRequestDetailRequest.DueDate <= checkRequest.DueDate)
+                )
+            )
+            {
+                throw new Exception("Invalid date range");
+            }
+
+
+            //verify conflict working date
+            Dictionary<DateTime?, DateTime?> existedDateRange = checkRequest.CheckRequestDetails.Where(c => c.CheckerId == createCheckRequestDetailRequest.CheckerId)
+                                                .Select(c => (c.StartDate, c.DueDate)).ToDictionary();
+            if (
+                existedDateRange.ContainsKey(createCheckRequestDetailRequest.StartDate)
+                || existedDateRange.Values.Contains(createCheckRequestDetailRequest.DueDate)
+            )
+            {
+                throw new Exception("Conflict working date");
+            }
+            foreach (KeyValuePair<DateTime?, DateTime?> entry in existedDateRange)
+            {
+                if (
+                    (entry.Key < createCheckRequestDetailRequest.StartDate
+                    && createCheckRequestDetailRequest.StartDate < entry.Value
+                    )
+                    ||
+                    (entry.Key < createCheckRequestDetailRequest.DueDate
+                    && createCheckRequestDetailRequest.DueDate < entry.Value
+                    )
+                )
+                {
+                    throw new Exception("Conflict working date");
+                }
+            }
+
+
+            #endregion
+
+            #region mapping data fields
             CheckRequestDetail checkRequestDetail = _mapper.Map<CheckRequestDetail>(createCheckRequestDetailRequest);
+
+            //map checker name
+            User checker = await _unitOfWork.Users.GetEntityByIdAsync(createCheckRequestDetailRequest.CheckerId);
+            checkRequestDetail.CheckerName = checker.Username;
 
             checkRequestDetail.Status = "ACTIVE";
             checkRequestDetail.CreatedTime = DateTime.Now;
@@ -96,6 +163,7 @@ namespace WWMS.BAL.Services
             checkRequestDetail.RoomId = wineRoom.RoomId;
             checkRequestDetail.RoomName = wineRoom.Room.RoomName;
             checkRequestDetail.RoomCapacity = (int)wineRoom.Room.Capacity;
+            #endregion
 
             await _unitOfWork.CheckRequestDetails.AddEntityAsync(checkRequestDetail);
             await _unitOfWork.CompleteAsync();
@@ -104,7 +172,7 @@ namespace WWMS.BAL.Services
         public async Task DisableCheckRequestDetailAsync(long id)
         {
             CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(id);
-            if (checkRequestDetail is null || DateTime.Now > checkRequestDetail.DueDate) throw new Exception("Id not found || Overdue");
+            if (checkRequestDetail is null || DateTime.Now > checkRequestDetail.DueDate || checkRequestDetail.Status == "COMPLETED" || checkRequestDetail.Status == "DISABLED") throw new Exception("Id not found || Overdue || COMPLETED || DISABLED");
 
             CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(checkRequestDetail.CheckRequestId);
 
