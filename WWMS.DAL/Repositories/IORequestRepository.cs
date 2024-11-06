@@ -46,14 +46,14 @@ namespace WWMS.DAL.Repositories
 
         public async Task<List<IORequest>> GetEntitiesByIOStyleMonthAndYearAsync(string ioType, int month, int year)
         {
-            // Lấy IORequest và bao gồm IORequestDetails bằng cách dùng Include để eager loading
+            
             var result = await _dbSet
                 .Where(c => c.IOType == ioType
                             && c.StartDate.HasValue
                             && c.StartDate.Value.Month == month
                             && c.StartDate.Value.Year == year
                             && c.Status == "Done")
-                .Include(c => c.IORequestDetails) // Eager loading các IORequestDetails
+                .Include(c => c.IORequestDetails) 
                 .ToListAsync();
 
             return result;

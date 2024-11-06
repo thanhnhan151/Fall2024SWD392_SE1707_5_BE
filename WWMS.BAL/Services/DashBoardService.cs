@@ -158,20 +158,20 @@ namespace WWMS.BAL.Services
         // viết hàm de tinh tong ruou theo categoory
         public async Task<List<GetToltalWineCategory>> GetQuantityWineListCategoryAsync()
         {
-            // Lấy danh sách tổng quan số lượng rượu
+ 
             var total = await GetQuantityWineListAsync();
 
-            // Sử dụng LINQ GroupBy để nhóm theo CategoryName và tính tổng số lượng cho mỗi nhóm
+          
             var totalWineCategories = total
-                .GroupBy(q => q.CategoryName)  // Nhóm theo CategoryName
+                .GroupBy(q => q.CategoryName)  
                 .Select(g => new GetToltalWineCategory
                 {
-                    CategoryName = g.Key,   // Tên danh mục rượu
-                    ToltalQuantity = g.Sum(q => q.ToltalQuantity) // Cộng dồn số lượng cho mỗi nhóm
+                    CategoryName = g.Key,  
+                    ToltalQuantity = g.Sum(q => q.ToltalQuantity) 
                 })
                 .ToList();
 
-            // Trả về danh sách tổng hợp
+            
             return totalWineCategories;
         }
     }
