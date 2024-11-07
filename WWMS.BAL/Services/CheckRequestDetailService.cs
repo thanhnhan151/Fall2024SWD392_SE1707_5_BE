@@ -47,13 +47,74 @@ namespace WWMS.BAL.Services
 
         public async Task UpdateCheckRequestDetailAsync(UpdateCheckRequestDetailRequest updateCheckRequestDetailRequest)
         {
-            CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(updateCheckRequestDetailRequest.Id);
 
-            if (checkRequestDetail is null || checkRequestDetail.Status.Equals("DISABLED") || checkRequestDetail.DueDate > DateTime.Now)
+            #region Verification
+            //verify input date range : valid start - due, fit with fixed main check request, future time ???
+            if (!(updateCheckRequestDetailRequest.StartDate <= updateCheckRequestDetailRequest.DueDate && updateCheckRequestDetailRequest.StartDate >= DateTime.Now))
             {
-                throw new Exception("ID not found or overdue or disabled detail");
+                throw new Exception("Invalid date range");
+            }
+            //DB touch
+            CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(updateCheckRequestDetailRequest.Id);
+            if (checkRequestDetail is null || checkRequestDetail.Status.Equals("DISABLED") || checkRequestDetail.DueDate > DateTime.Now || checkRequestDetail.StartDate.Equals("COMPLETED"))
+            {
+                throw new Exception("ID not found or overdue or disabled or completed detail");
+            }
+            CheckRequest checkRequest = await _unitOfWork.CheckRequests.GetEntityByIdAsync(checkRequestDetail.CheckRequestId);
+
+            //verify date range input fit with the main check request date range ?
+            if (
+                !(
+                    (checkRequest.StartDate <= updateCheckRequestDetailRequest.StartDate && updateCheckRequestDetailRequest.StartDate <= checkRequest.DueDate)
+                    &&
+                    (checkRequest.StartDate <= updateCheckRequestDetailRequest.DueDate && updateCheckRequestDetailRequest.DueDate <= checkRequest.DueDate)
+
+                )
+            )
+            {
+                throw new Exception("Not fit with current fixed date range of main check request");
             }
 
+            //verify is requester ?
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.CurrentCultureIgnoreCase)).Value;
+            if (checkRequest.RequesterId != long.Parse(userId)) throw new Exception("Not valid requester");
+
+            //verify duplicate wine room id
+            HashSet<long> wineRoomIds = checkRequest.CheckRequestDetails.Select(d => d.WineRoomId).ToHashSet();
+            if (wineRoomIds.Contains(updateCheckRequestDetailRequest.WineRoomId))
+            {
+                throw new Exception("Duplicate wine room in same main check request");
+            }
+
+            //verify conflict working date
+
+            Dictionary<DateTime?, DateTime?> existedDateRange = checkRequest.CheckRequestDetails.Where(c => c.CheckerId == updateCheckRequestDetailRequest.CheckerId)
+                                    .Select(c => (c.StartDate, c.DueDate)).ToDictionary();
+            if (
+                existedDateRange.ContainsKey(updateCheckRequestDetailRequest.StartDate)
+                || existedDateRange.Values.Contains(updateCheckRequestDetailRequest.DueDate)
+            )
+            {
+                throw new Exception("Conflict working date");
+            }
+            foreach (KeyValuePair<DateTime?, DateTime?> entry in existedDateRange)
+            {
+                if (
+                    (entry.Key < updateCheckRequestDetailRequest.StartDate
+                    && updateCheckRequestDetailRequest.StartDate < entry.Value
+                    )
+                    ||
+                    (entry.Key < updateCheckRequestDetailRequest.DueDate
+                    && updateCheckRequestDetailRequest.DueDate < entry.Value
+                    )
+                )
+                {
+                    throw new Exception("Conflict working date");
+                }
+            }
+
+
+            #endregion
             checkRequestDetail.WineRoomId = updateCheckRequestDetailRequest.WineRoomId;
             checkRequestDetail.CheckerId = updateCheckRequestDetailRequest.CheckerId;
             checkRequestDetail.Purpose = !string.IsNullOrWhiteSpace(updateCheckRequestDetailRequest.Purpose) ? updateCheckRequestDetailRequest.Purpose : checkRequestDetail.Purpose;
@@ -202,33 +263,6 @@ namespace WWMS.BAL.Services
             throw new Exception("NO VERIFIED USER");
         }
 
-        public async Task DeleteReportAsync(int detailId)
-        {
-            CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(detailId);
-            if (checkRequestDetail is null) throw new Exception("Id not found");
-            //clear all information about the report
-            checkRequestDetail.ReportFile = String.Empty;
-            checkRequestDetail.ReportDescription = String.IsNullOrEmpty(checkRequestDetail.ReportDescription) ?
-            "DISABLED" : "(DISABLED) " + checkRequestDetail.ReportDescription;
-            _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);
-            _unitOfWork.CompleteAsync();
-
-        }
-
-        public async Task CreateOrUpdateReportAsync(CreateOrUpdateCheckRequestDetailReportRequest request, long detailId)
-        {
-            CheckRequestDetail checkRequestDetail = await _unitOfWork.CheckRequestDetails.GetEntityByIdAsync(detailId);
-            if (checkRequestDetail is null) throw new Exception("Id not found");
-            //completing fields relating to the report
-            checkRequestDetail.ReportDescription = request.ReportDescription;
-            checkRequestDetail.ReporterAssigned = request.ReporterAssigned;
-            checkRequestDetail.DiscrepanciesFound = request.DiscrepanciesFound;
-            checkRequestDetail.ActualQuantity = request.ActualQuantity;
-            checkRequestDetail.ReportCode = GenRandomString();
-            //TODO: File handling later
-            _unitOfWork.CheckRequestDetails.UpdateEntity(checkRequestDetail);
-            _unitOfWork.CompleteAsync();
-        }
         private string GenRandomString(int length = 12)
         {
             const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
