@@ -6,6 +6,7 @@ using WWMS.BAL.Mappings;
 using WWMS.BAL.Models.Users;
 using WWMS.BAL.Models.Wines;
 using WWMS.BAL.Services;
+using WWMS.BAL.Services.BackgroundJob;
 using WWMS.BAL.Validators.Users;
 using WWMS.BAL.Validators.Wines;
 using WWMS.DAL.Infrastructures;
@@ -80,6 +81,8 @@ namespace WWMS.BAL
             services.AddScoped<IDashBoardService, DashBoardService>();
 
             services.AddScoped<IWineRoomService, WineRoomService>();
+
+            services.AddHostedService<CheckRequestWorkerService>();
 
             #endregion
 
