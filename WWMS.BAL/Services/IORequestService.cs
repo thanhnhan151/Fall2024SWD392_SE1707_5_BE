@@ -124,9 +124,9 @@ namespace WWMS.BAL.Services
                 existingWineRoom.Import += existingDetail.Quantity;
                 existingWineRoom.CurrentQuantity = existingWineRoom.InitialQuantity + existingWineRoom.Import - existingWineRoom.Export;
 
-                if (existingWineRoom.Import > midRoom.Capacity)
+                if (existingWineRoom.CurrentQuantity > midRoom.Capacity)
                 {
-                    throw new Exception($"Overstock in room {midRoom.RoomName}, current total: {existingWineRoom.Import}, capacity: {midRoom.Capacity}");
+                    throw new Exception($"Overstock in room {midRoom.RoomName}, current total: {existingWineRoom.CurrentQuantity}, capacity: {midRoom.Capacity}");
                 }
             }
             else
@@ -164,9 +164,10 @@ namespace WWMS.BAL.Services
 
             if (existingWineRoom != null)
             {
+
                 if (existingWineRoom.CurrentQuantity < existingDetail.Quantity)
                 {
-                    throw new Exception("Not enough stock to fulfill the request.");
+                    throw new Exception($"Not enough stock to fulfill the request, current total: {existingWineRoom.CurrentQuantity}, quantity request: {existingDetail.Quantity}");
                 }
 
 
