@@ -60,19 +60,18 @@ namespace WWMS.BAL.Services
      
             foreach (var wine in listWine)
             {
-                if (wine != null)
+                if (wine != null && wine.Status == "Active")
                 {
                 
                     var wineRoomsForWine = listWineRoom.Where(wr => wr.WineId == wine.Id).ToList();
                     var wines = _mapper.Map<GetWineDetailResponse>(await _unitOfWork.Wines.GetByIdWithIncludeAsync(wine.Id));
-         
+                  
                     if (wineRoomsForWine.Any())
                     {
             
                         var existingWine = listWineQuantities.FirstOrDefault(w => w.Id == wine.Id);
                     
 
-                        // Kiểm tra nếu không tìm thấy danh mục rượu
               
                         if (existingWine == null)
                         {
@@ -122,7 +121,7 @@ namespace WWMS.BAL.Services
             {
                 var importByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleMonthAndYearAsync("In", month, year);
                 var exportByMonth = await _unitOfWork.IIORequests.GetEntitiesByIOStyleMonthAndYearAsync("Out", month, year);
-                var checkRequest = await _unitOfWork.CheckRequestDetails.GetQuantityByMonthAndYearAsync(month, year);
+               
 
                 int totalImportQuantity = 0;
                 int totalExportQuantity = 0;
