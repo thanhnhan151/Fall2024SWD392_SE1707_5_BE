@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WWMS.BAL.Models.Dashboard
+﻿namespace WWMS.BAL.Models.Dashboard
 {
     public class GetToltalWineCategory
     {
