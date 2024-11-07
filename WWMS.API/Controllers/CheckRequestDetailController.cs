@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.CheckRequests;
-using WWMS.BAL.Models.CheckRequests.Report;
 
 namespace WWMS.API.Controllers
 {
@@ -52,31 +51,6 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        #region Get All Check Request Details as tasks of staff
-        // /// <summary>
-        // ///Staff get all their check request details as their tasks
-        // /// </summary>
-        // [HttpGet("staff/{reporterName}")]
-        // public async Task<IActionResult> GetAllByReporterNameAsync(string reporterName)
-        // {
-        //     try
-        //     {
-        //         var result = await _checkRequestDetailService.GetAllByReporterNameAsync(reporterName);
-
-        //         if (result is not null)
-        //         {
-        //             return Ok(result);
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         throw new Exception(ex.Message);
-        //     }
-
-        //     return NotFound();
-        // }
-        #endregion
-
         #region Create an additional check request detail
         /// <summary>
         /// Manager create an additional check request detail with existed check request
@@ -98,22 +72,22 @@ namespace WWMS.API.Controllers
         #endregion
 
         #region Update a check request detail
-        // /// <summary>
-        // /// Manager update the information of check request detail
-        // /// </summary>
-        // [HttpPut]
-        // public async Task<IActionResult> UpdateAsync([FromBody] UpdateCheckRequestDetailRequest request)
-        // {
-        //     try
-        //     {
-        //         await _checkRequestDetailService.UpdateCheckRequestDetailAsync(request);
-        //         return Ok("Updated check request detail ok!");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        //     }
-        // }
+        /// <summary>
+        /// Manager update the information of check request detail
+        /// </summary>
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateCheckRequestDetailRequest request)
+        {
+            try
+            {
+                await _checkRequestDetailService.UpdateCheckRequestDetailAsync(request);
+                return Ok("Updated check request detail ok!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
         #endregion
 
         #region Disable the check request detail

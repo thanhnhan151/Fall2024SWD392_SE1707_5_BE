@@ -16,16 +16,5 @@ namespace WWMS.BAL.Interfaces
         //delete the detail
         Task DisableCheckRequestDetailAsync(long id);
         Task<GetCheckRequestDetailViewDetailResponse> GetByIdAsync(long id);
-        Task DeleteReportAsync(int detailId);
-        Task CreateOrUpdateReportAsync(CreateOrUpdateCheckRequestDetailReportRequest request, long detailId);
-
-
-        #region report for the check request detail
-        //create report for the check request detail
-
-        //delete report for the check request detail
-
-        //update report for the check request detail
-        #endregion
     }
 }
