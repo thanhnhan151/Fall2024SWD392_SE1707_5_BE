@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.Wines;
 
@@ -54,7 +55,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] CreateUpdateWineRequest createWineRequest)
         {
@@ -85,7 +86,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -119,7 +120,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
@@ -179,7 +180,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(long id, [FromBody] CreateUpdateWineRequest updateWineRequest)
         {
@@ -212,7 +213,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER")]
+        [PermissionAuthorize("MANAGER")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id)
         {
