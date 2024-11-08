@@ -114,7 +114,7 @@ namespace WWMS.BAL.Services.BackgroundJob
                     _logger.LogError(e, ">>>>> Error occurred while scanning check request data.");
                 }
 
-                await Task.Delay(60000 * 60, stoppingToken); // Delay 1hour 
+                await Task.Delay(60000 * 60 * 12, stoppingToken);
             }
         }
     }
