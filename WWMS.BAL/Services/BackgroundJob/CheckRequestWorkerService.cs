@@ -56,7 +56,16 @@ namespace WWMS.BAL.Services.BackgroundJob
                         //non overdue + active + all sub completed = completed
                         foreach (var checkRequest in nonOverdueCheckRequests)
                         {
-                            if (checkRequest.CheckRequestDetails.All(d => d.Status == "COMPLETED"))
+                            bool isCompleted = true;
+                            foreach (var detail in checkRequest.CheckRequestDetails)
+                            {
+                                if (detail.Status != "COMPLETED")
+                                {
+                                    isCompleted = false;
+                                    break;
+                                }
+                            }
+                            if (isCompleted)
                             {
                                 checkRequest.Status = "COMPLETED";
                                 _unitOfWork.CheckRequests.UpdateEntity(checkRequest);
@@ -105,7 +114,7 @@ namespace WWMS.BAL.Services.BackgroundJob
                     _logger.LogError(e, ">>>>> Error occurred while scanning check request data.");
                 }
 
-                await Task.Delay(60000, stoppingToken); // Delay 1 min
+                await Task.Delay(60000 * 60, stoppingToken); // Delay 1hour 
             }
         }
     }
