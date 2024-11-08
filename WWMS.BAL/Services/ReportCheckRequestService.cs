@@ -49,8 +49,14 @@ namespace WWMS.BAL.Services
                 throw new Exception("Cannot find the check request detail id ");
             }
 
-            if (DateTime.Now > checkRequestDetail.DueDate || checkRequestDetail.Status == "COMPLETED" || checkRequestDetail.Status == "DISABLED") throw new Exception("Overdue || COMPLETED || DISABLED");
-
+            if (DateTime.Now > checkRequestDetail.DueDate)
+            {
+                throw new Exception("Overdue");
+            }
+            if(checkRequestDetail.Status == "DISABLED"){
+                throw new Exception("Disabled already");
+            }
+            
             //verify reporter
             if (string.Equals(role, "STAFF") && checkRequestDetail.CheckerId != long.Parse(userId))
             {
@@ -76,6 +82,7 @@ namespace WWMS.BAL.Services
             checkRequestDetail.ActualQuantity = request.ActualQuantity;
             checkRequestDetail.ReportDescription = request.ReportDescription;
             checkRequestDetail.ReporterAssigned = userName;
+            checkRequestDetail.Status = "COMPLETED";
 
             WineRoom wineRoom = await _unitOfWork.WineRooms.GetEntityByIdAsync(checkRequestDetail.WineRoomId);
             wineRoom.CurrentQuantity = request.ActualQuantity;
