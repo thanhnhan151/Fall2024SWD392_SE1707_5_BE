@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 
 namespace WWMS.API.Controllers
@@ -32,7 +33,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("ADMIN", "MANAGER")]
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync(int year)
         {
@@ -65,6 +66,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet("quantity")]
         public async Task<IActionResult> GetAllWineAsync()
         {
@@ -85,6 +87,7 @@ namespace WWMS.API.Controllers
             return NotFound();
         }
         #endregion
+
         #region Gell All wine by category 
         /// <summary>
         /// Get all Import/Export Request in the system
@@ -96,6 +99,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet("quantityCategory")]
         public async Task<IActionResult> GetAllWinebyCategoryAsync()
         {
@@ -116,6 +120,7 @@ namespace WWMS.API.Controllers
             return NotFound();
         }
         #endregion
+
         #region Gell All Import/Export quantity
         /// <summary>
         /// Get all Import/Export Request in the system
@@ -127,7 +132,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("ADMIN", "MANAGER")]
+        [PermissionAuthorize("ADMIN", "MANAGER")]
         [HttpGet("quantityIo")]
         public async Task<IActionResult> GetIOAllAsync(int year)
         {
