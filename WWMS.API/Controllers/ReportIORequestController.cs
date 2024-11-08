@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WWMS.BAL.Authentications;
 using WWMS.BAL.Interfaces;
 using WWMS.BAL.Models.ReportIORequest;
 
@@ -38,7 +39,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -70,7 +71,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
@@ -93,7 +94,7 @@ namespace WWMS.API.Controllers
         }
         #endregion
 
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpGet("GetReportsByIORequestId/{id}")]
         public async Task<IActionResult> GetAllReportByIOIdAsync(long id)
         {
@@ -130,7 +131,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(CreateReport updateIO, long id)
         {
@@ -163,7 +164,7 @@ namespace WWMS.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server</response>
-        //[PermissionAuthorize("MANAGER", "STAFF")]
+        [PermissionAuthorize("MANAGER", "STAFF")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DisableAsync(long id, long idDetails)
         {
